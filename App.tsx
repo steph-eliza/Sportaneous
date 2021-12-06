@@ -4,6 +4,7 @@ import {
   StyleSheet, Text, View, Button,
 } from 'react-native';
 import { storeData } from './utils/config';
+import { UserProvider } from './contexts/UserContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,12 +17,14 @@ const styles = StyleSheet.create({
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>NBC Meetup</Text>
-      <Button onPress={() => { storeData(); }}
-          title="Click Me"
-          color="#841584"/>
-      <StatusBar style="auto" />
-    </View>
+    <UserProvider>
+      <View style={styles.container}>
+        <Text>NBC Meetup</Text>
+        <Button onPress={() => { storeData(); }}
+            title="Click Me"
+            color="#841584"/>
+        <StatusBar style="auto" />
+      </View>
+    </UserProvider>
   );
 }
