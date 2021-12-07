@@ -4,6 +4,7 @@ import {
   StyleSheet, Text, View, Button,
 } from 'react-native';
 import { storeData } from './utils/config';
+import {Login} from "./components/Login.screen/Login.component"
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +18,7 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <View style={styles.container}>
+      <Login />
       <Text>NBC Meetup</Text>
       <Button onPress={() => { storeData(); }}
           title="Click Me"

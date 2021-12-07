@@ -21,7 +21,7 @@ const config = {
   storageBucket: DB_BUCKET,
 };
 
-initializeApp(config);
+export const app = initializeApp(config);
 
 export function getData() {
   const db = getDatabase();
@@ -32,7 +32,7 @@ export function getData() {
   });
 }
 
-export function storeData(): void {
+export function storeData() {
   const db = getDatabase();
   const reference = ref(db, 'user');
   set(reference, {

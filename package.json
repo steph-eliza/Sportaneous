@@ -15,6 +15,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "expo": "~43.0.2",
+    "expo-firebase-recaptcha": "^2.0.2",
     "expo-status-bar": "~1.1.0",
     "firebase": "^9.6.0",
     "react": "17.0.1",
