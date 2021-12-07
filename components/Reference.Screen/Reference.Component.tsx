@@ -1,7 +1,7 @@
 import { View, Button, Text, StyleSheet } from "react-native";
-import { Header } from "../Header.view/Header.component";
 import { StatusBar } from "expo-status-bar";
 import { storeData } from "../../utils/config";
+import { UserProvider } from "../../contexts/UserContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,9 +19,8 @@ const styles = StyleSheet.create({
 
 export const Reference = () => {
   return (
-    <View style={styles.container}>
-      <Header navigation />
-      <View style={styles.bottomContainer}>
+    <UserProvider>
+      <View style={styles.container}>
         <Text>NBC Meetup</Text>
         <Button
           onPress={() => {
@@ -32,6 +31,6 @@ export const Reference = () => {
         />
         <StatusBar style="auto" />
       </View>
-    </View>
+    </UserProvider>
   );
 };
