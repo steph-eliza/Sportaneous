@@ -21,7 +21,7 @@ const config = {
   storageBucket: DB_BUCKET,
 };
 
-export const app = initializeApp(config);
+export const firebaseApp = initializeApp(config);
 
 export function getData() {
   const db = getDatabase();
