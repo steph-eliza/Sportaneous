@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState, useRef, LegacyRef, SetStateAction } from 'react';
 import {
   Text,
   View,
@@ -9,19 +8,10 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
-import { initializeApp, getApp } from 'firebase/app';
-import { getAuth, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
-import {firebaseApp} from "../../utils/config"
-// Initialize Firebase JS SDK >=9.x.x
-// https://firebase.google.com/docs/web/setup
-/*try {
-  initializeApp({
-    ...
-  });
-} catch (err) {
-  // ignore app already initialized error in snack
-}*/
+import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner, FirebaseAuthApplicationVerifier } from 'expo-firebase-recaptcha';
+import { getAuth, PhoneAuthProvider, signInWithCredential, ApplicationVerifier } from 'firebase/auth';
+import { getApp } from 'firebase/app';
+import { firebaseApp } from "../../utils/config"
 
 const app = getApp();
 const auth = getAuth();
@@ -32,14 +22,13 @@ if (!app?.options || Platform.OS === 'web') {
 
 export function PhoneSignIn() {
   firebaseApp
-  // Ref or state management hooks
-  const recaptchaVerifier = React.useRef(null);
-  const [phoneNumber, setPhoneNumber] = useState();
-  const [verificationId, setVerificationId] = useState();
-  const [verificationCode, setVerificationCode] = useState();
+  const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [verificationId, setVerificationId] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
 
   // const firebaseConfig = app ? app.options : undefined;
-  const [message, showMessage] = React.useState();
+  const [message, showMessage] = useState('');
   const attemptInvisibleVerification = false;
 
   return (
@@ -52,7 +41,7 @@ export function PhoneSignIn() {
       <Text style={{ marginTop: 20 }}>Enter phone number</Text>
       <TextInput
         style={{ marginVertical: 10, fontSize: 17 }}
-        placeholder="+1 999 999 9999"
+        placeholder="+44 999 999 9999"
         autoFocus
         autoCompleteType="tel"
         keyboardType="phone-pad"
@@ -61,7 +50,7 @@ export function PhoneSignIn() {
       />
       <Button
         title="Send Verification Code"
-        disabled={!phoneNumber}
+        // disabled={!phoneNumber}
         onPress={async () => {
           // The FirebaseRecaptchaVerifierModal ref implements the
           // FirebaseAuthApplicationVerifier interface and can be
@@ -70,14 +59,13 @@ export function PhoneSignIn() {
             const phoneProvider = new PhoneAuthProvider(auth);
             const verificationId = await phoneProvider.verifyPhoneNumber(
               phoneNumber,
-              recaptchaVerifier.current
+              recaptchaVerifier.current as FirebaseAuthApplicationVerifier
             );
             setVerificationId(verificationId);
-            showMessage({
-              text: 'Verification code has been sent to your phone.',
-            });
-          } catch (err) {
-            showMessage({ text: `Error: ${err.message}`, color: 'red' });
+            showMessage('Verification code has been sent to your phone.');
+          } catch (err: any) {
+            console.error(err)
+            showMessage(`Error: ${err.message}`);
           }
         }}
       />
@@ -90,7 +78,7 @@ export function PhoneSignIn() {
       />
       <Button
         title="Confirm Verification Code"
-        // disabled={!verificationId}
+        disabled={!verificationId}
         onPress={async () => {
           try {
             const credential = PhoneAuthProvider.credential(
@@ -98,27 +86,29 @@ export function PhoneSignIn() {
               verificationCode
             );
             await signInWithCredential(auth, credential);
-            showMessage({ text: 'Phone authentication successful 👍' });
+            showMessage("Phone authentication successful" as SetStateAction<string>);
           } catch (err) {
-            showMessage({ text: `Error: ${err.message}`, color: 'red' });
+            console.log({verificationId,
+              verificationCode})
+            console.error(err)
+            showMessage(`Error: ${err}` as SetStateAction<string>);
           }
         }}
       />
       {message ? (
         <TouchableOpacity
           style={[
-            StyleSheet.absoluteFill,
-            { backgroundColor: 0xffffffee, justifyContent: 'center' },
+            StyleSheet.absoluteFill
           ]}
-          onPress={() => showMessage(undefined)}>
+          onPress={() => showMessage('')}>
           <Text
             style={{
-              color: message.color || 'blue',
+              color: 'blue',
               fontSize: 17,
               textAlign: 'center',
               margin: 20,
             }}>
-            {message.text}
+            {message}
           </Text>
         </TouchableOpacity>
       ) : (
