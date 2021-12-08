@@ -1,7 +1,8 @@
-const { db } = require("./firestoreConfig.tsx");
-const { collection, getDocs, query, where, setDoc, doc } = require("firebase/firestore");
+import  db  from "./firestoreConfig.js";
+import { collection, getDocs, query, where, setDoc, doc } from "firebase/firestore";
 
-exports.selectAllEvents = () => {
+
+const selectAllEvents = () => {
   getDocs(collection(db, "events"))
     .then((snapshot) => {
       let eventsArray = [];
@@ -15,7 +16,7 @@ exports.selectAllEvents = () => {
     });
 };
 
-exports.selectEventsByUser = (user_id) => {
+const selectEventsByUser = (user_id) => {
   const q = query(collection(db, "events"), where("host_id", "==", user_id));
 
   getDocs(q)
@@ -30,8 +31,6 @@ exports.selectEventsByUser = (user_id) => {
       console.log(err);
     });
 };
-
-exports.selectEventsByUser("-MqFbx--rZQ1MsDKnDxB")
 
 // exports.insertNewEvent = (eventObject) => {
 //   const newPost = doc(db, "events");
@@ -51,3 +50,8 @@ exports.selectEventsByUser("-MqFbx--rZQ1MsDKnDxB")
 //     last_name: 'Dewane',
 //     image_bitmap: '8098203360'
 //   })
+
+selectAllEvents()
+selectEventsByUser("-MqFbx--rZQ1MsDKnDxB")
+
+export default selectAllEvents
