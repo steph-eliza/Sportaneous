@@ -1,8 +1,8 @@
-const { db } = require("./firestoreConfig");
-const { doc, setDoc } = require("firebase/firestore");
-const usersData = require("../data/users.json");
-const eventsData = require("../data/events.json");
-const chatsData = require("../data/chats.json");
+import db from "./firestoreConfig";
+import { doc, setDoc } from "firebase/firestore";
+import usersData from "../data/users.json";
+import eventsData from "../data/events.json";
+import chatsData from "../data/chats.json";
 
 exports.seedData = () => {
   const userIdArray = Object.keys(usersData);
