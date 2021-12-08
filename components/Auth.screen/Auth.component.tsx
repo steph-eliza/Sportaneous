@@ -9,9 +9,10 @@ import {
   Platform,
 } from 'react-native';
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner, FirebaseAuthApplicationVerifier } from 'expo-firebase-recaptcha';
-import { getAuth, PhoneAuthProvider, signInWithCredential, ApplicationVerifier } from 'firebase/auth';
+import { getAuth, PhoneAuthProvider, signInWithCredential, ApplicationVerifier, onAuthStateChanged  } from 'firebase/auth';
 import { getApp } from 'firebase/app';
 import { firebaseApp } from "../../utils/config"
+import { styles } from './Auth.style';
 
 const app = getApp();
 const auth = getAuth();
@@ -21,22 +22,33 @@ if (!app?.options || Platform.OS === 'web') {
 }
 
 export function PhoneSignIn() {
+
   firebaseApp
+
   const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [verificationId, setVerificationId] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
 
-  // const firebaseConfig = app ? app.options : undefined;
+  const firebaseConfig = app ? app.options : undefined;
   const [message, showMessage] = useState('');
   const attemptInvisibleVerification = false;
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      console.log("userID:" + user.uid)
+    } else {
+
+    }
+  });
+
   return (
-    <View style={{ padding: 20, marginTop: 50 }}>
+    <View style={styles.view}>
       <FirebaseRecaptchaVerifierModal
         ref={recaptchaVerifier}
         firebaseConfig={app.options}
-        // attemptInvisibleVerification
+        attemptInvisibleVerification
       />
       <Text style={{ marginTop: 20 }}>Enter phone number</Text>
       <TextInput
@@ -95,12 +107,7 @@ export function PhoneSignIn() {
           ]}
           onPress={() => showMessage('')}>
           <Text
-            style={{
-              color: 'blue',
-              fontSize: 17,
-              textAlign: 'center',
-              margin: 20,
-            }}>
+            style={styles.popUpText}>
             {message}
           </Text>
         </TouchableOpacity>
