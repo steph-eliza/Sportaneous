@@ -1,4 +1,4 @@
-import React, { useState, useRef, LegacyRef, SetStateAction } from 'react';
+import React, { useState, useRef, SetStateAction } from 'react';
 import {
   Text,
   View,
@@ -41,7 +41,7 @@ export function PhoneSignIn() {
       <Text style={{ marginTop: 20 }}>Enter phone number</Text>
       <TextInput
         style={{ marginVertical: 10, fontSize: 17 }}
-        placeholder="+44 999 999 9999"
+        placeholder="+1 999 999 9999"
         autoFocus
         autoCompleteType="tel"
         keyboardType="phone-pad"
@@ -72,7 +72,7 @@ export function PhoneSignIn() {
       <Text style={{ marginTop: 20 }}>Enter Verification code</Text>
       <TextInput
         style={{ marginVertical: 10, fontSize: 17 }}
-        editable={!verificationId}
+        editable={!!verificationId}
         placeholder="123456"
         onChangeText={setVerificationCode}
       />
