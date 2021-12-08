@@ -52,9 +52,6 @@ export function PhoneSignIn() {
         title="Send Verification Code"
         // disabled={!phoneNumber}
         onPress={async () => {
-          // The FirebaseRecaptchaVerifierModal ref implements the
-          // FirebaseAuthApplicationVerifier interface and can be
-          // passed directly to `verifyPhoneNumber`.
           try {
             const phoneProvider = new PhoneAuthProvider(auth);
             const verificationId = await phoneProvider.verifyPhoneNumber(
@@ -64,7 +61,6 @@ export function PhoneSignIn() {
             setVerificationId(verificationId);
             showMessage('Verification code has been sent to your phone.');
           } catch (err: any) {
-            console.error(err)
             showMessage(`Error: ${err.message}`);
           }
         }}
@@ -88,9 +84,6 @@ export function PhoneSignIn() {
             await signInWithCredential(auth, credential);
             showMessage("Phone authentication successful" as SetStateAction<string>);
           } catch (err) {
-            console.log({verificationId,
-              verificationCode})
-            console.error(err)
             showMessage(`Error: ${err}` as SetStateAction<string>);
           }
         }}
