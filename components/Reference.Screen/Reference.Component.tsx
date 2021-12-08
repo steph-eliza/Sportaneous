@@ -1,6 +1,7 @@
 import { View, Button, Text, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { storeData } from "../../utils/config";
+import { UserProvider } from "../../contexts/UserContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
 
 export const Reference = () => {
   return (
+    <UserProvider>
       <View style={styles.container}>
         <Text>NBC Meetup</Text>
         <Button
@@ -29,5 +31,6 @@ export const Reference = () => {
         />
         <StatusBar style="auto" />
       </View>
+    </UserProvider>
   );
 };

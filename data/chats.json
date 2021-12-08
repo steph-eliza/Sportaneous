@@ -1,0 +1,41 @@
+{
+  "-MqFdV5ywbsGMVlV_Dvc": {
+    "host_id": "-MqFbwzzuLbOhneGLtDs",
+    "attendees_id": ["-MqFbx--rZQ1MsDKnDxB"],
+    "messages": [{"first_name" : "Lindsey",
+        "message_body" : "What you sayin' g?",
+        "timestamp" : 11111
+        },
+        {"first_name" : "Lilias",
+            "message_body" : "Good moro, run this sat?",
+            "timestamp" : 11112
+            }
+    ]
+  },
+  "-MqFdV61nNp5BqUqDNqU": {
+    "host_id": "-MqFbx--rZQ1MsDKnDxB",
+    "attendees_id": ["-MqFbwzzuLbOhneGLtDs"],
+    "messages": [{"first_name" : "Lilias",
+        "message_body" : "Tennis, tomorrow, be there",
+        "timestamp" : 11111
+        },
+        {"first_name" : "Lindsey",
+            "message_body" : "No",
+            "timestamp" : 11112
+            }
+    ]
+  },
+  "-MqFdV64GrCmmGLhLAs_": {
+    "host_id": "-MqFbx-3zbETE2gRo5pI",
+    "attendees_id": ["-MqFbx-1VrkhVGHYYpLX"],
+    "messages": [{"first_name" : "Bruno",
+        "message_body" : "Hallo, wie gehts?",
+        "timestamp" : 11111
+        },
+        {"first_name" : "Gerhardt",
+            "message_body" : "Gut, danke",
+            "timestamp" : 11112
+            }
+    ]
+  }
+}
