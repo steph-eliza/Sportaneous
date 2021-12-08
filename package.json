@@ -8,9 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "prepare": "husky install",
+    // "prepare": "husky install",
     "test": "",
-    "lint": "eslint ./ --fix"
+    // "lint": "eslint ./ --fix"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.0.9",
@@ -23,7 +23,9 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-collapsible": "^1.6.0",
     "react-native-dotenv": "^3.3.0",
+    "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "^3.3.2",
@@ -37,10 +39,8 @@
     "@types/react-native": "~0.64.12",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
-    "eslint": "^8.4.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.3",
-    "husky": "^7.0.4",
     "react-icons": "^4.3.1",
     "typescript": "~4.3.5"
   },
