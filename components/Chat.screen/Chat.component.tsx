@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { styles } from "./chat.style";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { addChatMessage } from "../../utils/utils";
 
 export const Chat = ({ route }) => {
   const { event_id } = route.params;
