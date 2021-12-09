@@ -57,6 +57,20 @@ export const addNewEvent = (newEvent) => {
   })
 }
 
+export const addNewUser = (newUser) => {
+  return addDoc(collection(db, 'users'), newUser).then((res) => {
+    console.log(res.id)
+    return res.id
+  })
+}
+
+export const addNewChatroom = (newChatroom) => {
+  return addDoc(collection(db, 'chats'), newChat).then((res) => {
+    console.log(res.id)
+    return res.id
+  })
+}
+
 // MVP just leaving it as one filter instead of complex.
 export const selectFilteredEvents = (location) => {
   const q1 = query(collection(db, 'events'), where('location', '==', location))
@@ -85,5 +99,12 @@ export const deleteEvent = (eventId) => {
   return deleteDoc(doc(db, "events", eventId))
   .then(() => {
     console.log("event deleted!")
+  })
+}
+
+export const deleteChatroom = (chatId) => {
+  return deleteDoc(doc(db, "chats", chatId))
+  .then(() => {
+    console.log("chatroom deleted!")
   })
 }

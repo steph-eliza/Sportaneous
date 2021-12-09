@@ -18,8 +18,7 @@ export const seedData = () => {
   for (let i = 0; i < userIdArray.length; i++) {
     const newPost = doc(db, usersCollectionString[i]);
     const docData = usersData[userIdArray[i]];
-    console.log(docData);
-    setDoc(newPost, docData).then(() => {
+        setDoc(newPost, docData).then(() => {
       console.log("users test data inputted");
     });
   }
