@@ -1,5 +1,5 @@
 {
-  "-MqFdV5ywbsGMVlV_Dvc": {
+  "MqFdV5ywbsGMVlV_Dvc": {
     "title": "Running",
     "category": "running",
     "location": "manchester",
@@ -8,31 +8,31 @@
     "max_capacity": 5,
     "pending_attendees": [""],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
-    "attendees": ["-MqFbx--rZQ1MsDKnDxB"]
+    "attendees": ["MqFbx--rZQ1MsDKnDxB"]
   },
-  "-MqFdV6-4eS7u0NojUhc": {
+  "MqFdV6-4eS7u0NojUhc": {
     "title": "Ice skating fun",
     "category": "ice skating",
     "location": "manchester",
     "date": "02/03/2021",
     "description": "Mature B-cell leukemia Burkitt-type not achieve remission",
     "max_capacity": 4,
-    "pending_attendees": ["-MqFbx-1VrkhVGHYYpLX","-MqFbx-3zbETE2gRo5pI"],
+    "pending_attendees": ["MqFbx-1VrkhVGHYYpLX","MqFbx-3zbETE2gRo5pI"],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
     "attendees": [""]
   },
-  "-MqFdV61nNp5BqUqDNqU": {
+  "MqFdV61nNp5BqUqDNqU": {
     "title": "tennis",
     "category": "tennis",
     "location": "manchester",
     "date": "03/04/2021",
     "description": "Effusion, left hip",
     "max_capacity": 5,
-    "pending_attendees": ["-MqFbx-4SAgvThoRMbjN"],
-    "host_id" : "-MqFbx--rZQ1MsDKnDxB",
-    "attendees": ["-MqFbwzzuLbOhneGLtDs"]
+    "pending_attendees": ["MqFbx-4SAgvThoRMbjN"],
+    "host_id" : "MqFbx--rZQ1MsDKnDxB",
+    "attendees": ["MqFbwzzuLbOhneGLtDs"]
   },
-  "-MqFdV62x4N1HYFKYd8a": {
+  "MqFdV62x4N1HYFKYd8a": {
     "title": "best table tennis of your life",
     "category": "table tennis",
     "location": "manchester",
@@ -40,18 +40,18 @@
     "description": "Assault by crashing of aircraft, initial encounter",
     "max_capacity": 3,
     "pending_attendees": [""],
-    "host_id" : "-MqFbx-1VrkhVGHYYpLX",
+    "host_id" : "MqFbx-1VrkhVGHYYpLX",
     "attendees": [""]
   },
-  "-MqFdV64GrCmmGLhLAs_": {
+  "MqFdV64GrCmmGLhLAs_": {
     "title": "mountain lovers",
     "category": "climbing",
     "location": "london",
     "date": "06/10/2021",
     "description": "Mtrcy rider (driver) injured in oth transport acc, sequela",
     "max_capacity": 1,
-    "pending_attendees": ["-MqFbx-1VrkhVGHYYpLX"],
-    "host_id" : "-MqFbx-3zbETE2gRo5pI",
-    "attendees": ["-MqFbwzzuLbOhneGLtDs"]
+    "pending_attendees": ["MqFbx-1VrkhVGHYYpLX"],
+    "host_id" : "MqFbx-3zbETE2gRo5pI",
+    "attendees": ["MqFbwzzuLbOhneGLtDs"]
   }
 }
