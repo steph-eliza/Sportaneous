@@ -8,7 +8,7 @@ const auth = getAuth();
 
 export const SplashScreen = () => {
     firebaseApp
-  
+
     const [currentUser, setCurrentUser] = useState(false)
   
     auth.onAuthStateChanged((user) =>{
@@ -17,12 +17,10 @@ export const SplashScreen = () => {
       }
     });
   
-    if(currentUser){return(<Text>NBC Welcome</Text>)}
+    if(!currentUser){return(<PhoneSignIn/>)}
     return(
         <View>
-            <Text>
-                <PhoneSignIn/>
-            </Text> 
+          <Text>Welcome to NBC</Text>
         </View>
     )
 }
