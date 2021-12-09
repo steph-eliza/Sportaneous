@@ -53,8 +53,6 @@ export function PhoneSignIn() {
         verificationId,
         verificationCode
       );
-      console.log("Verification id:",verificationId)
-      console.log("Verification code",verificationCode)
       await signInWithCredential(auth, credential);
       showMessage("Phone authentication successful" as SetStateAction<string>);
     } catch (err) {

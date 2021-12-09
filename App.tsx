@@ -1,13 +1,10 @@
-
 import React, {useState} from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { Home } from "./components/Home.screen/Home.component";
-import { getAuth } from "@firebase/auth";
+import { Nav } from "./components/Nav.view/Nav.component";
 import { firebaseApp } from "./utils/firestoreConfig";
+import { getAuth } from "@firebase/auth";
 import { SplashScreen } from "./components/Splash.screen/splash.component";
+import { NavigationContainer } from "@react-navigation/native";
 
-const Drawer = createDrawerNavigator();
 const auth = getAuth();
 
 export default function App() {
@@ -24,9 +21,7 @@ export default function App() {
   if(!currentUser){return(<SplashScreen />)}
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={Home} />
-      </Drawer.Navigator>
+      <Nav />
     </NavigationContainer>
   );
 }
