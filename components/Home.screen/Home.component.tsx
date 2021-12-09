@@ -1,11 +1,13 @@
-import { Text } from "react-native";
 import React from "react";
-import { PhoneSignIn } from "../Auth.screen/Auth.component";
+import { Text } from "react-native";
 import { Screen } from "react-native-screens";
+import { Nav } from "../Nav.view/Nav.component";
 
 export const Home = () => {
   return (
     <Screen>
-      <PhoneSignIn />
+      <Text>
+        Home Screen
+      </Text>
     </Screen>
   )};

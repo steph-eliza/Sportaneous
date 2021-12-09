@@ -1,14 +1,27 @@
-import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { UserProvider } from "./contexts/UserContext";
+import React, {useState} from "react";
 import { Nav } from "./components/Nav.view/Nav.component";
+import { firebaseApp } from "./utils/firestoreConfig";
+import { getAuth } from "@firebase/auth";
+import { SplashScreen } from "./components/Splash.screen/splash.component";
+import { NavigationContainer } from "@react-navigation/native";
 
-const Drawer = createDrawerNavigator();
+const auth = getAuth();
 
 export default function App() {
+  firebaseApp
+  
+    const [currentUser, setCurrentUser] = useState(false)
+  
+    auth.onAuthStateChanged((user) =>{
+      if (user) {
+        setCurrentUser(true)
+      }
+    });
+  
+  if(!currentUser){return(<SplashScreen />)}
   return (
-    <UserProvider>
+    <NavigationContainer>
       <Nav />
-    </UserProvider>
+    </NavigationContainer>
   );
 }
