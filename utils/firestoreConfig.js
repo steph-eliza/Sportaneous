@@ -1,8 +1,15 @@
-import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import {
-  DB_APIKEY, DB_AUTHDOMAIN, DB_URL, DB_PROJECTID, DB_BUCKET, DB_MESSAGINGSENDERID, DB_APPID, DB_MEASUREMENTID
-} from '@env';
+  DB_APIKEY,
+  DB_AUTHDOMAIN,
+  DB_URL,
+  DB_PROJECTID,
+  DB_BUCKET,
+  DB_MESSAGINGSENDERID,
+  DB_APPID,
+  DB_MEASUREMENTID,
+} from "@env";
 
 const firestoreConfig = {
   apiKey: DB_APIKEY,
@@ -12,7 +19,7 @@ const firestoreConfig = {
   storageBucket: DB_BUCKET,
   messagingSenderId: DB_MESSAGINGSENDERID,
   appId: DB_APPID,
-  measurementId: DB_MEASUREMENTID
+  measurementId: DB_MEASUREMENTID,
 };
 
 export const firebaseApp = initializeApp(firestoreConfig);
