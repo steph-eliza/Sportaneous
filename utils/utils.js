@@ -105,3 +105,27 @@ export const deleteChatroom = (chatId) => {
     console.log("chatroom deleted!");
   });
 };
+
+export const getUsers = () => {
+  return getDocs(collection(db, "users"))
+    .then((snapshot) => {
+      let usersArray = [];
+      snapshot.docs.forEach((user) => {
+        usersArray.push({ ...user.data(), id: user.id });
+      });
+      console.log(usersArray);
+      return usersArray;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const getUserById = (userId) => {
+  const docRef = doc(db, "users", userId);
+  return getDoc(docRef).then((snapshot) => {
+    const user = snapshot.data();
+    console.log(user);
+    return user;
+  });
+};
