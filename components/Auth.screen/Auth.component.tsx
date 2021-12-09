@@ -11,7 +11,7 @@ import {
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner, FirebaseAuthApplicationVerifier } from 'expo-firebase-recaptcha';
 import { getAuth, PhoneAuthProvider, signInWithCredential, ApplicationVerifier, onAuthStateChanged  } from 'firebase/auth';
 import { getApp } from 'firebase/app';
-import { firebaseApp } from "../../utils/config"
+import { firebaseApp } from "../../utils/firestoreConfig"
 import { styles } from './Auth.style';
 
 const app = getApp();
@@ -30,18 +30,37 @@ export function PhoneSignIn() {
   const [verificationId, setVerificationId] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
 
-  const firebaseConfig = app ? app.options : undefined;
   const [message, showMessage] = useState('');
   const attemptInvisibleVerification = false;
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const uid = user.uid;
-      console.log("userID:" + user.uid)
-    } else {
-
+  const sendUserPhoneDetails = async() =>{
+    try {
+      const phoneProvider = new PhoneAuthProvider(auth);
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        phoneNumber,
+        recaptchaVerifier.current as FirebaseAuthApplicationVerifier
+      );
+      setVerificationId(verificationId);
+      showMessage('Verification code has been sent to your phone.');
+    } catch (err: any) {
+      showMessage(`Error: ${err.message}`);
     }
-  });
+  }
+
+  const sendVerificationCode = async() =>{
+    try {
+      const credential = PhoneAuthProvider.credential(
+        verificationId,
+        verificationCode
+      );
+      console.log("Verification id:",verificationId)
+      console.log("Verification code",verificationCode)
+      await signInWithCredential(auth, credential);
+      showMessage("Phone authentication successful" as SetStateAction<string>);
+    } catch (err) {
+      showMessage(`Error: ${err}` as SetStateAction<string>);
+    }
+  }
 
   return (
     <View style={styles.view}>
@@ -62,20 +81,7 @@ export function PhoneSignIn() {
       />
       <Button
         title="Send Verification Code"
-        // disabled={!phoneNumber}
-        onPress={async () => {
-          try {
-            const phoneProvider = new PhoneAuthProvider(auth);
-            const verificationId = await phoneProvider.verifyPhoneNumber(
-              phoneNumber,
-              recaptchaVerifier.current as FirebaseAuthApplicationVerifier
-            );
-            setVerificationId(verificationId);
-            showMessage('Verification code has been sent to your phone.');
-          } catch (err: any) {
-            showMessage(`Error: ${err.message}`);
-          }
-        }}
+        onPress={async () => sendUserPhoneDetails()}
       />
       <Text style={{ marginTop: 20 }}>Enter Verification code</Text>
       <TextInput
@@ -87,18 +93,7 @@ export function PhoneSignIn() {
       <Button
         title="Confirm Verification Code"
         disabled={!verificationId}
-        onPress={async () => {
-          try {
-            const credential = PhoneAuthProvider.credential(
-              verificationId,
-              verificationCode
-            );
-            await signInWithCredential(auth, credential);
-            showMessage("Phone authentication successful" as SetStateAction<string>);
-          } catch (err) {
-            showMessage(`Error: ${err}` as SetStateAction<string>);
-          }
-        }}
+        onPress={async () => sendVerificationCode()}
       />
       {message ? (
         <TouchableOpacity

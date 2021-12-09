@@ -1,25 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
 import { Text, View } from "react-native";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { PhoneSignIn } from "../Auth.screen/Auth.component";
+import { firebaseApp } from "../../utils/firestoreConfig"
 
 const auth = getAuth();
-const currentUser = auth.currentUser;
 
 export const SplashScreen = () => {
+    firebaseApp
+  
+    const [currentUser, setCurrentUser] = useState(false)
+  
+    auth.onAuthStateChanged((user) =>{
+      if (user) {
+        setCurrentUser(true)
+      }
+    });
+  
+    if(currentUser){return(<Text>NBC Welcome</Text>)}
     return(
         <View>
-            {onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    const uid = user.uid;
-                    return(
-                        <Text>Welcome {user.uid}</Text>
-                    )
-                }
-                return(
-                    <PhoneSignIn/>
-                    )
-            })}
+            <Text>
+                <PhoneSignIn/>
+            </Text> 
         </View>
     )
 }
