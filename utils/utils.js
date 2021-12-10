@@ -163,3 +163,20 @@ export const joinEvent = (userDetails, eventId) => {
     console.log(res);
   });
 };
+
+export const addAttendee = (eventId, userDetails) => {
+  return updateDoc(doc(db, "events", eventId), {
+    attendees: arrayUnion(userDetails),
+    pending_attendees: arrayRemove(userDetails),
+  }).then((res) => {
+    console.log(res);
+  });
+};
+
+export const removeAttendee = (eventId, userDetails) => {
+  return updateDoc(doc(db, "events", eventId), {
+    attendees : arrayRemove(userDetails),
+  }).then((res) => {
+    console.log(res);
+  });
+};

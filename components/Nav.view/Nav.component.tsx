@@ -6,6 +6,9 @@ import { SingleEvent } from "../SingleEvent.screen/SingleEvent.component";
 import EventList from "../Events.screen/EventList.component";
 import Chatroom from "../Chatroom.screen/Chatroom.component";
 import { Chat } from "../Chat.screen/Chat.component";
+import { AcceptReject } from "../AcceptReject.screen/AcceptReject.component";
+
+
 
 const Drawer = createDrawerNavigator();
 
@@ -18,6 +21,7 @@ export function Nav() {
       <Drawer.Screen name="EventList" component={EventList} />
       <Drawer.Screen name="Chatrooms" component={Chatroom} />
       <Drawer.Screen name="Chat" component={Chat} />
+      <Drawer.Screen name="AcceptReject" component={AcceptReject} />
     </Drawer.Navigator>
   );
 }

@@ -6,7 +6,7 @@
     "date": "15/12/2021",
     "time": "09:00",
     "description": "Explosion and rupture of pressurized-gas tank, init encntr",
-    "max_capacity": 5,
+    "max_capacity": "5",
     "pending_attendees": [""],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
     "attendees": ["MqFbx--rZQ1MsDKnDxB"]
@@ -18,7 +18,7 @@
     "date": "02/03/2021",
     "time": "09:30",
     "description": "Mature B-cell leukemia Burkitt-type not achieve remission",
-    "max_capacity": 4,
+    "max_capacity": "4",
     "pending_attendees": ["MqFbx-1VrkhVGHYYpLX","MqFbx-3zbETE2gRo5pI"],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
     "attendees": [""]
@@ -30,7 +30,7 @@
     "date": "03/04/2021",
     "time": "09:00",
     "description": "Effusion, left hip",
-    "max_capacity": 5,
+    "max_capacity": "5",
     "pending_attendees": ["MqFbx-4SAgvThoRMbjN"],
     "host_id" : "MqFbx--rZQ1MsDKnDxB",
     "attendees": ["MqFbwzzuLbOhneGLtDs"]
@@ -42,7 +42,7 @@
     "date": "22/08/2021",
     "time": "13:00",
     "description": "Assault by crashing of aircraft, initial encounter",
-    "max_capacity": 3,
+    "max_capacity": "3",
     "pending_attendees": [""],
     "host_id" : "MqFbx-1VrkhVGHYYpLX",
     "attendees": [""]
@@ -54,7 +54,7 @@
     "date": "06/10/2021",
     "time": "17:00",
     "description": "Mtrcy rider (driver) injured in oth transport acc, sequela",
-    "max_capacity": 1,
+    "max_capacity": "1",
     "pending_attendees": ["MqFbx-1VrkhVGHYYpLX"],
     "host_id" : "MqFbx-3zbETE2gRo5pI",
     "attendees": ["MqFbwzzuLbOhneGLtDs"]
