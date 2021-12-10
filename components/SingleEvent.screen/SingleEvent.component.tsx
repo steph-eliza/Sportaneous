@@ -4,10 +4,7 @@ import { styles } from "./SingleEvent.style";
 import { joinEvent, selectEventById } from "../../utils/utils";
 
 export const SingleEvent = ({ navigation, route }) => {
-  //Update when EventsList is added to main
-
   const { eventId } = route.params;
-  // const eventId = "-MqFdV6-4eS7u0NojUhc";
   const user = { userId: "1234", first_name: "Will", second_name: "test" };
 
   const [isLoading, setIsLoading] = React.useState(true);
@@ -31,7 +28,6 @@ export const SingleEvent = ({ navigation, route }) => {
       setIsLoading(false);
     });
   }, [eventId]);
-  console.log(eventDetails);
 
   if (isLoading) {
     return (

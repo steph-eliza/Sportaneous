@@ -4,7 +4,6 @@ import styles from "./EventList.style";
 import Filter from "./Filter.component";
 import { selectAllEvents } from "../../utils/utils";
 import { truncate, getDate, getTime } from "./utils/EventListUtils";
-import { SingleEvent } from "../SingleEvent.screen/SingleEvent.component";
 
 const EventList = ({ navigation }) => {
   const [selectedId, setSelectedId] = useState(null);
@@ -27,7 +26,6 @@ const EventList = ({ navigation }) => {
       setEvents(res);
     });
   }, []);
-  console.log(events);
 
   const Item = ({ item, onPress, backgroundColor, textColor }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
