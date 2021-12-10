@@ -37,7 +37,7 @@ const Chatroom = ({ navigation }) => {
       <Item
         item={item}
         onPress={() => {
-          navigation.navigate("Chat", { event_id: item.id });
+          navigation.navigate("Chat", { chat_id: item.id });
         }}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
