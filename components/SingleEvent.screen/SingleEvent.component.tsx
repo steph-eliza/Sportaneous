@@ -1,11 +1,14 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { styles } from "./SingleEvent.style";
-import { selectAllEvents, selectEventById } from "../../utils/utils";
+import { joinEvent, selectEventById } from "../../utils/utils";
 
-export const SingleEvent = ({ navigation }) => {
+export const SingleEvent = ({ navigation, route }) => {
   //Update when EventsList is added to main
-  const eventId = "-MqFdV6-4eS7u0NojUhc";
+
+  const { eventId } = route.params;
+  // const eventId = "-MqFdV6-4eS7u0NojUhc";
+  const user = { userId: "1234", first_name: "Will", second_name: "test" };
 
   const [isLoading, setIsLoading] = React.useState(true);
   //Dummy object to shut up TS.
@@ -19,6 +22,7 @@ export const SingleEvent = ({ navigation }) => {
     max_capacity: 4,
     pending_attendees: [],
     title: "Dummmy",
+    id: 123,
   });
   React.useEffect(() => {
     setIsLoading(true);
@@ -26,7 +30,8 @@ export const SingleEvent = ({ navigation }) => {
       setEventDetails(res);
       setIsLoading(false);
     });
-  }, []);
+  }, [eventId]);
+  console.log(eventDetails);
 
   if (isLoading) {
     return (
@@ -51,8 +56,7 @@ export const SingleEvent = ({ navigation }) => {
           <Pressable
             style={styles.pressable}
             onPress={() => {
-              //API call to join the event
-              console.log("JOIN PRESSED");
+              joinEvent(user, eventId);
             }}
           >
             <Text style={styles.PressableText}>Join this event?</Text>
