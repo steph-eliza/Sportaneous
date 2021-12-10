@@ -21,7 +21,6 @@ import {
 } from 'firebase/auth'
 import { getApp } from 'firebase/app'
 import { styles } from './Auth.style'
-import { useNavigation } from '@react-navigation/native'
 
 const app = getApp()
 const auth = getAuth()
@@ -33,7 +32,6 @@ if (!app?.options || Platform.OS === 'web') {
 }
 
 const PhoneSignIn = () => {
-  const navigation = useNavigation()
 
   const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null)
   const [phoneNumber, setPhoneNumber] = useState('')
