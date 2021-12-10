@@ -11,6 +11,7 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  setDoc,
 } from "firebase/firestore";
 
 export const selectAllEvents = () => {
@@ -60,11 +61,8 @@ export const addNewEvent = (newEvent) => {
   });
 };
 
-export const addNewUser = (newUser) => {
-  return addDoc(collection(db, "users"), newUser).then((res) => {
-    console.log(res.id);
-    return res.id;
-  });
+export const addNewUser = (newUser, uid) => {
+  return setDoc(doc(db, "users", uid), newUser);
 };
 
 export const addNewChatroom = (newChatroom) => {
