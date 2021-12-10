@@ -1,32 +1,47 @@
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./chat.style";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { addChatMessage } from "../../utils/utils";
+import {
+  addChatMessage,
+  deleteChatMessage,
+  selectChatById,
+} from "../../utils/utils";
+import { db } from "../../utils/firestoreConfig";
+
+import { doc, onSnapshot } from "firebase/firestore";
 
 export const Chat = ({ route }) => {
-  const { event_id } = route.params;
-  const [selectedId, setSelectedId] = useState(null);
+  const { chat_id } = route.params;
+  const [selectedId, setSelectedId] = React.useState(null);
+  const [messages, setMessages] = React.useState([]);
 
   //API call to getChatroomByEventId
 
-  //retrieved messages data:
-  const messages = [
-    {
-      first_name: "Lindsey",
-      message_body: "What you sayin' g?",
-      timestamp: 11111,
-    },
-    {
-      first_name: "Lilias",
-      message_body: "Good moro, run this sat?",
-      timestamp: 11112,
-    },
-  ];
+  React.useEffect(() => {
+    // selectChatById(chat_id).then((res) => {
+    //   console.log("CHAT OBJECT:", res);
+    //   setMessages(res.messages);
+    // });
+    const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
+      console.log("DOC:", doc.data());
+      if (doc.data().messages.length > 0) {
+        setMessages(doc.data().messages);
+      } else {
+        setMessages([
+          {
+            first_name: "NBC",
+            message_body: "Add a message",
+            timestamp: 11111,
+          },
+        ]);
+      }
+    });
+  }, [db, chat_id]);
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+  const Item = ({ item, backgroundColor, textColor }) => (
+    <TouchableOpacity style={[styles.item, backgroundColor]}>
       <Text style={styles.item}>{item.first_name}</Text>
       <Text style={styles.item}>{item.message_body}</Text>
     </TouchableOpacity>
@@ -39,9 +54,6 @@ export const Chat = ({ route }) => {
     return (
       <Item
         item={item}
-        onPress={() => {
-          navigation.navigate("Chat", { event_id: item.id });
-        }}
         backgroundColor={{ backgroundColor }}
         textColor={{ color }}
       />
@@ -56,6 +68,35 @@ export const Chat = ({ route }) => {
         keyExtractor={(item) => item.id}
         extraData={selectedId}
       />
+
+      <Pressable
+        onPress={() => {
+          addChatMessage(
+            {
+              first_name: "Will",
+              message_body: "Testing testing... 123",
+              timestamp: "11114",
+            },
+            "MqFdV5ywbsGMVlV_Dvc"
+          );
+        }}
+      >
+        <Text style={styles.press}>SEND MESSAGE?</Text>
+      </Pressable>
+      <Pressable
+        onPress={() => {
+          deleteChatMessage(
+            {
+              first_name: "Will",
+              message_body: "Testing testing... 123",
+              timestamp: "11114",
+            },
+            "MqFdV5ywbsGMVlV_Dvc"
+          );
+        }}
+      >
+        <Text style={styles.press}>DELETE MESSAGE?</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

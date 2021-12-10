@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 10,
   },
   item: {
     backgroundColor: "rgba(100,50,190, 0.08)",
@@ -16,5 +15,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderColor: "#333",
     borderWidth: 2,
+  },
+  press: {
+    fontSize: 50,
   },
 });
