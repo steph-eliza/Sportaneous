@@ -8,6 +8,10 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  setDoc,
 } from "firebase/firestore";
 
 export const selectAllEvents = () => {
@@ -57,11 +61,8 @@ export const addNewEvent = (newEvent) => {
   });
 };
 
-export const addNewUser = (newUser) => {
-  return addDoc(collection(db, "users"), newUser).then((res) => {
-    console.log(res.id);
-    return res.id;
-  });
+export const addNewUser = (newUser, uid) => {
+  return setDoc(doc(db, "users", uid), newUser);
 };
 
 export const addNewChatroom = (newChatroom) => {
@@ -127,5 +128,30 @@ export const getUserById = (userId) => {
     const user = snapshot.data();
     console.log(user);
     return user;
+  });
+};
+
+export const selectChatById = (chatId) => {
+  const docRef = doc(db, "chats", chatId);
+  return getDoc(docRef).then((snapshot) => {
+    const event = snapshot.data();
+    console.log("event:", event);
+    return event;
+  });
+};
+
+export const addChatMessage = (chatObject, chatId) => {
+  return updateDoc(doc(db, "chats", chatId), {
+    messages: arrayUnion(chatObject),
+  }).then((res) => {
+    console.log(res);
+  });
+};
+
+export const deleteChatMessage = (chatObject, chatId) => {
+  return updateDoc(doc(db, "chats", chatId), {
+    messages: arrayRemove(chatObject),
+  }).then((res) => {
+    console.log(res);
   });
 };
