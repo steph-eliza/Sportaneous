@@ -155,3 +155,11 @@ export const deleteChatMessage = (chatObject, chatId) => {
     console.log(res);
   });
 };
+
+export const joinEvent = (userDetails, eventId) => {
+  return updateDoc(doc(db, "events", eventId), {
+    pending_attendees: arrayUnion(userDetails),
+  }).then((res) => {
+    console.log(res);
+  });
+};
