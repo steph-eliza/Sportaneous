@@ -20,9 +20,8 @@ import {
   ApplicationVerifier,
 } from 'firebase/auth'
 import { getApp } from 'firebase/app'
-import { firebaseApp } from '../../utils/firestoreConfig'
 import { styles } from './Auth.style'
-
+import { useNavigation } from '@react-navigation/native'
 
 const app = getApp()
 const auth = getAuth()
@@ -34,7 +33,7 @@ if (!app?.options || Platform.OS === 'web') {
 }
 
 const PhoneSignIn = () => {
-  firebaseApp
+  const navigation = useNavigation()
 
   const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null)
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -66,7 +65,6 @@ const PhoneSignIn = () => {
       )
       await signInWithCredential(auth, credential)
       showMessage('Phone authentication successful' as SetStateAction<string>);
-      //add navigation to GetUserName
     } catch (err) {
       showMessage(`Error: ${err}` as SetStateAction<string>)
     }

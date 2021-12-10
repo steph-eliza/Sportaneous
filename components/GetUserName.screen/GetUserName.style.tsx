@@ -16,4 +16,10 @@ export const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'whitesmoke',
   },
+  loadingText:{
+    flex:1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "grey"
+  }
 })
