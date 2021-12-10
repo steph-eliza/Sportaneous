@@ -1,26 +1,47 @@
-import React, {useState} from "react";
-import { Text, View } from "react-native";
-import { getAuth } from 'firebase/auth';
-import { PhoneSignIn } from "../Auth.screen/Auth.component";
-import { firebaseApp } from "../../utils/firestoreConfig"
+import React, { useState, useContext, useEffect } from 'react'
+import { getAuth } from 'firebase/auth'
+import PhoneSignIn from '../Auth.screen/Auth.component'
+import { UserContext } from '../../contexts/UserContext'
+import { Nav } from '../Nav.view/Nav.component'
+import { Text } from 'react-native-elements'
+import { Screen } from 'react-native-screens'
+import { getUserById } from '../../utils/utils'
+import GetUserName from '../GetUserName.screen/GetUserName.component'
+import {styles} from "./Splash.style"
 
-const auth = getAuth();
+export const Splash= () => {
 
-export const SplashScreen = () => {
-    firebaseApp
-
-    const [currentUser, setCurrentUser] = useState(false)
+  const auth = getAuth()
   
-    auth.onAuthStateChanged((user) =>{
+  const [isLoading, setIsLoading] = useState(true)
+  const [reLoad , setReload] = useState(false)
+  const [userAuth, setUserAuth] = useState(false)
+  const {currentUser, setCurrentUser} = useContext(UserContext)
+
+  useEffect(()=>{
+    auth.onAuthStateChanged((user) => {
+      setIsLoading(true)
+      setUserAuth(false)
+      setReload(false)
       if (user) {
-        setCurrentUser(true)
+        setIsLoading(false)
+        setUserAuth(true)
+        getUserById(user.uid)
+          .then((res)=>{
+            setCurrentUser(res)
+        }).catch((err)=>{
+            console.log(err)
+        })
+      }else{ 
+        setUserAuth(false)
+        setIsLoading(false)
       }
-    });
+    })
+  },[reLoad])
   
-    if(!currentUser){return(<PhoneSignIn/>)}
-    return(
-        <View>
-          <Text>Welcome to NBC</Text>
-        </View>
-    )
+  console.log(currentUser)
+  if (isLoading) return (<Screen style={styles.loadingText} ><Text>Welcome to NBC</Text></Screen>)
+  if (!userAuth) return <PhoneSignIn />
+  if (!currentUser) return <GetUserName setReload={setReload}/>
+  return <Nav/>
 }

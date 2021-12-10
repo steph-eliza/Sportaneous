@@ -1,4 +1,4 @@
-import React, { useState, useRef, SetStateAction } from 'react';
+import React, { useState, useRef, SetStateAction } from 'react'
 import {
   Text,
   View,
@@ -7,56 +7,64 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
-} from 'react-native';
-import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner, FirebaseAuthApplicationVerifier } from 'expo-firebase-recaptcha';
-import { getAuth, PhoneAuthProvider, signInWithCredential, ApplicationVerifier, onAuthStateChanged  } from 'firebase/auth';
-import { getApp } from 'firebase/app';
-import { firebaseApp } from "../../utils/firestoreConfig"
-import { styles } from './Auth.style';
+} from 'react-native'
+import {
+  FirebaseRecaptchaVerifierModal,
+  FirebaseRecaptchaBanner,
+  FirebaseAuthApplicationVerifier,
+} from 'expo-firebase-recaptcha'
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+  ApplicationVerifier,
+} from 'firebase/auth'
+import { getApp } from 'firebase/app'
+import { styles } from './Auth.style'
 
-const app = getApp();
-const auth = getAuth();
+const app = getApp()
+const auth = getAuth()
 
 if (!app?.options || Platform.OS === 'web') {
-  throw new Error('This example only works on Android or iOS, and requires a valid Firebase config.');
+  throw new Error(
+    'This example only works on Android or iOS, and requires a valid Firebase config.'
+  )
 }
 
-export function PhoneSignIn() {
+const PhoneSignIn = () => {
 
-  firebaseApp
+  const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null)
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [verificationId, setVerificationId] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
 
-  const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [verificationId, setVerificationId] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
+  const [message, showMessage] = useState('')
+  const attemptInvisibleVerification = false
 
-  const [message, showMessage] = useState('');
-  const attemptInvisibleVerification = false;
-
-  const sendUserPhoneDetails = async() =>{
+  const sendUserPhoneDetails = async () => {
     try {
-      const phoneProvider = new PhoneAuthProvider(auth);
+      const phoneProvider = new PhoneAuthProvider(auth)
       const verificationId = await phoneProvider.verifyPhoneNumber(
         phoneNumber,
         recaptchaVerifier.current as FirebaseAuthApplicationVerifier
-      );
-      setVerificationId(verificationId);
-      showMessage('Verification code has been sent to your phone.');
+      )
+      setVerificationId(verificationId)
+      showMessage('Verification code has been sent to your phone.')
     } catch (err: any) {
-      showMessage(`Error: ${err.message}`);
+      showMessage(`Error: ${err.message}`)
     }
   }
 
-  const sendVerificationCode = async() =>{
+  const sendVerificationCode = async () => {
     try {
       const credential = PhoneAuthProvider.credential(
         verificationId,
         verificationCode
-      );
-      await signInWithCredential(auth, credential);
-      showMessage("Phone authentication successful" as SetStateAction<string>);
+      )
+      await signInWithCredential(auth, credential)
+      showMessage('Phone authentication successful' as SetStateAction<string>);
     } catch (err) {
-      showMessage(`Error: ${err}` as SetStateAction<string>);
+      showMessage(`Error: ${err}` as SetStateAction<string>)
     }
   }
 
@@ -75,7 +83,7 @@ export function PhoneSignIn() {
         autoCompleteType="tel"
         keyboardType="phone-pad"
         textContentType="telephoneNumber"
-        onChangeText={phoneNumber => setPhoneNumber(phoneNumber)}
+        onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
       />
       <Button
         title="Send Verification Code"
@@ -95,19 +103,15 @@ export function PhoneSignIn() {
       />
       {message ? (
         <TouchableOpacity
-          style={[
-            StyleSheet.absoluteFill
-          ]}
-          onPress={() => showMessage('')}>
-          <Text
-            style={styles.popUpText}>
-            {message}
-          </Text>
+          style={[StyleSheet.absoluteFill]}
+          onPress={() => showMessage('')}
+        >
+          <Text style={styles.popUpText}>{message}</Text>
         </TouchableOpacity>
-      ) : (
-        undefined
-      )}
+      ) : undefined}
       {attemptInvisibleVerification && <FirebaseRecaptchaBanner />}
     </View>
-  );
+  )
 }
+
+export default PhoneSignIn
