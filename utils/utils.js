@@ -8,8 +8,9 @@ import {
   doc,
   addDoc,
   deleteDoc,
-  updateDoc, 
-  arrayUnion
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
 } from "firebase/firestore";
 
 export const selectAllEvents = () => {
@@ -130,30 +131,29 @@ export const getUserById = (userId) => {
     console.log(user);
     return user;
   });
-}; 
+};
 
-// UNTESTED, made by fraser and will
-export const addChatMessage = (chatObject, eventId) => {
-  return updateDoc(doc(db, "chats", eventId), {
-    messages: arrayUnion(chatObject)
-}).then((res) => {
-  console.log(res)})
-}
-
-// UNTESTED, made by fraser and will
 export const selectChatById = (chatId) => {
   const docRef = doc(db, "chats", chatId);
   return getDoc(docRef).then((snapshot) => {
     const event = snapshot.data();
-    console.log(event);
+    console.log("event:", event);
     return event;
   });
 };
 
-// UNTESTED, made by fraser and will
-export const deleteChatMessage = (chatObject, eventId) => {
-  return updateDoc(doc(db, "chats", eventId), {
-    messages: arrayRemove(chatObject)
-}).then((res) => {
-  console.log(res)})
-}
+export const addChatMessage = (chatObject, chatId) => {
+  return updateDoc(doc(db, "chats", chatId), {
+    messages: arrayUnion(chatObject),
+  }).then((res) => {
+    console.log(res);
+  });
+};
+
+export const deleteChatMessage = (chatObject, chatId) => {
+  return updateDoc(doc(db, "chats", chatId), {
+    messages: arrayRemove(chatObject),
+  }).then((res) => {
+    console.log(res);
+  });
+};
