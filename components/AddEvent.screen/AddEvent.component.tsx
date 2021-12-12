@@ -19,7 +19,9 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
     date: '',
     time: '',
     max_capacity: 0,
-    host_id: 'MqFbwzzuLbOhneGLtDs',
+    host_id: currentUser,
+    attendees: [],
+    pending_attendees: []
   })
 
   const handleChange = (text: string, stateKey: string) => {
@@ -29,13 +31,11 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
   const handlePress = async () => {
     const eventId = await addNewEvent(eventDetails)
     addNewChatroom(
-      { host_id: 'MqFbwzzuLbOhneGLtDs', attendees_id: [], messages: [] },
+      { host_id: currentUser, attendees_id: [], messages: [] },
       eventId
     )
-    navigation.navigate('Event', { eventId })
+    navigation.navigate('Event', { eventId: eventId })
   }
-
-  console.log(eventDetails)
 
   return (
     <SafeAreaView style={styles.container}>
