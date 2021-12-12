@@ -40,8 +40,6 @@ export const Splash = () => {
     })
   }
 
-  console.log(currentUser)
-
   if (isLoading)
     return (
       <Screen style={styles.loadingText}>
