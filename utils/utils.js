@@ -1,4 +1,3 @@
-import { db } from './firestoreConfig.js'
 import {
   collection,
   getDocs,
@@ -13,6 +12,7 @@ import {
   arrayRemove,
   setDoc,
 } from 'firebase/firestore'
+import { db } from './firestoreConfig.js'
 
 export const selectAllEvents = () => {
   return getDocs(collection(db, 'events')).then((snapshot) => {
@@ -55,7 +55,6 @@ export const addNewChatroom = (newChatroom, eventId) => {
   return setDoc(doc(db, 'chats', eventId), newChatroom)
 }
 
-// MVP just leaving it as one filter instead of complex.
 export const selectFilteredEvents = (location) => {
   const q1 = query(collection(db, 'events'), where('location', '==', location))
   return getDocs(q1).then((snapshot) => {
@@ -81,28 +80,22 @@ export const deleteChatroom = (chatId) => {
 
 export const getUsers = () => {
   return getDocs(collection(db, 'users')).then((snapshot) => {
-    let usersArray = []
+    let users = []
     snapshot.docs.forEach((user) => {
-      usersArray.push({ ...user.data(), id: user.id })
+      users.push({ ...user.data(), id: user.id })
     })
-    return usersArray
+    return users
   })
 }
 
 export const getUserById = (userId) => {
   const docRef = doc(db, 'users', userId)
-  return getDoc(docRef).then((snapshot) => {
-    const user = snapshot.data()
-    return user
-  })
+  return getDoc(docRef).then((snapshot) => snapshot.data())
 }
 
 export const selectChatById = (chatId) => {
   const docRef = doc(db, 'chats', chatId)
-  return getDoc(docRef).then((snapshot) => {
-    const event = snapshot.data()
-    return event
-  })
+  return getDoc(docRef).then((snapshot) => snapshot.data())
 }
 
 export const addChatMessage = (chatObject, chatId) => {
