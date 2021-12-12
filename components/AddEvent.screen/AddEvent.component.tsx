@@ -19,7 +19,7 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
     date: '',
     time: '',
     max_capacity: 0,
-    host_id: currentUser,
+    host_id: currentUser.id,
     attendees: [],
     pending_attendees: []
   })
@@ -31,7 +31,7 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
   const handlePress = async () => {
     const eventId = await addNewEvent(eventDetails)
     addNewChatroom(
-      { host_id: currentUser, attendees_id: [], messages: [] },
+      { host_id: currentUser.id, attendees_id: [], messages: [] },
       eventId
     )
     navigation.navigate('Event', { eventId: eventId })
