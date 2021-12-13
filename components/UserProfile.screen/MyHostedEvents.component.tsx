@@ -13,7 +13,6 @@ import {styles} from "./ProfileEvents.style";
 import {confirmDelete} from "./ProfileUtils";
 
 export const MyHostedEvents = ({user_id, navigation}) => {
-  console.log(navigation);
   const [isLoading, setIsLoading] = useState(true);
   const [hostedIsCollapsed, setHostedIsCollapsed] = useState(false);
   const [myHostedEvents, setMyHostedEvents] = useState([
@@ -53,6 +52,24 @@ export const MyHostedEvents = ({user_id, navigation}) => {
 
   if (isLoading) {
     return <Text>Loading ...</Text>;
+  }
+  if (myHostedEvents.length < 1) {
+    return (
+      <View>
+        <Pressable
+          onPress={() => {
+            setHostedIsCollapsed(hostedIsCollapsed === true ? false : true);
+          }}
+        >
+          <Text style={styles.eventHeader}>My Hosted Events</Text>
+        </Pressable>
+        <ScrollView>
+          <Collapsible collapsed={hostedIsCollapsed}>
+            <Text>You have not hosted any events.</Text>
+          </Collapsible>
+        </ScrollView>
+      </View>
+    );
   }
   return (
     <View>
