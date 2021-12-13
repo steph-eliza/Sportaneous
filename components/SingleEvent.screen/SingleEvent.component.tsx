@@ -23,6 +23,7 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
   const { currentUser } = useContext(UserContext);
 
   const [attendingStatus, setAttendingStatus] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const [eventDetails, setEventDetails] = React.useState({
     attendees: [""],
     category: "Dummy",
@@ -54,6 +55,7 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
   };
 
   React.useEffect(() => {
+    setIsLoading(true);
     selectEventById(eventId)
       .then((event: any) => {
         setEventDetails(event);
@@ -68,8 +70,9 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
           first_name: user!.first_name,
           last_name: user!.last_name,
         });
+        setIsLoading(false);
       });
-  }, [eventId]);
+  }, [eventId, attendingStatus]);
 
   const userDetailsForEvent = {
     first_name: currentUser.first_name,
@@ -77,51 +80,56 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
     userId: currentUser.id,
   };
 
-  return (
-    <>
-      <View style={styles.view}>
-        <Text style={styles.title}>{eventDetails.title}</Text>
-        <Text style={styles.text}>Location: {eventDetails.location}</Text>
-        <Text style={styles.text}>Category: {eventDetails.category}</Text>
-        <Text style={styles.text}>Description: {eventDetails.description}</Text>
-        <Text style={styles.text}>{`Time: ${eventDetails.time}`}</Text>
-        <Text style={styles.text}>{`Date: ${eventDetails.date}`}</Text>
-        <Text style={styles.text}>
-          Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
-        </Text>
-        <Pressable
-          style={styles.pressable}
-          onPress={() => {
-            if (!attendingStatus) {
-              setAttendingStatus(true);
-              joinEvent(userDetailsForEvent, eventId);
-            } else {
-              //leaveEvent api call
-              setAttendingStatus(false);
-              removeSelfFromEvent(userDetailsForEvent, eventId);
-            }
-          }}
-        >
-          <Text style={styles.PressableText}>
-            {attendingStatus ? "Leave event?" : "Join event?"}
+  if (isLoading) {
+    return <Text>Loading</Text>;
+  } else
+    return (
+      <>
+        <View style={styles.view}>
+          <Text style={styles.title}>{eventDetails.title}</Text>
+          <Text style={styles.text}>Location: {eventDetails.location}</Text>
+          <Text style={styles.text}>Category: {eventDetails.category}</Text>
+          <Text style={styles.text}>
+            Description: {eventDetails.description}
           </Text>
-        </Pressable>
-      </View>
-      <View style={styles.view}>
-        <Text style={styles.text}>Event host:</Text>
-        <Text
-          style={styles.text}
-        >{`${hostDetails.first_name} ${hostDetails.last_name}`}</Text>
+          <Text style={styles.text}>{`Time: ${eventDetails.time}`}</Text>
+          <Text style={styles.text}>{`Date: ${eventDetails.date}`}</Text>
+          <Text style={styles.text}>
+            Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
+          </Text>
+          <Pressable
+            style={styles.pressable}
+            onPress={() => {
+              if (!attendingStatus) {
+                setAttendingStatus(true);
+                joinEvent(userDetailsForEvent, eventId);
+              } else {
+                //leaveEvent api call
+                setAttendingStatus(false);
+                removeSelfFromEvent(userDetailsForEvent, eventId);
+              }
+            }}
+          >
+            <Text style={styles.PressableText}>
+              {attendingStatus ? "Leave event?" : "Join event?"}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={styles.view}>
+          <Text style={styles.text}>Event host:</Text>
+          <Text
+            style={styles.text}
+          >{`${hostDetails.first_name} ${hostDetails.last_name}`}</Text>
 
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Events");
-          }}
-          style={styles.pressable}
-        >
-          <Text style={styles.PressableText}>Go back to events</Text>
-        </Pressable>
-      </View>
-    </>
-  );
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Events");
+            }}
+            style={styles.pressable}
+          >
+            <Text style={styles.PressableText}>Go back to events</Text>
+          </Pressable>
+        </View>
+      </>
+    );
 };
