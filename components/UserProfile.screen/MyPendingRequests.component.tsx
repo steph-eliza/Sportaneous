@@ -64,7 +64,10 @@ export const MyPendingRequests = ({user_id}) => {
                 },
                 styles.requestsButton,
               ]}
-              onPress={() => {}}
+              onPress={() => {
+                // add functionality to remove yourself from pending_members
+                // patch request by event
+              }}
             >
               <Text style={styles.buttonTitle}>Cancel Request</Text>
             </Pressable>
@@ -74,22 +77,3 @@ export const MyPendingRequests = ({user_id}) => {
     </View>
   );
 };
-
-{
-  // Object {
-  //     "attendees": Array [
-  //       "MqFbwzzuLbOhneGLtDs",
-  //     ],
-  //     "category": "climbing",
-  //     "date": "06/10/2021",
-  //     "description": "Mtrcy rider (driver) injured in oth transport acc, sequela",
-  //     "host_id": "MqFbx-3zbETE2gRo5pI",
-  //     "id": "MqFdV64GrCmmGLhLAs_",
-  //     "location": "london",
-  //     "max_capacity": 1,
-  //     "pending_attendees": Array [
-  //       "MqFbx-1VrkhVGHYYpLX",
-  //     ],
-  //     "title": "mountain lovers",
-  //   },
-}

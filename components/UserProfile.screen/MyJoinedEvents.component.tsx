@@ -27,22 +27,3 @@ export const MyJoinedEvents = ({user_id}) => {
     </View>
   );
 };
-
-{
-  // Object {
-  //     "attendees": Array [
-  //       "MqFbwzzuLbOhneGLtDs",
-  //     ],
-  //     "category": "climbing",
-  //     "date": "06/10/2021",
-  //     "description": "Mtrcy rider (driver) injured in oth transport acc, sequela",
-  //     "host_id": "MqFbx-3zbETE2gRo5pI",
-  //     "id": "MqFdV64GrCmmGLhLAs_",
-  //     "location": "london",
-  //     "max_capacity": 1,
-  //     "pending_attendees": Array [
-  //       "MqFbx-1VrkhVGHYYpLX",
-  //     ],
-  //     "title": "mountain lovers",
-  //   },
-}

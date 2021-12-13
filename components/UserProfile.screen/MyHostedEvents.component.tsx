@@ -24,10 +24,6 @@ export const MyHostedEvents = ({user_id, navigation}) => {
   ]);
 
   useEffect(() => {
-    // (async () => {
-    //   const myEventRes = selectAllEvents();
-    //   console.log(myEventRes);
-    // })();
     (async () => {
       const myEventRes = await selectEventsByUser(user_id);
       setMyHostedEvents(myEventRes);
@@ -90,7 +86,10 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     },
                     styles.deleteButton,
                   ]}
-                  onPress={() => {}}
+                  onPress={() => {
+                    // add delete request to backend
+                    // maybe confirmation ?
+                  }}
                 >
                   <Text style={styles.buttonTitle}>Delete Event</Text>
                 </Pressable>
@@ -102,23 +101,3 @@ export const MyHostedEvents = ({user_id, navigation}) => {
     </View>
   );
 };
-
-{
-  // Object {
-  //   "attendees": Array [
-  //     "",
-  //   ],
-  //   "category": "ice skating",
-  //   "date": "02/03/2021",
-  //   "description": "Mature B-cell leukemia Burkitt-type not achieve remission",
-  //   "host_id": "MqFbwzzuLbOhneGLtDs",
-  //   "id": "MqFdV6-4eS7u0NojUhc",
-  //   "location": "manchester",
-  //   "max_capacity": 4,
-  //   "pending_attendees": Array [
-  //     "MqFbx-1VrkhVGHYYpLX",
-  //     "MqFbx-3zbETE2gRo5pI",
-  //   ],
-  //   "title": "Ice skating fun",
-  // },
-}
