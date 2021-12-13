@@ -10,7 +10,7 @@ import {MyJoinedEvents} from "./MyJoinedEvents.component";
 
 export const UserDetails = ({navigation}) => {
   const {currentUser} = useContext(UserContext);
-  const user_id: string = Object.keys(currentUser)[0];
+  const user_id: string = currentUser.id;
 
   return (
     <SafeAreaView style={styles.page}>
@@ -19,17 +19,9 @@ export const UserDetails = ({navigation}) => {
         <View style={styles.detailsContainer}>
           {/* <Image source={}></Image> */}
           <Text style={styles.detailsField}>First Name</Text>
-          <Text style={styles.detailsValue}>
-            {currentUser[user_id].first_name}
-          </Text>
+          <Text style={styles.detailsValue}>{currentUser.first_name}</Text>
           <Text style={styles.detailsField}>Last Name</Text>
-          <Text style={styles.detailsValue}>
-            {currentUser[user_id].last_name}
-          </Text>
-          <Text style={styles.detailsField}>Phone Number</Text>
-          <Text style={styles.detailsValue}>
-            {currentUser[user_id].phone_no}
-          </Text>
+          <Text style={styles.detailsValue}>{currentUser.last_name}</Text>
           <Text style={styles.detailsField}>UID</Text>
           <Text style={styles.detailsValue}>{user_id}</Text>
           <Pressable
