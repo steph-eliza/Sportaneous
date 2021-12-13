@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
-import React, { Component } from "react";
+import React from "react";
 import { styles } from "./SingleEvent.style";
-import { joinEvent, selectEventById } from "../../utils/utils";
+import { getUserById, joinEvent, selectEventById } from "../../utils/utils";
 
 type AddEventProps = {
   navigation: {
@@ -30,12 +30,28 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
     title: "Dummmy",
     id: 123,
   });
+  const [hostDetails, setHostDetails] = React.useState({
+    first_name: "",
+    last_name: "",
+  });
+
   React.useEffect(() => {
     setIsLoading(true);
-    selectEventById(eventId).then((res: any) => {
-      setEventDetails(res);
-      setIsLoading(false);
-    });
+    selectEventById(eventId)
+      .then((event: any) => {
+        setEventDetails(event);
+        setIsLoading(false);
+        return event;
+      })
+      .then((host) => {
+        return getUserById(host.host_id);
+      })
+      .then((user) => {
+        setHostDetails({
+          first_name: user!.first_name,
+          last_name: user!.last_name,
+        });
+      });
   }, [eventId]);
 
   if (isLoading) {
@@ -68,7 +84,11 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
           </Pressable>
         </View>
         <View style={styles.view}>
-          <Text style={styles.text}>About the host:</Text>
+          <Text style={styles.text}>Event host:</Text>
+          <Text
+            style={styles.text}
+          >{`${hostDetails.first_name} ${hostDetails.last_name}`}</Text>
+
           <Pressable
             onPress={() => {
               //Navigate back to EventsList when added to repo
