@@ -17,13 +17,11 @@ export const UserDetails = ({navigation}) => {
       <ScrollView>
         <Text style={styles.title}>Account Details</Text>
         <View style={styles.detailsContainer}>
-          {/* <Image source={}></Image> */}
+          <Image source={currentUser.image_bitmap} />
           <Text style={styles.detailsField}>First Name</Text>
           <Text style={styles.detailsValue}>{currentUser.first_name}</Text>
           <Text style={styles.detailsField}>Last Name</Text>
           <Text style={styles.detailsValue}>{currentUser.last_name}</Text>
-          <Text style={styles.detailsField}>UID</Text>
-          <Text style={styles.detailsValue}>{user_id}</Text>
           <Pressable
             style={({pressed}) => [
               {
