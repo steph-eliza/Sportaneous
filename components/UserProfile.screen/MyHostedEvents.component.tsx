@@ -10,6 +10,7 @@ import {
 } from "../../utils/utils";
 import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
+import {confirmDelete} from "./ProfileUtils";
 
 export const MyHostedEvents = ({user_id, navigation}) => {
   console.log(navigation);
@@ -33,22 +34,22 @@ export const MyHostedEvents = ({user_id, navigation}) => {
       setMyHostedEvents(myEventRes);
       setIsLoading(false);
     })();
-  }, [myHostedEvents]);
+  }, []);
 
-  const confirmDelete = (eventID) =>
-    Alert.alert("woah hold up", "u sure bro", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: () => {
-          deleteEvent(eventID);
-        },
-      },
-    ]);
+  // const confirmDelete = (eventID) =>
+  //   Alert.alert("woah hold up", "u sure bro", [
+  //     {
+  //       text: "Cancel",
+  //       onPress: () => console.log("Cancel Pressed"),
+  //       style: "cancel",
+  //     },
+  //     {
+  //       text: "OK",
+  //       onPress: () => {
+  //         deleteEvent(eventID);
+  //       },
+  //     },
+  //   ]);
 
   if (isLoading) {
     return <Text>Loading ...</Text>;
