@@ -33,7 +33,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
       setMyHostedEvents(myEventRes);
       setIsLoading(false);
     })();
-  }, []);
+  }, [myHostedEvents]);
 
   const confirmDelete = (eventID) =>
     Alert.alert("woah hold up", "u sure bro", [
