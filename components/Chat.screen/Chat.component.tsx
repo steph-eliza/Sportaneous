@@ -1,8 +1,7 @@
-import { View, Text, Pressable, Button } from "react-native";
-import React, { useState } from "react";
+import { View, Text, Pressable } from "react-native";
+import React, { useContext } from "react";
 import { styles } from "./chat.style";
 import {
-  TouchableOpacity,
   FlatList,
   TextInput,
 } from "react-native-gesture-handler";
@@ -10,32 +9,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   addChatMessage,
   deleteChatMessage,
-  selectChatById,
 } from "../../utils/utils";
 import { db } from "../../utils/firestoreConfig";
 import { doc, onSnapshot } from "firebase/firestore";
+import { UserContext } from '../../contexts/UserContext';
+
 
 export const Chat = ({ route }) => {
   const { chat_id } = route.params;
+  const { currentUser } = useContext(UserContext)
   const [selectedId, setSelectedId] = React.useState(null);
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState("");
+  const [isMessagesEmpty, setIsMessagesEmpty] = React.useState(true);
 
-  //API call to getChatroomByEventId
-  //ERROR: mismatch of event_id and chatroom_id
   React.useEffect(() => {
     const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
-      console.log("DOC:", doc.data());
       if (doc.data().messages.length > 0) {
+        setIsMessagesEmpty(false);
         setMessages(doc.data().messages);
-      } else {
-        setMessages([
-          {
-            first_name: "NBC",
-            message_body: "Add a message",
-            timestamp: 11111,
-          },
-        ]);
       }
     });
   }, [db, chat_id]);
@@ -49,17 +41,20 @@ export const Chat = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
+          if (currentUser.id === item.userId) {
           deleteChatMessage(
             {
-              first_name: "Will",
-              message_body: "Testing testing... 123",
-              timestamp: "11114",
+              userId: currentUser.id,
+              first_name: currentUser.first_name,
+              message_body: item.message_body,
+              timestamp: item.timestamp,
             },
-            "MqFdV5ywbsGMVlV_Dvc"
+            chat_id
           );
+          }
         }}
       >
-        <Text>X</Text>
+        <Text> {currentUser.id === item.userId ? "X" : ""} </Text>
       </Pressable>
     </View>
   );
@@ -77,37 +72,71 @@ export const Chat = ({ route }) => {
     );
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
-      />
+  if (isMessagesEmpty) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View>
+          <TextInput
+            placeholder="Message..."
+            onChangeText={setText}
+            value={text}
+          ></TextInput>
+          <Pressable
+            onPress={() => {
+              if(text !== ""){
+              addChatMessage(
+                {
+                  userId: currentUser.id,
+                  first_name: currentUser.first_name,
+                  message_body: text,
+                  timestamp: new Date(),
+                },
+                chat_id
+              );
+              }
+            }}
+          >
+            <Text style={styles.press}>SEND</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={messages}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+        />
 
-      <View>
-        <TextInput
-          placeholder="Message..."
-          onChangeText={setText}
-          value={text}
-        ></TextInput>
-        <Pressable
-          onPress={() => {
-            addChatMessage(
-              {
-                //Get first_name from userContext
-                first_name: "Will",
-                message_body: text,
-                timestamp: new Date(),
-              },
-              chat_id
-            );
-          }}
-        >
-          <Text style={styles.press}>SEND</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
-  );
+        <View>
+          <TextInput
+            placeholder="Message..."
+            onChangeText={setText}
+            value={text}
+          ></TextInput>
+          <Pressable
+            onPress={() => {
+              if(text !== ""){
+                addChatMessage(
+                {
+                  userId: currentUser.id,
+                  first_name: currentUser.first_name,
+                  message_body: text,
+                  timestamp: new Date(),
+                },
+                chat_id
+              );
+              }
+              
+            }}
+          >
+            <Text style={styles.press}>SEND</Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
+    );
+  }
 };
