@@ -5,7 +5,6 @@ import {styles} from "./UserDetails.style";
 import {MyHostedEvents} from "./MyHostedEvents.component";
 import {MyAcceptedRequests} from "./MyAcceptedRequests.component";
 import {ScrollView} from "react-native-gesture-handler";
-import {MyPendingRequests} from "./MyPendingRequests.component";
 import {MyJoinedEvents} from "./MyJoinedEvents.component";
 
 export const UserDetails = ({navigation}) => {

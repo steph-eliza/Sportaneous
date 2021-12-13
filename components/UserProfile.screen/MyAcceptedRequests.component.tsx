@@ -28,8 +28,6 @@ export const MyAcceptedRequests = ({user_id}) => {
       });
       if (myAccepted) {
         setAcceptedRequests(myAccepted);
-      } else {
-        setAcceptedRequests("No joined events");
       }
       setIsLoading(false);
     })();
@@ -72,8 +70,8 @@ export const MyAcceptedRequests = ({user_id}) => {
                 styles.requestsButton,
               ]}
               onPress={() => {
-                // add functionality to accept / reject
-                // navigate to AcceptReject component
+                // add functionality leave event
+                // patch event details, remove self from attendees
               }}
             >
               <Text style={styles.buttonTitle}>Leave Event</Text>

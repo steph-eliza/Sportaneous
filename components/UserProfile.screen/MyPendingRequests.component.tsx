@@ -28,8 +28,6 @@ export const MyPendingRequests = ({user_id}) => {
       });
       if (myPending) {
         setPendingRequests(myPending);
-      } else {
-        setPendingRequests("No joined events");
       }
       setIsLoading(false);
     })();
@@ -73,7 +71,7 @@ export const MyPendingRequests = ({user_id}) => {
               ]}
               onPress={() => {
                 // add functionality to remove yourself from pending_members
-                // patch request by event
+                // patch request by event, remove self form pending_attendees
               }}
             >
               <Text style={styles.buttonTitle}>Cancel Request</Text>

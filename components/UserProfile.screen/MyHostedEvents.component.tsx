@@ -3,11 +3,7 @@ import {useEffect, useState} from "react";
 import {Text, Pressable, View, TouchableOpacity, Alert} from "react-native";
 import Collapsible from "react-native-collapsible";
 import {ScrollView} from "react-native-gesture-handler";
-import {
-  deleteEvent,
-  selectAllEvents,
-  selectEventsByUser,
-} from "../../utils/utils";
+import {selectEventsByUser} from "../../utils/utils";
 import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
 import {confirmDelete} from "./ProfileUtils";
@@ -35,23 +31,8 @@ export const MyHostedEvents = ({user_id, navigation}) => {
     })();
   }, []);
 
-  // const confirmDelete = (eventID) =>
-  //   Alert.alert("woah hold up", "u sure bro", [
-  //     {
-  //       text: "Cancel",
-  //       onPress: () => console.log("Cancel Pressed"),
-  //       style: "cancel",
-  //     },
-  //     {
-  //       text: "OK",
-  //       onPress: () => {
-  //         deleteEvent(eventID);
-  //       },
-  //     },
-  //   ]);
-
   if (isLoading) {
-    return <Text>Loading ...</Text>;
+    return <Text>Loading hosted events ...</Text>;
   }
   if (myHostedEvents.length < 1) {
     return (
@@ -127,13 +108,9 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     },
                     styles.deleteButton,
                   ]}
-                  onPress={
-                    () => {
-                      confirmDelete(myEvent.id);
-                    }
-                    // add delete request to backend
-                    // maybe confirmation ?
-                  }
+                  onPress={() => {
+                    confirmDelete(myEvent.id);
+                  }}
                 >
                   <Text style={styles.buttonTitle}>Delete Event</Text>
                 </Pressable>
