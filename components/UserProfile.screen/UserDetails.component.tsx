@@ -8,7 +8,8 @@ import {ScrollView} from "react-native-gesture-handler";
 import {MyPendingRequests} from "./MyPendingRequests.component";
 import {MyJoinedEvents} from "./MyJoinedEvents.component";
 
-export const UserDetails = ({navigation}) => {
+export const UserDetails = ({ navigation }) => {
+  
   const {currentUser} = useContext(UserContext);
   const user_id: string = currentUser.id;
 
@@ -33,9 +34,12 @@ export const UserDetails = ({navigation}) => {
               },
               styles.editButton,
             ]}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("Edit Profile")
+            }}
             // detail edit functionality
             // navigate to edit page
+            
           >
             <Text style={styles.buttonTitle}>Edit Details</Text>
           </Pressable>
