@@ -1,23 +1,16 @@
 import { View, Text, Pressable } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./chat.style";
-import {
-  FlatList,
-  TextInput,
-} from "react-native-gesture-handler";
+import { FlatList, TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  addChatMessage,
-  deleteChatMessage,
-} from "../../utils/utils";
+import { addChatMessage, deleteChatMessage } from "../../utils/utils";
 import { db } from "../../utils/firestoreConfig";
 import { doc, onSnapshot } from "firebase/firestore";
-import { UserContext } from '../../contexts/UserContext';
-
+import { UserContext } from "../../contexts/UserContext";
 
 export const Chat = ({ route }) => {
   const { chat_id } = route.params;
-  const { currentUser } = useContext(UserContext)
+  const { currentUser } = useContext(UserContext);
   const [selectedId, setSelectedId] = React.useState(null);
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState("");
@@ -32,25 +25,46 @@ export const Chat = ({ route }) => {
     });
   }, [db, chat_id]);
 
+  const formatTimestamp = (timestamp) => {
+    let date = new Date(timestamp * 1000);
+    let datevalues = {
+      fullYear: String(date.getFullYear()),
+      month: String(date.getMonth() + 1),
+      day: String(date.getDate()),
+      hour: String(date.getHours()),
+      minutes: String(date.getMinutes()),
+      seconds: String(date.getSeconds()),
+    }
+    if(Number(datevalues.hour) < 10){
+      let hourString = '0' + datevalues.hour
+      datevalues.hour = hourString
+    };
+    if(Number(datevalues.minutes) < 10){
+      let minutesString = '0' + datevalues.minutes
+      datevalues.minutes = minutesString
+    };
+    return `${datevalues.hour}:${datevalues.minutes} ${datevalues.day}/${datevalues.month}/${datevalues.fullYear}`;
+  };
+
   const Item = ({ item, backgroundColor, textColor }) => (
     <View style={[styles.item, backgroundColor]}>
       <Text style={styles.item}>{item.first_name}</Text>
       <Text style={styles.item}>{item.message_body}</Text>
       {/* ADD functionality for formatting time from api */}
-      <Text style={styles.item}>{"TIME"}</Text>
+      <Text style={styles.item}>{formatTimestamp(item.timestamp.seconds)}</Text>
       <Pressable
         style={styles.item}
         onPress={() => {
           if (currentUser.id === item.userId) {
-          deleteChatMessage(
-            {
-              userId: currentUser.id,
-              first_name: currentUser.first_name,
-              message_body: item.message_body,
-              timestamp: item.timestamp,
-            },
-            chat_id
-          );
+            deleteChatMessage(
+              {
+                userId: currentUser.id,
+                first_name: currentUser.first_name,
+                message_body: item.message_body,
+                timestamp: item.timestamp,
+              },
+              chat_id
+            );
           }
         }}
       >
@@ -83,16 +97,16 @@ export const Chat = ({ route }) => {
           ></TextInput>
           <Pressable
             onPress={() => {
-              if(text !== ""){
-              addChatMessage(
-                {
-                  userId: currentUser.id,
-                  first_name: currentUser.first_name,
-                  message_body: text,
-                  timestamp: new Date(),
-                },
-                chat_id
-              );
+              if (text !== "") {
+                addChatMessage(
+                  {
+                    userId: currentUser.id,
+                    first_name: currentUser.first_name,
+                    message_body: text,
+                    timestamp: new Date(),
+                  },
+                  chat_id
+                );
               }
             }}
           >
@@ -119,18 +133,17 @@ export const Chat = ({ route }) => {
           ></TextInput>
           <Pressable
             onPress={() => {
-              if(text !== ""){
+              if (text !== "") {
                 addChatMessage(
-                {
-                  userId: currentUser.id,
-                  first_name: currentUser.first_name,
-                  message_body: text,
-                  timestamp: new Date(),
-                },
-                chat_id
-              );
+                  {
+                    userId: currentUser.id,
+                    first_name: currentUser.first_name,
+                    message_body: text,
+                    timestamp: new Date(),
+                  },
+                  chat_id
+                );
               }
-              
             }}
           >
             <Text style={styles.press}>SEND</Text>
