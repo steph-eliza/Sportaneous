@@ -6,6 +6,7 @@ import {getUsers, selectAllEvents} from "../../utils/utils";
 import {makeNameIdReference, truncate} from "./utils/EventListUtils";
 
 const EventList = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [userNames, setUserNames] = useState({});
   const [events, setEvents] = React.useState([
@@ -26,6 +27,7 @@ const EventList = ({navigation}) => {
   useEffect(() => {
     selectAllEvents().then((res) => {
       setEvents(res);
+      setIsLoading(false);
     });
     getUsers().then((res) => {
       setUserNames(makeNameIdReference(res));
@@ -63,6 +65,9 @@ const EventList = ({navigation}) => {
     );
   };
 
+  if (isLoading) {
+    return <Text>Loading events ...</Text>;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Filter setEvents={setEvents} />
