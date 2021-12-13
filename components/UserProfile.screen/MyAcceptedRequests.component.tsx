@@ -28,8 +28,6 @@ export const MyAcceptedRequests = ({user_id}) => {
       });
       if (myAccepted) {
         setAcceptedRequests(myAccepted);
-      } else {
-        setAcceptedRequests("No joined events");
       }
       setIsLoading(false);
     })();
@@ -37,6 +35,13 @@ export const MyAcceptedRequests = ({user_id}) => {
 
   if (isLoading) {
     return <Text>Loading joined events ...</Text>;
+  }
+  if (acceptedRequests.length < 1) {
+    return (
+      <Text style={styles.joinSubHeader}>
+        You have no accepted event requests.
+      </Text>
+    );
   }
   return (
     <View>
@@ -65,8 +70,8 @@ export const MyAcceptedRequests = ({user_id}) => {
                 styles.requestsButton,
               ]}
               onPress={() => {
-                // add functionality to accept / reject
-                // navigate to AcceptReject component
+                // add functionality leave event
+                // patch event details, remove self from attendees
               }}
             >
               <Text style={styles.buttonTitle}>Leave Event</Text>

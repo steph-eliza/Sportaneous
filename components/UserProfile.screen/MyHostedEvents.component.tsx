@@ -1,14 +1,14 @@
 import React from "react";
 import {useEffect, useState} from "react";
-import {Text, Pressable, View, TouchableOpacity, Button} from "react-native";
+import {Text, Pressable, View, TouchableOpacity, Alert} from "react-native";
 import Collapsible from "react-native-collapsible";
 import {ScrollView} from "react-native-gesture-handler";
-import {selectAllEvents, selectEventsByUser} from "../../utils/utils";
+import {selectEventsByUser} from "../../utils/utils";
 import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
+import {confirmDelete} from "./ProfileUtils";
 
 export const MyHostedEvents = ({user_id, navigation}) => {
-  console.log(navigation);
   const [isLoading, setIsLoading] = useState(true);
   const [hostedIsCollapsed, setHostedIsCollapsed] = useState(false);
   const [myHostedEvents, setMyHostedEvents] = useState([
@@ -32,7 +32,27 @@ export const MyHostedEvents = ({user_id, navigation}) => {
   }, []);
 
   if (isLoading) {
-    return <Text>Loading ...</Text>;
+    return <Text>Loading hosted events ...</Text>;
+  }
+  if (myHostedEvents.length < 1) {
+    return (
+      <View>
+        <Pressable
+          onPress={() => {
+            setHostedIsCollapsed(hostedIsCollapsed === true ? false : true);
+          }}
+        >
+          <Text style={styles.eventHeader}>My Hosted Events</Text>
+        </Pressable>
+        <ScrollView>
+          <Collapsible collapsed={hostedIsCollapsed}>
+            <Text style={styles.joinSubHeader}>
+              You have not hosted any events.
+            </Text>
+          </Collapsible>
+        </ScrollView>
+      </View>
+    );
   }
   return (
     <View>
@@ -73,7 +93,9 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     },
                     styles.requestsButton,
                   ]}
-                  onPress={() => {}}
+                  onPress={() => {
+                    navigation.navigate("AcceptReject", {eventId: myEvent.id});
+                  }}
                 >
                   <Text style={styles.buttonTitle}>Pending Requests</Text>
                 </Pressable>
@@ -87,8 +109,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.deleteButton,
                   ]}
                   onPress={() => {
-                    // add delete request to backend
-                    // maybe confirmation ?
+                    confirmDelete(myEvent.id);
                   }}
                 >
                   <Text style={styles.buttonTitle}>Delete Event</Text>
