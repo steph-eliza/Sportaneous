@@ -29,7 +29,7 @@ export const GetUserName = ({ reload }: { reload: () => void }) => {
   return (
     <View style={styles.container}>
       <Text>Hello! What's your name?</Text>
-      <Text>First name:</Text>
+      <Text>First Name:</Text>
       <TextInput
         style={styles.inputName}
         onChangeText={setFirstName}
