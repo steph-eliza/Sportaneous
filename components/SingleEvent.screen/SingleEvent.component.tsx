@@ -1,9 +1,18 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { Component } from "react";
 import { styles } from "./SingleEvent.style";
 import { joinEvent, selectEventById } from "../../utils/utils";
 
-export const SingleEvent = ({ navigation, route }) => {
+type AddEventProps = {
+  navigation: {
+    navigate: (component: string) => {};
+  };
+  route: {
+    params: { eventId: string };
+  };
+};
+
+export const SingleEvent = ({ navigation, route }: AddEventProps) => {
   const { eventId } = route.params;
   const user = { userId: "1234", first_name: "Will", second_name: "test" };
 
