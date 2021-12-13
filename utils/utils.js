@@ -114,4 +114,17 @@ export const joinEvent = (userDetails, eventId) => {
   return updateDoc(doc(db, 'events', eventId), {
     pending_attendees: arrayUnion(userDetails),
   })
-}
+};
+
+export const addAttendee = (eventId, userDetails) => {
+  return updateDoc(doc(db, "events", eventId), {
+    attendees: arrayUnion(userDetails),
+    pending_attendees: arrayRemove(userDetails),
+  })
+};
+
+export const removeAttendee = (eventId, userDetails) => {
+  return updateDoc(doc(db, "events", eventId), {
+    attendees : arrayRemove(userDetails),
+  })
+};

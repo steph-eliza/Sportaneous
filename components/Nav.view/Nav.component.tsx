@@ -7,6 +7,9 @@ import PhoneSignIn from "../Auth.screen/Auth.component";
 import Chatroom from "../Chatroom.screen/Chatroom.component";
 import { GetUserName } from "../GetUserName.screen/GetUserName.component";
 import { Chat } from "../Chat.screen/Chat.component";
+import { AcceptReject } from "../AcceptReject.screen/AcceptReject.component";
+
+
 
 const Drawer = createDrawerNavigator();
 
@@ -20,6 +23,7 @@ export function Nav() {
       <Drawer.Screen name="GetUserName" component={GetUserName} options={{drawerItemStyle:{display:"none"}}}/>
       <Drawer.Screen name="Chatrooms" component={Chatroom} />
       <Drawer.Screen name="Chat" component={Chat} />
+      <Drawer.Screen name="AcceptReject" component={AcceptReject} />
     </Drawer.Navigator>
   )
 }

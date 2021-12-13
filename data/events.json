@@ -6,10 +6,14 @@
     "date": "15/12/2021",
     "time": "09:00",
     "description": "Explosion and rupture of pressurized-gas tank, init encntr",
-    "max_capacity": 5,
+    "max_capacity": "5",
     "pending_attendees": [""],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
-    "attendees": ["MqFbx--rZQ1MsDKnDxB"]
+    "attendees": [{
+      "first_name": "Lindsey",
+      "last_name": "Riddlesden",
+      "userId": "MqFbx--rZQ1MsDKnDxB"
+    }]
   },
   "MqFdV6-4eS7u0NojUhc": {
     "title": "Ice skating fun",
@@ -18,8 +22,17 @@
     "date": "02/03/2021",
     "time": "09:30",
     "description": "Mature B-cell leukemia Burkitt-type not achieve remission",
-    "max_capacity": 4,
-    "pending_attendees": ["MqFbx-1VrkhVGHYYpLX","MqFbx-3zbETE2gRo5pI"],
+    "max_capacity": "4",
+    "pending_attendees": [{
+      "first_name": "Gerhardt",
+      "last_name": "Kerrod",
+      "userId": "MqFbx-1VrkhVGHYYpLX"
+    },
+    {
+      "first_name": "Bruno",
+      "last_name": "Dewane",
+      "userId": "MqFbx-3zbETE2gRo5pI"
+    }],
     "host_id" : "MqFbwzzuLbOhneGLtDs",
     "attendees": [""]
   },
@@ -30,10 +43,18 @@
     "date": "03/04/2021",
     "time": "09:00",
     "description": "Effusion, left hip",
-    "max_capacity": 5,
-    "pending_attendees": ["MqFbx-4SAgvThoRMbjN"],
+    "max_capacity": "5",
+    "pending_attendees": [{
+      "first_name": "Joelynn",
+      "last_name": "Rickcord",
+      "userId": "MqFbx-4SAgvThoRMbjN"
+    }],
     "host_id" : "MqFbx--rZQ1MsDKnDxB",
-    "attendees": ["MqFbwzzuLbOhneGLtDs"]
+    "attendees": [{
+      "first_name": "Lilias",
+      "last_name": "Mattson",
+      "userId": "MqFbwzzuLbOhneGLtDs"
+    }]
   },
   "MqFdV62x4N1HYFKYd8a": {
     "title": "best table tennis of your life",
@@ -42,7 +63,7 @@
     "date": "22/08/2021",
     "time": "13:00",
     "description": "Assault by crashing of aircraft, initial encounter",
-    "max_capacity": 3,
+    "max_capacity": "3",
     "pending_attendees": [""],
     "host_id" : "MqFbx-1VrkhVGHYYpLX",
     "attendees": [""]
@@ -54,9 +75,17 @@
     "date": "06/10/2021",
     "time": "17:00",
     "description": "Mtrcy rider (driver) injured in oth transport acc, sequela",
-    "max_capacity": 1,
-    "pending_attendees": ["MqFbx-1VrkhVGHYYpLX"],
+    "max_capacity": "1",
+    "pending_attendees": [{
+      "first_name": "Gerhardt",
+      "last_name": "Kerrod",
+      "userId": "MqFbx-1VrkhVGHYYpLX"
+    }],
     "host_id" : "MqFbx-3zbETE2gRo5pI",
-    "attendees": ["MqFbwzzuLbOhneGLtDs"]
+    "attendees": [{
+      "first_name": "Lilias",
+      "last_name": "Mattson",
+      "userId": "MqFbwzzuLbOhneGLtDs"
+    }]
   }
 }
