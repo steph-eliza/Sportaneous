@@ -65,7 +65,9 @@ export const MyHostedEvents = ({user_id, navigation}) => {
         </Pressable>
         <ScrollView>
           <Collapsible collapsed={hostedIsCollapsed}>
-            <Text>You have not hosted any events.</Text>
+            <Text style={styles.joinSubHeader}>
+              You have not hosted any events.
+            </Text>
           </Collapsible>
         </ScrollView>
       </View>

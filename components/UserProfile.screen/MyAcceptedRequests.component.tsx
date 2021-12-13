@@ -38,6 +38,13 @@ export const MyAcceptedRequests = ({user_id}) => {
   if (isLoading) {
     return <Text>Loading joined events ...</Text>;
   }
+  if (acceptedRequests.length < 1) {
+    return (
+      <Text style={styles.joinSubHeader}>
+        You have no accepted event requests.
+      </Text>
+    );
+  }
   return (
     <View>
       <Text style={styles.joinSubHeader}>Accepted Join Requests</Text>

@@ -38,6 +38,13 @@ export const MyPendingRequests = ({user_id}) => {
   if (isLoading) {
     return <Text>Loading event requests ...</Text>;
   }
+  if (pendingRequests.length < 1) {
+    return (
+      <Text style={styles.joinSubHeader}>
+        You have no pending event requests.
+      </Text>
+    );
+  }
   return (
     <View>
       <Text style={styles.joinSubHeader}>Pending Join Requests</Text>
