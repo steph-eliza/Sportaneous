@@ -1,7 +1,11 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Button } from "react-native";
 import React, { useState } from "react";
 import { styles } from "./chat.style";
-import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
+import {
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+} from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   addChatMessage,
@@ -9,21 +13,17 @@ import {
   selectChatById,
 } from "../../utils/utils";
 import { db } from "../../utils/firestoreConfig";
-
 import { doc, onSnapshot } from "firebase/firestore";
 
 export const Chat = ({ route }) => {
   const { chat_id } = route.params;
   const [selectedId, setSelectedId] = React.useState(null);
   const [messages, setMessages] = React.useState([]);
+  const [text, setText] = React.useState("");
 
   //API call to getChatroomByEventId
-
+  //ERROR: mismatch of event_id and chatroom_id
   React.useEffect(() => {
-    // selectChatById(chat_id).then((res) => {
-    //   console.log("CHAT OBJECT:", res);
-    //   setMessages(res.messages);
-    // });
     const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
       console.log("DOC:", doc.data());
       if (doc.data().messages.length > 0) {
@@ -41,10 +41,27 @@ export const Chat = ({ route }) => {
   }, [db, chat_id]);
 
   const Item = ({ item, backgroundColor, textColor }) => (
-    <TouchableOpacity style={[styles.item, backgroundColor]}>
+    <View style={[styles.item, backgroundColor]}>
       <Text style={styles.item}>{item.first_name}</Text>
       <Text style={styles.item}>{item.message_body}</Text>
-    </TouchableOpacity>
+      {/* ADD functionality for formatting time from api */}
+      <Text style={styles.item}>{"TIME"}</Text>
+      <Pressable
+        style={styles.item}
+        onPress={() => {
+          deleteChatMessage(
+            {
+              first_name: "Will",
+              message_body: "Testing testing... 123",
+              timestamp: "11114",
+            },
+            "MqFdV5ywbsGMVlV_Dvc"
+          );
+        }}
+      >
+        <Text>X</Text>
+      </Pressable>
+    </View>
   );
 
   const renderItem = ({ item }) => {
@@ -69,34 +86,28 @@ export const Chat = ({ route }) => {
         extraData={selectedId}
       />
 
-      <Pressable
-        onPress={() => {
-          addChatMessage(
-            {
-              first_name: "Will",
-              message_body: "Testing testing... 123",
-              timestamp: "11114",
-            },
-            "MqFdV5ywbsGMVlV_Dvc"
-          );
-        }}
-      >
-        <Text style={styles.press}>SEND MESSAGE?</Text>
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          deleteChatMessage(
-            {
-              first_name: "Will",
-              message_body: "Testing testing... 123",
-              timestamp: "11114",
-            },
-            "MqFdV5ywbsGMVlV_Dvc"
-          );
-        }}
-      >
-        <Text style={styles.press}>DELETE MESSAGE?</Text>
-      </Pressable>
+      <View>
+        <TextInput
+          placeholder="Message..."
+          onChangeText={setText}
+          value={text}
+        ></TextInput>
+        <Pressable
+          onPress={() => {
+            addChatMessage(
+              {
+                //Get first_name from userContext
+                first_name: "Will",
+                message_body: text,
+                timestamp: new Date(),
+              },
+              chat_id
+            );
+          }}
+        >
+          <Text style={styles.press}>SEND</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };
