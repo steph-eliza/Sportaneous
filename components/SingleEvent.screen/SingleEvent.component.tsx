@@ -63,7 +63,7 @@ export const SingleEvent = ({ navigation, route }) => {
           <Pressable
             onPress={() => {
               //Navigate back to EventsList when added to repo
-              navigation.navigate("EventList");
+              navigation.navigate("Events");
             }}
             style={styles.pressable}
           >
