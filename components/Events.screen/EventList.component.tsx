@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import React, {useEffect, useState} from "react";
+import {FlatList, SafeAreaView, Text, TouchableOpacity} from "react-native";
 import styles from "./EventList.style";
 import Filter from "./Filter.component";
-import { selectAllEvents } from "../../utils/utils";
-import { truncate, getDate, getTime } from "./utils/EventListUtils";
+import {selectAllEvents} from "../../utils/utils";
+import {truncate, getDate, getTime} from "./utils/EventListUtils";
 
-const EventList = ({ navigation }) => {
+const EventList = ({navigation}) => {
   const [selectedId, setSelectedId] = useState(null);
   const [events, setEvents] = React.useState([
     {
@@ -17,7 +17,7 @@ const EventList = ({ navigation }) => {
       host_id: 0,
       location: "dummy",
       max_capacity: "dummy",
-      pending_attendee: { 0: "dummy" },
+      pending_attendee: {0: "dummy"},
       title: "dummy",
     },
   ]);
@@ -25,9 +25,9 @@ const EventList = ({ navigation }) => {
     selectAllEvents().then((res) => {
       setEvents(res);
     });
-  }, []);
+  }, [events]);
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={[styles.user, textColor]}>{`User: ${item.host_id}`}</Text>
@@ -41,7 +41,7 @@ const EventList = ({ navigation }) => {
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const backgroundColor =
       item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
     const color = item.id === selectedId ? "white" : "black";
@@ -50,10 +50,10 @@ const EventList = ({ navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.chat_id);
-          navigation.navigate("Event", { eventId: item.id });
+          navigation.navigate("Event", {eventId: item.id});
         }}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
+        backgroundColor={{backgroundColor}}
+        textColor={{color}}
       />
     );
   };

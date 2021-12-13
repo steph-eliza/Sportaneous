@@ -33,7 +33,7 @@ export const MyAcceptedRequests = ({user_id}) => {
       }
       setIsLoading(false);
     })();
-  }, []);
+  }, [acceptedRequests]);
 
   if (isLoading) {
     return <Text>Loading joined events ...</Text>;
