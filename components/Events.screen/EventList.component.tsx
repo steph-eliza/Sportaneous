@@ -21,11 +21,12 @@ const EventList = ({navigation}) => {
       title: "dummy",
     },
   ]);
+
   useEffect(() => {
     selectAllEvents().then((res) => {
       setEvents(res);
     });
-  }, [events]);
+  }, []);
 
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>

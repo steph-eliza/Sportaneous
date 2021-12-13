@@ -33,7 +33,7 @@ export const MyPendingRequests = ({user_id}) => {
       }
       setIsLoading(false);
     })();
-  }, [pendingRequests]);
+  }, []);
 
   if (isLoading) {
     return <Text>Loading event requests ...</Text>;
