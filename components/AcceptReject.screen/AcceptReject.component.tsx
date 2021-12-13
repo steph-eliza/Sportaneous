@@ -8,14 +8,14 @@ import { selectEventById, selectAllEvents, removeAttendee, addAttendee } from ".
 
 export const AcceptReject = ({ route }) => {
 //   const { event_id } = route.params;
-    const event_id = "MqFdV6-4eS7u0NojUhc"
+    const event_id = "MqFdV61nNp5BqUqDNqU"
     const [selectedId, setSelectedId] = React.useState(null);
   const [pendingUsers, setPendingUsers] = React.useState([]);
   const [attendingUsers, setAttendingUsers] = React.useState([]);
 
   React.useEffect(() => {
     selectEventById(event_id).then((res) => {
-      //console.log(res)
+      console.log(res)
       if(res.pending_attendees.length > 0){
               let pendingUsersNoEmpties = res.pending_attendees.filter((user) => {
           return user !== ""
