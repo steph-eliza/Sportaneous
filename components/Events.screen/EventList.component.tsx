@@ -2,11 +2,12 @@ import React, {useEffect, useState} from "react";
 import {FlatList, SafeAreaView, Text, TouchableOpacity} from "react-native";
 import styles from "./EventList.style";
 import Filter from "./Filter.component";
-import {selectAllEvents} from "../../utils/utils";
-import {truncate, getDate, getTime} from "./utils/EventListUtils";
+import {getUsers, selectAllEvents} from "../../utils/utils";
+import {makeNameIdReference, truncate} from "./utils/EventListUtils";
 
 const EventList = ({navigation}) => {
   const [selectedId, setSelectedId] = useState(null);
+  const [userNames, setUserNames] = useState({});
   const [events, setEvents] = React.useState([
     {
       attendees: "dummy",
@@ -21,20 +22,24 @@ const EventList = ({navigation}) => {
       title: "dummy",
     },
   ]);
+
   useEffect(() => {
     selectAllEvents().then((res) => {
       setEvents(res);
+    });
+    getUsers().then((res) => {
+      setUserNames(makeNameIdReference(res));
     });
   }, []);
 
   const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={[styles.user, textColor]}>{`User: ${item.host_id}`}</Text>
+      <Text style={[styles.user, textColor]}>{userNames[item.host_id]}</Text>
       <Text style={[styles.location, textColor]}>{item.location}</Text>
-      <Text style={[styles.date, textColor]}>{getDate(item.date)}</Text>
+      <Text style={[styles.date, textColor]}>{item.date}</Text>
       <Text style={[styles.category, textColor]}>{item.category}</Text>
-      <Text style={[styles.time, textColor]}>{getTime(item.date)}</Text>
+      <Text style={[styles.time, textColor]}>{item.time}</Text>
       <Text style={[styles.description, textColor]}>
         {truncate(item.description)}
       </Text>
