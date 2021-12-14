@@ -1,9 +1,8 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useContext} from "react";
 import {UserContext} from "../../contexts/UserContext";
 import {SafeAreaView, Text, Pressable, View, Image} from "react-native";
 import {styles} from "./UserDetails.style";
 import {MyHostedEvents} from "./MyHostedEvents.component";
-import {MyAcceptedRequests} from "./MyAcceptedRequests.component";
 import {ScrollView} from "react-native-gesture-handler";
 import {MyJoinedEvents} from "./MyJoinedEvents.component";
 
@@ -38,7 +37,7 @@ export const UserDetails = ({navigation}) => {
           </Pressable>
         </View>
         <MyHostedEvents user_id={user_id} navigation={navigation} />
-        <MyJoinedEvents user_id={user_id} />
+        <MyJoinedEvents user_id={user_id} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>
   );

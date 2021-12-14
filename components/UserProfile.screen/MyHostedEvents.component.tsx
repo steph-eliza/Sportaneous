@@ -4,13 +4,14 @@ import {Text, Pressable, View, TouchableOpacity, Alert} from "react-native";
 import Collapsible from "react-native-collapsible";
 import {ScrollView} from "react-native-gesture-handler";
 import {selectEventsByUser} from "../../utils/utils";
-import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
+import {truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
-import {confirmDelete} from "./ProfileUtils";
+import {confirmDelete, getOwnName} from "./ProfileUtils";
 
 export const MyHostedEvents = ({user_id, navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hostedIsCollapsed, setHostedIsCollapsed] = useState(false);
+  const [myName, setMyName] = useState("");
   const [myHostedEvents, setMyHostedEvents] = useState([
     {
       title: "dummy",
@@ -18,7 +19,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
       location: "dummy",
       date: "dummy",
       category: "dummy",
-      // time: ...
+      time: "dummy",
       description: "dummy",
     },
   ]);
@@ -28,6 +29,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
       const myEventRes = await selectEventsByUser(user_id);
       setMyHostedEvents(myEventRes);
       setIsLoading(false);
+      setMyName(await getOwnName(user_id));
     })();
   }, []);
 
@@ -75,11 +77,11 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                   }}
                 >
                   <Text style={styles.title}>{myEvent.title}</Text>
-                  <Text style={styles.user}>{myEvent.host_id}</Text>
+                  <Text style={styles.user}>{myName}</Text>
                   <Text style={styles.location}>{myEvent.location}</Text>
                   <Text style={styles.date}>{myEvent.date}</Text>
                   <Text style={styles.category}>{myEvent.category}</Text>
-                  <Text style={styles.time}>{getTime(myEvent.date)}</Text>
+                  <Text style={styles.time}>{myEvent.time}</Text>
                   <Text style={styles.description}>
                     {truncate(myEvent.description)}
                   </Text>
