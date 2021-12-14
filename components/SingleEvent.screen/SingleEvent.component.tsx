@@ -75,11 +75,7 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
           time: "",
         });
       }
-
-      setIsLoading(false);
-      setIsLoading(true);
     });
-    return unsub;
   }, [eventId]);
 
   React.useEffect(() => {
@@ -90,6 +86,8 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
           last_name: user.last_name,
         });
       }
+
+      setIsLoading(false);
     });
   }, [eventDetails]);
 
