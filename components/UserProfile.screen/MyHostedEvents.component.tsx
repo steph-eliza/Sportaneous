@@ -94,7 +94,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.requestsButton,
                   ]}
                   onPress={() => {
-                    navigation.navigate("AcceptReject", {eventId: myEvent.id});
+                    navigation.navigate("AcceptReject", {eventId: myEvent.id,eventTitle : myEvent.title});
                   }}
                 >
                   <Text style={styles.buttonTitle}>Pending Requests</Text>
