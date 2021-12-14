@@ -8,6 +8,8 @@ export const truncate = (string: string) => {
   if (string.length > 40) {
     string = `${string.substring(0, 60)}...`;
     return string;
+  } else {
+    return string;
   }
 };
 
