@@ -14,7 +14,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firestoreConfig";
 
 type navigationWithEventId = {
-  event_id: string;
+  eventId: string;
 };
 
 type AddEventProps = {
@@ -97,7 +97,7 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
         <Pressable
           style={styles.pressable}
           onPress={() => {
-            navigation.navigate("AcceptReject", { event_id: eventId });
+            navigation.navigate("AcceptReject", { eventId: eventId });
           }}
         >
           <Text style={styles.PressableText}>Review attendees</Text>
