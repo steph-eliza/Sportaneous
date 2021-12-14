@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {
-  Button,
-  Platform,
   TextInput,
   SafeAreaView,
   View,
