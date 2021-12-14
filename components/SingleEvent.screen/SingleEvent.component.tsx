@@ -1,14 +1,29 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { styles } from "./SingleEvent.style";
-import { joinEvent, selectEventById } from "../../utils/utils";
+import { UserContext } from "../../contexts/UserContext";
+import {
+  getUserById,
+  joinEvent,
+  removeSelfFromEvent,
+  selectEventById,
+} from "../../utils/utils";
 
-export const SingleEvent = ({ navigation, route }) => {
+type AddEventProps = {
+  navigation: {
+    navigate: (component: string) => {};
+  };
+  route: {
+    params: { eventId: string };
+  };
+};
+
+export const SingleEvent = ({ navigation, route }: AddEventProps) => {
   const { eventId } = route.params;
-  const user = { userId: "1234", first_name: "Will", second_name: "test" };
+  const { currentUser } = useContext(UserContext);
 
+  const [attendingStatus, setAttendingStatus] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  //Dummy object to shut up TS.
   const [eventDetails, setEventDetails] = React.useState({
     attendees: [""],
     category: "Dummy",
@@ -17,25 +32,57 @@ export const SingleEvent = ({ navigation, route }) => {
     host_id: "Dummmy",
     location: "Dummmy",
     max_capacity: 4,
-    pending_attendees: [],
+    pending_attendees: [""],
     title: "Dummmy",
     id: 123,
+    time: "",
   });
+  const [hostDetails, setHostDetails] = React.useState({
+    first_name: "",
+    last_name: "",
+  });
+
+  const checkAttendingStatus = (object: any) => {
+    if (object.attendees.includes(currentUser.id)) {
+      setAttendingStatus(true);
+    }
+
+    for (let i = 0; i < object.pending_attendees.length; i++) {
+      if (object.pending_attendees[i].userId === currentUser) {
+        setAttendingStatus(true);
+      }
+    }
+  };
+
   React.useEffect(() => {
     setIsLoading(true);
-    selectEventById(eventId).then((res: any) => {
-      setEventDetails(res);
-      setIsLoading(false);
-    });
-  }, [eventId]);
+    selectEventById(eventId)
+      .then((event: any) => {
+        setEventDetails(event);
+        checkAttendingStatus(event);
+        return event;
+      })
+      .then((host) => {
+        return getUserById(host.host_id);
+      })
+      .then((user) => {
+        setHostDetails({
+          first_name: user!.first_name,
+          last_name: user!.last_name,
+        });
+        setIsLoading(false);
+      });
+  }, [eventId, attendingStatus]);
+
+  const userDetailsForEvent = {
+    first_name: currentUser.first_name,
+    last_name: currentUser.last_name,
+    userId: currentUser.id,
+  };
 
   if (isLoading) {
-    return (
-      <View>
-        <Text>Loading</Text>
-      </View>
-    );
-  } else {
+    return <Text>Loading</Text>;
+  } else
     return (
       <>
         <View style={styles.view}>
@@ -45,24 +92,37 @@ export const SingleEvent = ({ navigation, route }) => {
           <Text style={styles.text}>
             Description: {eventDetails.description}
           </Text>
-          <Text style={styles.text}>Date: {eventDetails.date}</Text>
+          <Text style={styles.text}>{`Time: ${eventDetails.time}`}</Text>
+          <Text style={styles.text}>{`Date: ${eventDetails.date}`}</Text>
           <Text style={styles.text}>
             Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
           </Text>
           <Pressable
             style={styles.pressable}
             onPress={() => {
-              joinEvent(user, eventId);
+              if (!attendingStatus) {
+                setAttendingStatus(true);
+                joinEvent(userDetailsForEvent, eventId);
+              } else {
+                //leaveEvent api call
+                setAttendingStatus(false);
+                removeSelfFromEvent(userDetailsForEvent, eventId);
+              }
             }}
           >
-            <Text style={styles.PressableText}>Join this event?</Text>
+            <Text style={styles.PressableText}>
+              {attendingStatus ? "Leave event?" : "Join event?"}
+            </Text>
           </Pressable>
         </View>
         <View style={styles.view}>
-          <Text style={styles.text}>About the host:</Text>
+          <Text style={styles.text}>Event host:</Text>
+          <Text
+            style={styles.text}
+          >{`${hostDetails.first_name} ${hostDetails.last_name}`}</Text>
+
           <Pressable
             onPress={() => {
-              //Navigate back to EventsList when added to repo
               navigation.navigate("Events");
             }}
             style={styles.pressable}
@@ -72,5 +132,4 @@ export const SingleEvent = ({ navigation, route }) => {
         </View>
       </>
     );
-  }
 };
