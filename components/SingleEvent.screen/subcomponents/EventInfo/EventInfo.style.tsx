@@ -12,6 +12,13 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#DADBDF",
   },
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    alignSelf: "center",
+    padding: 10,
+    textTransform: "capitalize",
+  },
   capitalizedText: {
     fontSize: 18,
     margin: 5,
@@ -20,12 +27,5 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     margin: 5,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    alignSelf: "center",
-    padding: 10,
-    textTransform: "capitalize",
   },
 });

@@ -7,8 +7,12 @@ export const EventInfo = ({ eventDetails }: addEventProps) => {
   return (
     <View style={styles.eventView}>
       <Text style={styles.title}>{eventDetails?.title}</Text>
-      <Text style={styles.text}>Location: {eventDetails?.location}</Text>
-      <Text style={styles.text}>Category: {eventDetails?.category}</Text>
+      <Text style={styles.capitalizedText}>
+        Location: {eventDetails?.location}
+      </Text>
+      <Text style={styles.capitalizedText}>
+        Category: {eventDetails?.category}
+      </Text>
       <Text style={styles.text}>Description: {eventDetails?.description}</Text>
       <Text style={styles.text}>Time: {eventDetails?.time}</Text>
       <Text style={styles.text}>Date: {eventDetails?.date}</Text>
