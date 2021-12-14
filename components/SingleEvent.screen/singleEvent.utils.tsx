@@ -64,3 +64,24 @@ export function deleteEventAndCascade(
     alert("Unable to delete event at this time, please try again later");
   }
 }
+
+export function checkCapacity(attending: boolean, eventDetails: any) {
+  if (
+    eventDetails.attendees.length >= parseInt(eventDetails.max_capacity) &&
+    attending === false
+  ) {
+    return true;
+  }
+  return false;
+}
+export function joinButtonText(
+  acceptedOrRequested: boolean,
+  eventDetails: eventDetails
+) {
+  if (checkCapacity(acceptedOrRequested, eventDetails)) {
+    return "Event full";
+  } else if (acceptedOrRequested) {
+    return "Leave event?";
+  }
+  return "Request to join event?";
+}

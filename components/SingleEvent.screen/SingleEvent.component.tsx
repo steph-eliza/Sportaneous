@@ -9,6 +9,8 @@ import {
   addEventProps,
   hostDetails,
   eventDetails,
+  checkCapacity,
+  joinButtonText,
 } from "./singleEvent.utils";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firestoreConfig";
@@ -79,24 +81,6 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     userId: currentUser.id,
   };
 
-  function checkCapacity(attending: boolean, eventDetails: any) {
-    if (
-      eventDetails.attendees.length >= parseInt(eventDetails.max_capacity) &&
-      attending === false
-    ) {
-      return true;
-    }
-    return false;
-  }
-  function joinButtonText() {
-    if (checkCapacity(acceptedOrRequested, eventDetails)) {
-      return "Event full";
-    } else if (acceptedOrRequested) {
-      return "Leave event?";
-    }
-    return "Request to join event?";
-  }
-
   if (isLoading) {
     return <View style={styles.view}></View>;
   } else if (eventDetails.host_id === currentUser.id) {
@@ -136,7 +120,9 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
             }
           }}
         >
-          <Text style={styles.touchOpacityText}>{joinButtonText()}</Text>
+          <Text style={styles.touchOpacityText}>
+            {joinButtonText(acceptedOrRequested, eventDetails)}
+          </Text>
         </TouchableOpacity>
 
         <HostInfo hostDetails={hostDetails} />
