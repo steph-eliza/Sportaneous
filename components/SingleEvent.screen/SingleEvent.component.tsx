@@ -2,14 +2,24 @@ import { View, Text, Pressable } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./SingleEvent.style";
 import { UserContext } from "../../contexts/UserContext";
-import { getUserById, joinEvent, removeSelfFromEvent } from "../../utils/utils";
+import {
+  deleteChatroom,
+  deleteEvent,
+  getUserById,
+  joinEvent,
+  removeSelfFromEvent,
+} from "../../utils/utils";
 import { checkAcceptedOrRequested } from "./singleEvent.utils";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firestoreConfig";
 
+type navigationWithEventId = {
+  event_id: string;
+};
+
 type AddEventProps = {
   navigation: {
-    navigate: (component: string) => {};
+    navigate: (component: string, event_id?: navigationWithEventId) => {};
   };
   route: {
     params: { eventId: string };
@@ -17,7 +27,7 @@ type AddEventProps = {
 };
 
 export const SingleEvent = ({ navigation, route }: AddEventProps) => {
-  const { eventId } = route.params;
+  let { eventId } = route.params;
   const { currentUser } = useContext(UserContext);
 
   const [isLoading, setIsLoading] = React.useState(true);
@@ -84,8 +94,44 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
         <Text style={styles.text}>
           Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
         </Text>
-        <Pressable>
-          <Text>Review attendees</Text>
+        <Pressable
+          style={styles.pressable}
+          onPress={() => {
+            navigation.navigate("AcceptReject", { event_id: eventId });
+          }}
+        >
+          <Text style={styles.PressableText}>Review attendees</Text>
+        </Pressable>
+        <Pressable
+          style={styles.pressable}
+          onPress={() => {
+            // try {
+            //   setEventDetails({
+            //     attendees: [],
+            //     category: "Dummy",
+            //     date: "Dummmy",
+            //     description: "Dummmy",
+            //     host_id: "Dummmy",
+            //     location: "Dummmy",
+            //     max_capacity: 4,
+            //     pending_attendees: [],
+            //     title: "Dummmy",
+            //     id: 123,
+            //     time: "",
+            //   });
+            //   deleteEvent(eventId).then(() => {
+            //     deleteChatroom(eventId);
+            //   });
+            //   eventId = "undefined";
+            //   navigation.navigate("EventsList");
+            // } catch (error) {
+            //   alert(
+            //     "Unable to delete event at this time, please try again later"
+            //   );
+            // }
+          }}
+        >
+          <Text style={styles.PressableText}>Delete event?</Text>
         </Pressable>
       </View>
     );
