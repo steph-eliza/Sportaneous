@@ -44,6 +44,7 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
     id: 123,
     time: "",
   });
+
   const [hostDetails, setHostDetails] = React.useState({
     first_name: "",
     last_name: "",
@@ -56,21 +57,39 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    console.log("HELO");
     const unsub = onSnapshot(doc(db, "events", eventId), (doc) => {
-      setEventDetails(doc.data());
+      if (doc.exists()) {
+        setEventDetails(doc.data());
+      } else {
+        setEventDetails({
+          attendees: [],
+          category: "Dummy",
+          date: "Dummmy",
+          description: "Dummmy",
+          host_id: "Dummmy",
+          location: "Dummmy",
+          max_capacity: 4,
+          pending_attendees: [],
+          title: "Dummmy",
+          id: 123,
+          time: "",
+        });
+      }
 
       setIsLoading(false);
+      setIsLoading(true);
     });
+    return unsub;
   }, [eventId]);
 
   React.useEffect(() => {
-    console.log("BYE");
     getUserById(eventDetails.host_id).then((user) => {
-      setHostDetails({
-        first_name: user.first_name,
-        last_name: user.last_name,
-      });
+      if (user !== undefined) {
+        setHostDetails({
+          first_name: user.first_name,
+          last_name: user.last_name,
+        });
+      }
     });
   }, [eventDetails]);
 
@@ -79,7 +98,6 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
     last_name: currentUser.last_name,
     userId: currentUser.id,
   };
-
   if (isLoading) {
     return (
       <View style={styles.view}>
@@ -109,29 +127,20 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
         <Pressable
           style={styles.pressable}
           onPress={() => {
-            // try {
-            //   setEventDetails({
-            //     attendees: [],
-            //     category: "Dummy",
-            //     date: "Dummmy",
-            //     description: "Dummmy",
-            //     host_id: "Dummmy",
-            //     location: "Dummmy",
-            //     max_capacity: 4,
-            //     pending_attendees: [],
-            //     title: "Dummmy",
-            //     id: 123,
-            //     time: "",
-            //   });
-            //   deleteEvent(eventId).then(() => {
-            //     deleteChatroom(eventId);
-            //   });
-            //   navigation.navigate("EventsList");
-            // } catch (error) {
-            //   alert(
-            //     "Unable to delete event at this time, please try again later"
-            //   );
-            // }
+            try {
+              deleteEvent(eventId)
+                .then(() => {
+                  deleteChatroom(eventId);
+                })
+                .then(() => {
+                  navigation.navigate("Events");
+                });
+            } catch (error) {
+              console.log(error);
+              alert(
+                "Unable to delete event at this time, please try again later"
+              );
+            }
           }}
         >
           <Text style={styles.PressableText}>Delete event?</Text>
