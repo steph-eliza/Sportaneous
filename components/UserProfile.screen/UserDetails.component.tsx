@@ -38,7 +38,7 @@ export const UserDetails = ({navigation}) => {
           </Pressable>
         </View>
         <MyHostedEvents user_id={user_id} navigation={navigation} />
-        <MyJoinedEvents user_id={user_id} />
+        <MyJoinedEvents user_id={user_id} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>
   );

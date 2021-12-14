@@ -3,14 +3,19 @@ import {useEffect} from "react";
 import {useState, useContext} from "react";
 import {Text, Pressable, View, TouchableOpacity} from "react-native";
 import {UserContext} from "../../contexts/UserContext";
-import {selectAllEvents} from "../../utils/utils";
-import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
+import {getUsers, selectAllEvents} from "../../utils/utils";
+import {
+  getTime,
+  makeNameIdReference,
+  truncate,
+} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
 import {confirmLeave} from "./ProfileUtils";
 
-export const MyAcceptedRequests = ({user_id}) => {
+export const MyAcceptedRequests = ({user_id, navigation}) => {
   const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
+  const [userNames, setUserNames] = useState({});
   const [acceptedRequests, setAcceptedRequests] = useState([
     {
       title: "dummy",
@@ -37,6 +42,8 @@ export const MyAcceptedRequests = ({user_id}) => {
         setAcceptedRequests(myAccepted);
       }
       setIsLoading(false);
+      const nameUidReferenceObject = await getUsers();
+      setUserNames(makeNameIdReference(nameUidReferenceObject));
     })();
   }, []);
 
@@ -56,9 +63,14 @@ export const MyAcceptedRequests = ({user_id}) => {
       {acceptedRequests.map((myEvent) => {
         return (
           <View style={styles.container}>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => {
+                navigation.navigate("Event", {eventId: myEvent.id});
+              }}
+            >
               <Text style={styles.title}>{myEvent.title}</Text>
-              <Text style={styles.user}>{myEvent.host_id}</Text>
+              <Text style={styles.user}>{userNames[myEvent.host_id]}</Text>
               <Text style={styles.location}>{myEvent.location}</Text>
               <Text style={styles.date}>{myEvent.date}</Text>
               <Text style={styles.category}>{myEvent.category}</Text>
