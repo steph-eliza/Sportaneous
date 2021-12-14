@@ -24,7 +24,11 @@ export const MyAcceptedRequests = ({user_id}) => {
     (async () => {
       const allEventRes = await selectAllEvents();
       const myAccepted = allEventRes.filter((event) => {
-        return event.attendees.includes(user_id);
+        let attendingMatch = false;
+        event.attendees.forEach((person) => {
+          if (person.userId === user_id) attendingMatch = true;
+        });
+        if (attendingMatch) return event;
       });
       if (myAccepted) {
         setAcceptedRequests(myAccepted);
