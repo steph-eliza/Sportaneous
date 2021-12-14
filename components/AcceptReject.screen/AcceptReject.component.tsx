@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { EventEmitter } from "stream";
 
-export const AcceptReject = ({ route }) => {
+export const AcceptReject = ({ route, navigation }) => {
     const { eventId, eventTitle } = route.params;
   console.log({eventId})
   //TEMP HARDCODING REMOVE ME
@@ -51,7 +51,10 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          // ADD NAVIGATION TO USER PROFILE HERE
+
+          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
+
+          // navigation.navigate("UserProfileView", {userId: item.userId});
         }}
       >
         <Text>Press here to go to user profile!</Text>
@@ -84,7 +87,10 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          // ADD NAVIGATION TO USER PROFILE HERE
+
+          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
+
+          // navigation.navigate("UserProfileView", {userId: item.userId});
         }}
       >
         <Text>Press here to see user profile</Text>
