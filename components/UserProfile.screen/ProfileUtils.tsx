@@ -2,7 +2,7 @@ import {Alert} from "react-native";
 import {deleteEvent} from "../../utils/utils";
 
 export const confirmDelete = (eventID) =>
-  Alert.alert("woah hold up", "u sure bro", [
+  Alert.alert("Warning!", "Are you sure you want to delete this event?", [
     {
       text: "Cancel",
       onPress: () => console.log("Cancel Pressed"),
