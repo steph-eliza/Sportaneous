@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { FlatList, SafeAreaView, Text, TouchableOpacity } from "react-native";
+import React, {useEffect, useState} from "react";
+import {FlatList, SafeAreaView, Text, TouchableOpacity} from "react-native";
 import styles from "./EventList.style";
 import Filter from "./Filter.component";
-import { selectAllEvents } from "../../utils/utils";
-import { truncate, getDate, getTime } from "./utils/EventListUtils";
+import {getUsers, selectAllEvents} from "../../utils/utils";
+import {makeNameIdReference, truncate} from "./utils/EventListUtils";
 
-const EventList = ({ navigation }) => {
+const EventList = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
+  const [userNames, setUserNames] = useState({});
   const [events, setEvents] = React.useState([
     {
       attendees: "dummy",
@@ -17,31 +19,36 @@ const EventList = ({ navigation }) => {
       host_id: 0,
       location: "dummy",
       max_capacity: "dummy",
-      pending_attendee: { 0: "dummy" },
+      pending_attendee: {0: "dummy"},
       title: "dummy",
     },
   ]);
+
   useEffect(() => {
     selectAllEvents().then((res) => {
       setEvents(res);
+      setIsLoading(false);
+    });
+    getUsers().then((res) => {
+      setUserNames(makeNameIdReference(res));
     });
   }, []);
 
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  const Item = ({item, onPress, backgroundColor, textColor}) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={[styles.user, textColor]}>{`User: ${item.host_id}`}</Text>
+      <Text style={[styles.user, textColor]}>{userNames[item.host_id]}</Text>
       <Text style={[styles.location, textColor]}>{item.location}</Text>
-      <Text style={[styles.date, textColor]}>{getDate(item.date)}</Text>
+      <Text style={[styles.date, textColor]}>{item.date}</Text>
       <Text style={[styles.category, textColor]}>{item.category}</Text>
-      <Text style={[styles.time, textColor]}>{getTime(item.date)}</Text>
+      <Text style={[styles.time, textColor]}>{item.time}</Text>
       <Text style={[styles.description, textColor]}>
         {truncate(item.description)}
       </Text>
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     const backgroundColor =
       item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
     const color = item.id === selectedId ? "white" : "black";
@@ -50,21 +57,24 @@ const EventList = ({ navigation }) => {
         item={item}
         onPress={() => {
           setSelectedId(item.chat_id);
-          navigation.navigate("Event", { eventId: item.id });
+          navigation.navigate("Event", {eventId: item.id});
         }}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
+        backgroundColor={{backgroundColor}}
+        textColor={{color}}
       />
     );
   };
 
+  if (isLoading) {
+    return <Text>Loading events ...</Text>;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Filter setEvents={setEvents} />
       <FlatList
         data={events}
         renderItem={renderItem}
-        keyExtractor={(item) => item.chat_id}
+        keyExtractor={(item) => item.id}
         extraData={selectedId}
       />
     </SafeAreaView>

@@ -6,7 +6,7 @@ import {MyAcceptedRequests} from "./MyAcceptedRequests.component";
 import {MyPendingRequests} from "./MyPendingRequests.component";
 import {styles} from "./ProfileEvents.style";
 
-export const MyJoinedEvents = ({user_id}) => {
+export const MyJoinedEvents = ({user_id, navigation}) => {
   const [joinedIsCollapsed, setJoinedIsCollapsed] = useState(false);
 
   return (
@@ -20,8 +20,8 @@ export const MyJoinedEvents = ({user_id}) => {
       </Pressable>
       <ScrollView>
         <Collapsible collapsed={joinedIsCollapsed}>
-          <MyAcceptedRequests user_id={user_id} />
-          <MyPendingRequests user_id={user_id} />
+          <MyAcceptedRequests user_id={user_id} navigation={navigation} />
+          <MyPendingRequests user_id={user_id} navigation={navigation} />
         </Collapsible>
       </ScrollView>
     </View>

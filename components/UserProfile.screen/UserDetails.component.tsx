@@ -1,11 +1,9 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useContext} from "react";
 import {UserContext} from "../../contexts/UserContext";
 import {SafeAreaView, Text, Pressable, View, Image} from "react-native";
 import {styles} from "./UserDetails.style";
 import {MyHostedEvents} from "./MyHostedEvents.component";
-import {MyAcceptedRequests} from "./MyAcceptedRequests.component";
 import {ScrollView} from "react-native-gesture-handler";
-import {MyPendingRequests} from "./MyPendingRequests.component";
 import {MyJoinedEvents} from "./MyJoinedEvents.component";
 
 export const UserDetails = ({navigation}) => {
@@ -17,13 +15,11 @@ export const UserDetails = ({navigation}) => {
       <ScrollView>
         <Text style={styles.title}>Account Details</Text>
         <View style={styles.detailsContainer}>
-          {/* <Image source={}></Image> */}
+          <Image source={currentUser.image_bitmap} />
           <Text style={styles.detailsField}>First Name</Text>
           <Text style={styles.detailsValue}>{currentUser.first_name}</Text>
           <Text style={styles.detailsField}>Last Name</Text>
           <Text style={styles.detailsValue}>{currentUser.last_name}</Text>
-          <Text style={styles.detailsField}>UID</Text>
-          <Text style={styles.detailsValue}>{user_id}</Text>
           <Pressable
             style={({pressed}) => [
               {
@@ -43,7 +39,7 @@ export const UserDetails = ({navigation}) => {
           </Pressable>
         </View>
         <MyHostedEvents user_id={user_id} navigation={navigation} />
-        <MyJoinedEvents user_id={user_id} />
+        <MyJoinedEvents user_id={user_id} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>
   );
