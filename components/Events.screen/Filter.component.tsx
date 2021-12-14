@@ -12,7 +12,7 @@ const Filter = ({setEvents}) => {
     [category: string]: boolean;
   }
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [categoryIsChecked, setCategoryIsChecked] = useState(EventCategories);
+  const [categoryIsChecked, setCategoryIsChecked] = useState<categoryIsChecked>(EventCategories);
 
   return (
     <View>
@@ -31,10 +31,8 @@ const Filter = ({setEvents}) => {
       >
         <Text style={styles.buttonTitle}>Filter</Text>
       </Pressable>
-      <Collapsible style={styles.collapse} collapsed={isCollapsed}>
-        <View>
+      <Collapsible collapsed={isCollapsed}>
           <Text style={styles.title}>Select Categories:</Text>
-
           <View style={styles.checkBoxContainer}>
             {Object.keys(categoryIsChecked).map((activity) => {
               return (
@@ -51,7 +49,6 @@ const Filter = ({setEvents}) => {
               );
             })}
           </View>
-
           <View style={styles.lowerButtonContainer}>
             <Pressable
               style={({pressed}) => [
@@ -84,7 +81,6 @@ const Filter = ({setEvents}) => {
               <Text style={styles.buttonTitle}>Apply Filters</Text>
             </Pressable>
           </View>
-        </View>
       </Collapsible>
     </View>
   );

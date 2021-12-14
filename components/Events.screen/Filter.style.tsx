@@ -5,27 +5,22 @@ const windowWidth = Dimensions.get("window").width;
 export const theme = {};
 
 export const styles = StyleSheet.create({
-  collapse: {
-    borderWidth: 2,
-    borderColor: "rgba(20,60,40, 0.05)",
-    borderRadius: 10,
-    backgroundColor: "rgba(10,80,160, 0.05)",
-  },
   title: {
     fontWeight: "bold",
     alignSelf: "center",
-    fontSize: 20,
+    fontSize: 17,
     paddingTop: 10,
     paddingBottom: 10,
   },
   filterButton: {
-    borderWidth: 2,
-    borderColor: "#333",
+    borderWidth: 1,
+    borderColor: "#323B76",
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    // backgroundColor: "rgba(120,50,240, 0.25)",
+    backgroundColor: "#323B76",
     padding: 8,
-    width: windowWidth / 1.085,
+    margin: 10,
+    width: windowWidth / 1.089,
     alignSelf: "center",
   },
   lowerButtonContainer: {
@@ -33,28 +28,31 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
   },
   lowerButtonClear: {
-    borderWidth: 2,
-    borderColor: "#333",
+    borderWidth: 0.5,
+    borderColor: "#323B76",
     borderBottomLeftRadius: 10,
-    // backgroundColor: "rgba(120,50,240, 0.25)",
+    backgroundColor: "#323B76",
     padding: 8,
     marginRight: 5,
     marginTop: 10,
+    marginBottom: 10,
     width: windowWidth / 2.25,
   },
   lowerButtonApply: {
-    borderWidth: 2,
-    borderColor: "#333",
+    borderWidth: 0.5,
+    borderColor: "#323B76",
     borderBottomRightRadius: 10,
-    // backgroundColor: "rgba(120,50,240, 0.25)",
+    backgroundColor: "#323B76",
     padding: 8,
     marginLeft: 5,
     marginTop: 10,
+    marginBottom: 10,
     width: windowWidth / 2.25,
   },
   buttonTitle: {
     textAlign: "center",
     fontWeight: "bold",
+    color: "whitesmoke"
   },
   checkBoxContainer: {
     justifyContent: "center",
@@ -62,10 +60,10 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   checkBox: {
-    backgroundColor: "rgba(100,50,190, 0.08)",
+    backgroundColor: "#FFF",
     width: windowWidth / 2.75,
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: "#323B76",
     borderRadius: 5,
     paddingLeft: 9,
     paddingTop: 7,
@@ -73,7 +71,7 @@ export const styles = StyleSheet.create({
     margin: 3,
   },
   checkBoxText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     textTransform: "capitalize",
   },
