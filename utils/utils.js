@@ -150,3 +150,7 @@ export const addNewEventToCurrentUserProfile = (userId, eventId) => {
     hosted_events: arrayUnion(eventId),
   });
 };
+
+export const updateUserDetails = (userDetails, uid) => {
+  return updateDoc(doc(db, "users", uid), userDetails);
+}
