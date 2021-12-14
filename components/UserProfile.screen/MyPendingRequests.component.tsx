@@ -1,12 +1,15 @@
 import React from "react";
 import {useEffect} from "react";
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {Text, Pressable, View, TouchableOpacity} from "react-native";
+import {UserContext} from "../../contexts/UserContext";
 import {selectAllEvents} from "../../utils/utils";
 import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
+import {confirmLeave} from "./ProfileUtils";
 
 export const MyPendingRequests = ({user_id}) => {
+  const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [pendingRequests, setPendingRequests] = useState([
     {
@@ -76,6 +79,12 @@ export const MyPendingRequests = ({user_id}) => {
               onPress={() => {
                 // add functionality to remove yourself from pending_members
                 // patch request by event, remove self form pending_attendees
+                const userInfo = {
+                  first_name: currentUser.first_name,
+                  last_name: currentUser.last_name,
+                  userId: currentUser.id,
+                };
+                confirmLeave(userInfo, myEvent.id);
               }}
             >
               <Text style={styles.buttonTitle}>Cancel Request</Text>
