@@ -1,12 +1,15 @@
 import React from "react";
 import {useEffect} from "react";
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {Text, Pressable, View, TouchableOpacity} from "react-native";
+import {UserContext} from "../../contexts/UserContext";
 import {selectAllEvents} from "../../utils/utils";
 import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
+import {confirmLeave} from "./ProfileUtils";
 
 export const MyAcceptedRequests = ({user_id}) => {
+  const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [acceptedRequests, setAcceptedRequests] = useState([
     {
@@ -76,6 +79,12 @@ export const MyAcceptedRequests = ({user_id}) => {
               onPress={() => {
                 // add functionality leave event
                 // patch event details, remove self from attendees
+                const userInfo = {
+                  first_name: currentUser.first_name,
+                  last_name: currentUser.last_name,
+                  userId: currentUser.id,
+                };
+                confirmLeave(userInfo, myEvent.id);
               }}
             >
               <Text style={styles.buttonTitle}>Leave Event</Text>
