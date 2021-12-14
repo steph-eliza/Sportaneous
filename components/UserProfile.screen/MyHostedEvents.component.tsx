@@ -19,7 +19,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
       location: "dummy",
       date: "dummy",
       category: "dummy",
-      // time: ...
+      time: "dummy",
       description: "dummy",
     },
   ]);

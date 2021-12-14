@@ -23,7 +23,7 @@ export const MyPendingRequests = ({user_id, navigation}) => {
       location: "dummy",
       date: "dummy",
       category: "dummy",
-      // time: ...
+      time: "dummy",
       description: "dummy",
     },
   ]);
@@ -89,8 +89,6 @@ export const MyPendingRequests = ({user_id, navigation}) => {
                 styles.requestsButton,
               ]}
               onPress={() => {
-                // add functionality to remove yourself from pending_members
-                // patch request by event, remove self form pending_attendees
                 const userInfo = {
                   first_name: currentUser.first_name,
                   last_name: currentUser.last_name,

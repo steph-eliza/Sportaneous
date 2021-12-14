@@ -23,7 +23,7 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
       location: "dummy",
       date: "dummy",
       category: "dummy",
-      // time: ...
+      time: "dummy",
       description: "dummy",
     },
   ]);
@@ -89,8 +89,6 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
                 styles.requestsButton,
               ]}
               onPress={() => {
-                // add functionality leave event
-                // patch event details, remove self from attendees
                 const userInfo = {
                   first_name: currentUser.first_name,
                   last_name: currentUser.last_name,
