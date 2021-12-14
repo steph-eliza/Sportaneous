@@ -45,10 +45,10 @@ export const styles = StyleSheet.create({
   },
   postButton: {
       marginVertical: 13,
-      padding: 10,
-      backgroundColor: "grey",
-      borderRadius: 50,
-      width: 150,
+      padding: 8,
+      backgroundColor: '#2B2C33',
+      borderRadius: 2,
+      width: 110,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
       textAlign: 'center',
       color: '#ffff',
       fontWeight: 'bold',
-      fontSize: 14,
+      fontSize: 17,
       textTransform: "uppercase"
     } 
 })
