@@ -74,7 +74,7 @@ const EventList = ({navigation}) => {
       <FlatList
         data={events}
         renderItem={renderItem}
-        keyExtractor={(item) => item.chat_id}
+        keyExtractor={(item) => item.id}
         extraData={selectedId}
       />
     </SafeAreaView>
