@@ -128,3 +128,7 @@ export const removeAttendee = (eventId, userDetails) => {
     attendees : arrayRemove(userDetails),
   })
 };
+
+export const updateUserDetails = (userDetails, uid) => {
+  return updateDoc(doc(db, "users", uid), userDetails);
+}

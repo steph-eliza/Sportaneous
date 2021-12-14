@@ -33,7 +33,9 @@ export const UserDetails = ({navigation}) => {
               },
               styles.editButton,
             ]}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate('Edit Profile')
+            }}
             // detail edit functionality
             // navigate to edit page
           >
