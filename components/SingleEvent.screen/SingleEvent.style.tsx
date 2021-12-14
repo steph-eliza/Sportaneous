@@ -1,8 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
 
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -53,14 +50,8 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     color: "whitesmoke",
   },
-  pressableContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 25,
-  },
   pressable: {
     marginBottom: 10,
-    // flex: 1,
     marginHorizontal: 2,
     borderWidth: 1,
     borderColor: "#323B76",
@@ -91,5 +82,22 @@ export const styles = StyleSheet.create({
     marginBottom: 0,
     borderWidth: 1,
     borderColor: "#DADBDF",
+  },
+  touchOpacity: {
+    marginBottom: 10,
+    marginHorizontal: 2,
+    borderWidth: 1,
+    borderColor: "#323B76",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    backgroundColor: "#323B76",
+    padding: 8,
+    alignSelf: "center",
+  },
+  touchOpacityText: {
+    padding: 4,
+    fontSize: 18,
+    textAlign: "center",
+    color: "whitesmoke",
   },
 });

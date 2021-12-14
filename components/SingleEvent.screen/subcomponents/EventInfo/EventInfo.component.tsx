@@ -13,7 +13,8 @@ export const EventInfo = ({ eventDetails }: addEventProps) => {
       <Text style={styles.text}>Time: {eventDetails?.time}</Text>
       <Text style={styles.text}>Date: {eventDetails?.date}</Text>
       <Text style={styles.text}>
-        Places: {eventDetails?.attendees.length}/{eventDetails?.max_capacity}
+        Places filled: {eventDetails?.attendees.length}/
+        {eventDetails?.max_capacity}
       </Text>
     </View>
   );

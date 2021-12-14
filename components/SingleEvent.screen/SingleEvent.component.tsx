@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./SingleEvent.style";
 import { UserContext } from "../../contexts/UserContext";
@@ -112,31 +112,31 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     return (
       <View style={styles.container}>
         <EventInfo eventDetails={eventDetails} />
-        <Pressable
-          style={styles.pressable}
+        <TouchableOpacity
+          style={styles.touchOpacity}
           onPress={() => {
             deleteEventAndCascade(eventId, { navigation });
           }}
         >
-          <Text style={styles.PressableText}>Delete event?</Text>
-        </Pressable>
-        <Pressable
-          style={styles.pressable}
+          <Text style={styles.touchOpacityText}>Delete event?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchOpacity}
           onPress={() => {
             navigation!.navigate("AcceptReject", { eventId: eventId });
           }}
         >
-          <Text style={styles.PressableText}>Review attendees</Text>
-        </Pressable>
+          <Text style={styles.touchOpacityText}>Review attendees</Text>
+        </TouchableOpacity>
       </View>
     );
   } else
     return (
       <View style={styles.container}>
         <EventInfo eventDetails={eventDetails} />
-        <Pressable
+        <TouchableOpacity
           disabled={checkCapacity(acceptedOrRequested, eventDetails)}
-          style={styles.pressable}
+          style={styles.touchOpacity}
           onPress={() => {
             if (!acceptedOrRequested) {
               joinEvent(userDetailsForEvent, eventId);
@@ -145,18 +145,18 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
             }
           }}
         >
-          <Text style={styles.PressableText}>{joinButtonText()}</Text>
-        </Pressable>
+          <Text style={styles.touchOpacityText}>{joinButtonText()}</Text>
+        </TouchableOpacity>
 
         <HostInfo hostDetails={hostDetails} />
-        <Pressable
+        <TouchableOpacity
           onPress={() => {
             navigation!.navigate("Events");
           }}
-          style={styles.pressable}
+          style={styles.touchOpacity}
         >
-          <Text style={styles.PressableText}>Go back to events</Text>
-        </Pressable>
+          <Text style={styles.touchOpacityText}>Go back to events</Text>
+        </TouchableOpacity>
       </View>
     );
 };
