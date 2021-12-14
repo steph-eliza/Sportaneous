@@ -2,52 +2,42 @@ import { View, Text, Pressable } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./SingleEvent.style";
 import { UserContext } from "../../contexts/UserContext";
+import { getUserById, joinEvent, removeSelfFromEvent } from "../../utils/utils";
 import {
-  deleteChatroom,
-  deleteEvent,
-  getUserById,
-  joinEvent,
-  removeSelfFromEvent,
-} from "../../utils/utils";
-import { checkAcceptedOrRequested } from "./singleEvent.utils";
+  checkAcceptedOrRequested,
+  deleteEventAndCascade,
+  addEventProps,
+  eventDetailsType,
+  hostDetailsType,
+} from "./singleEvent.utils";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firestoreConfig";
+import { EventInfo } from "./subcomponents/EventInfo/EventInfo.component";
+import { HostInfo } from "./subcomponents/HostInfo/HostInfo.component";
 
-type navigationWithEventId = {
-  eventId: string;
-};
-
-type AddEventProps = {
-  navigation: {
-    navigate: (component: string, event_id?: navigationWithEventId) => {};
-  };
-  route: {
-    params: { eventId: string };
-  };
-};
-
-export const SingleEvent = ({ navigation, route }: AddEventProps) => {
+export const SingleEvent = ({ navigation, route }: addEventProps) => {
   let { eventId } = route.params;
   const { currentUser } = useContext(UserContext);
 
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [eventDetails, setEventDetails] = React.useState({
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [eventDetails, setEventDetails] = React.useState<eventDetailsType>({
     attendees: [],
     category: "Dummy",
     date: "Dummmy",
     description: "Dummmy",
     host_id: "Dummmy",
     location: "Dummmy",
-    max_capacity: 4,
+    max_capacity: "4",
     pending_attendees: [],
     title: "Dummmy",
-    id: 123,
     time: "",
   });
 
-  const [hostDetails, setHostDetails] = React.useState({
+  const [hostDetails, setHostDetails] = React.useState<hostDetailsType>({
     first_name: "",
     last_name: "",
+    description: "",
+    image_bitmap: "",
   });
 
   let acceptedOrRequested: boolean = checkAcceptedOrRequested(
@@ -68,10 +58,9 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
           description: "Dummmy",
           host_id: "Dummmy",
           location: "Dummmy",
-          max_capacity: 4,
+          max_capacity: "",
           pending_attendees: [],
           title: "Dummmy",
-          id: 123,
           time: "",
         });
       }
@@ -84,6 +73,8 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
         setHostDetails({
           first_name: user.first_name,
           last_name: user.last_name,
+          description: user.description,
+          image_bitmap: user.image_bitmap,
         });
       }
 
@@ -96,98 +87,61 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
     last_name: currentUser.last_name,
     userId: currentUser.id,
   };
+
   if (isLoading) {
-    return (
-      <View style={styles.view}>
-        <Text>Loading</Text>
-      </View>
-    );
+    return <View style={styles.view}></View>;
   } else if (eventDetails.host_id === currentUser.id) {
     return (
-      <View style={styles.view}>
-        <Text style={styles.title}>{eventDetails.title}</Text>
-        <Text style={styles.text}>Location: {eventDetails.location}</Text>
-        <Text style={styles.text}>Category: {eventDetails.category}</Text>
-        <Text style={styles.text}>Description: {eventDetails.description}</Text>
-        <Text style={styles.text}>Time: {eventDetails.time}</Text>
-        <Text style={styles.text}>Date: {eventDetails.date}</Text>
-        <Text style={styles.text}>
-          Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
-        </Text>
-        <Pressable
-          style={styles.pressable}
-          onPress={() => {
-            navigation.navigate("AcceptReject", { eventId: eventId });
-          }}
-        >
-          <Text style={styles.PressableText}>Review attendees</Text>
-        </Pressable>
-        <Pressable
-          style={styles.pressable}
-          onPress={() => {
-            try {
-              deleteEvent(eventId)
-                .then(() => {
-                  deleteChatroom(eventId);
-                })
-                .then(() => {
-                  navigation.navigate("Events");
-                });
-            } catch (error) {
-              console.log(error);
-              alert(
-                "Unable to delete event at this time, please try again later"
-              );
-            }
-          }}
-        >
-          <Text style={styles.PressableText}>Delete event?</Text>
-        </Pressable>
+      <View style={styles.container}>
+        <EventInfo eventDetails={eventDetails} />
+        <View style={styles.pressableContainer}>
+          <Pressable
+            style={styles.pressable}
+            onPress={() => {
+              deleteEventAndCascade(eventId, { navigation });
+            }}
+          >
+            <Text style={styles.PressableText}>Delete event?</Text>
+          </Pressable>
+          <Pressable
+            style={styles.pressable}
+            onPress={() => {
+              navigation.navigate("AcceptReject", { eventId: eventId });
+            }}
+          >
+            <Text style={styles.PressableText}>Review attendees</Text>
+          </Pressable>
+        </View>
       </View>
     );
   } else
     return (
-      <>
-        <View style={styles.view}>
-          <Text style={styles.title}>{eventDetails.title}</Text>
-          <Text style={styles.text}>Location: {eventDetails.location}</Text>
-          <Text style={styles.text}>Category: {eventDetails.category}</Text>
-          <Text style={styles.text}>
-            Description: {eventDetails.description}
+      <View style={styles.container}>
+        <EventInfo eventDetails={eventDetails} />
+        <Pressable
+          style={styles.pressable}
+          onPress={() => {
+            if (!acceptedOrRequested) {
+              joinEvent(userDetailsForEvent, eventId);
+            } else {
+              removeSelfFromEvent(userDetailsForEvent, eventId);
+            }
+          }}
+        >
+          <Text style={styles.PressableText}>
+            {acceptedOrRequested ? "Leave event?" : "Request to join event?"}
           </Text>
-          <Text style={styles.text}>{`Time: ${eventDetails.time}`}</Text>
-          <Text style={styles.text}>{`Date: ${eventDetails.date}`}</Text>
-          <Text style={styles.text}>
-            Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
-          </Text>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              if (!acceptedOrRequested) {
-                joinEvent(userDetailsForEvent, eventId);
-              } else {
-                removeSelfFromEvent(userDetailsForEvent, eventId);
-              }
-            }}
-          >
-            <Text style={styles.PressableText}>
-              {acceptedOrRequested ? "Leave event?" : "Join event?"}
-            </Text>
-          </Pressable>
-          <Text style={styles.text}>Event host:</Text>
-          <Text
-            style={styles.text}
-          >{`${hostDetails.first_name} ${hostDetails.last_name}`}</Text>
+        </Pressable>
 
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Events");
-            }}
-            style={styles.pressable}
-          >
-            <Text style={styles.PressableText}>Go back to events</Text>
-          </Pressable>
-        </View>
-      </>
+        <HostInfo hostDetails={hostDetails} />
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Events");
+          }}
+          style={styles.pressable}
+        >
+          <Text style={styles.PressableText}>Go back to events</Text>
+        </Pressable>
+      </View>
     );
 };
