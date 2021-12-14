@@ -24,7 +24,11 @@ export const MyPendingRequests = ({user_id}) => {
     (async () => {
       const allEventRes = await selectAllEvents();
       const myPending = allEventRes.filter((event) => {
-        return event.pending_attendees.includes(user_id);
+        let attendingMatch = false;
+        event.pending_attendees.forEach((person) => {
+          if (person.userId === user_id) attendingMatch = true;
+        });
+        if (attendingMatch) return event;
       });
       if (myPending) {
         setPendingRequests(myPending);
