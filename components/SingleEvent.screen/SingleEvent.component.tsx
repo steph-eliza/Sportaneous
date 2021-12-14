@@ -56,19 +56,23 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
 
   React.useEffect(() => {
     setIsLoading(true);
-
+    console.log("HELO");
     const unsub = onSnapshot(doc(db, "events", eventId), (doc) => {
       setEventDetails(doc.data());
 
-      getUserById(doc.data().host_id).then((user) => {
-        setHostDetails({
-          first_name: user!.first_name,
-          last_name: user!.last_name,
-        });
-        setIsLoading(false);
+      setIsLoading(false);
+    });
+  }, [eventId]);
+
+  React.useEffect(() => {
+    console.log("BYE");
+    getUserById(eventDetails.host_id).then((user) => {
+      setHostDetails({
+        first_name: user.first_name,
+        last_name: user.last_name,
       });
     });
-  }, [eventId, db]);
+  }, [eventDetails]);
 
   const userDetailsForEvent = {
     first_name: currentUser.first_name,
@@ -89,8 +93,8 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
         <Text style={styles.text}>Location: {eventDetails.location}</Text>
         <Text style={styles.text}>Category: {eventDetails.category}</Text>
         <Text style={styles.text}>Description: {eventDetails.description}</Text>
-        <Text style={styles.text}>{`Time: ${eventDetails.time}`}</Text>
-        <Text style={styles.text}>{`Date: ${eventDetails.date}`}</Text>
+        <Text style={styles.text}>Time: {eventDetails.time}</Text>
+        <Text style={styles.text}>Date: {eventDetails.date}</Text>
         <Text style={styles.text}>
           Places: {eventDetails.attendees.length}/{eventDetails.max_capacity}
         </Text>
@@ -122,7 +126,6 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
             //   deleteEvent(eventId).then(() => {
             //     deleteChatroom(eventId);
             //   });
-            //   eventId = "undefined";
             //   navigation.navigate("EventsList");
             // } catch (error) {
             //   alert(
@@ -164,8 +167,6 @@ export const SingleEvent = ({ navigation, route }: AddEventProps) => {
               {acceptedOrRequested ? "Leave event?" : "Join event?"}
             </Text>
           </Pressable>
-        </View>
-        <View style={styles.view}>
           <Text style={styles.text}>Event host:</Text>
           <Text
             style={styles.text}

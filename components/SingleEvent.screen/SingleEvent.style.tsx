@@ -29,5 +29,6 @@ export const styles = StyleSheet.create({
     width: windowWdith / 2,
     marginHorizontal: windowWdith / 4,
     marginTop: 20,
+    marginBottom: 20,
   },
 });
