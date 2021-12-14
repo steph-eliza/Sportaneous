@@ -8,7 +8,7 @@ export const HostInfo = ({ hostDetails }: addEventProps) => {
     <View style={styles.hostView}>
       <Text style={styles.text}>About the host:</Text>
       <Text
-        style={styles.text}
+        style={styles.capitalizedText}
       >{`${hostDetails?.first_name} ${hostDetails?.last_name}`}</Text>
       <Text style={styles.text}>{hostDetails?.description}</Text>
     </View>

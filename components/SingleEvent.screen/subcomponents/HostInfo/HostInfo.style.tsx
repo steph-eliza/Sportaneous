@@ -16,4 +16,9 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     margin: 5,
   },
+  capitalizedText: {
+    fontSize: 18,
+    margin: 5,
+    textTransform: "capitalize",
+  },
 });
