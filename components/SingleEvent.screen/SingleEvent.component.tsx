@@ -7,8 +7,8 @@ import {
   checkAcceptedOrRequested,
   deleteEventAndCascade,
   addEventProps,
-  eventDetailsType,
-  hostDetailsType,
+  hostDetails,
+  eventDetails,
 } from "./singleEvent.utils";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../utils/firestoreConfig";
@@ -16,11 +16,11 @@ import { EventInfo } from "./subcomponents/EventInfo/EventInfo.component";
 import { HostInfo } from "./subcomponents/HostInfo/HostInfo.component";
 
 export const SingleEvent = ({ navigation, route }: addEventProps) => {
-  let { eventId } = route.params;
+  let { eventId } = route!.params;
   const { currentUser } = useContext(UserContext);
 
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [eventDetails, setEventDetails] = React.useState<eventDetailsType>({
+  const [eventDetails, setEventDetails] = React.useState<eventDetails>({
     attendees: [],
     category: "Dummy",
     date: "Dummmy",
@@ -33,7 +33,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     time: "",
   });
 
-  const [hostDetails, setHostDetails] = React.useState<hostDetailsType>({
+  const [hostDetails, setHostDetails] = React.useState<hostDetails>({
     first_name: "",
     last_name: "",
     description: "",
@@ -47,7 +47,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    const unsub = onSnapshot(doc(db, "events", eventId), (doc) => {
+    const unsub = onSnapshot(doc(db, "events", eventId), (doc: any) => {
       if (doc.exists()) {
         setEventDetails(doc.data());
       } else {
@@ -88,30 +88,46 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     userId: currentUser.id,
   };
 
+  function checkCapacity(attending: boolean, eventDetails: any) {
+    if (
+      eventDetails.attendees.length >= parseInt(eventDetails.max_capacity) &&
+      attending === false
+    ) {
+      return true;
+    }
+    return false;
+  }
+  function joinButtonText() {
+    if (checkCapacity(acceptedOrRequested, eventDetails)) {
+      return "Event full";
+    } else if (acceptedOrRequested) {
+      return "Leave event?";
+    }
+    return "Request to join event?";
+  }
+
   if (isLoading) {
     return <View style={styles.view}></View>;
   } else if (eventDetails.host_id === currentUser.id) {
     return (
       <View style={styles.container}>
         <EventInfo eventDetails={eventDetails} />
-        <View style={styles.pressableContainer}>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              deleteEventAndCascade(eventId, { navigation });
-            }}
-          >
-            <Text style={styles.PressableText}>Delete event?</Text>
-          </Pressable>
-          <Pressable
-            style={styles.pressable}
-            onPress={() => {
-              navigation.navigate("AcceptReject", { eventId: eventId });
-            }}
-          >
-            <Text style={styles.PressableText}>Review attendees</Text>
-          </Pressable>
-        </View>
+        <Pressable
+          style={styles.pressable}
+          onPress={() => {
+            deleteEventAndCascade(eventId, { navigation });
+          }}
+        >
+          <Text style={styles.PressableText}>Delete event?</Text>
+        </Pressable>
+        <Pressable
+          style={styles.pressable}
+          onPress={() => {
+            navigation!.navigate("AcceptReject", { eventId: eventId });
+          }}
+        >
+          <Text style={styles.PressableText}>Review attendees</Text>
+        </Pressable>
       </View>
     );
   } else
@@ -119,6 +135,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
       <View style={styles.container}>
         <EventInfo eventDetails={eventDetails} />
         <Pressable
+          disabled={checkCapacity(acceptedOrRequested, eventDetails)}
           style={styles.pressable}
           onPress={() => {
             if (!acceptedOrRequested) {
@@ -128,15 +145,13 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
             }
           }}
         >
-          <Text style={styles.PressableText}>
-            {acceptedOrRequested ? "Leave event?" : "Request to join event?"}
-          </Text>
+          <Text style={styles.PressableText}>{joinButtonText()}</Text>
         </Pressable>
 
         <HostInfo hostDetails={hostDetails} />
         <Pressable
           onPress={() => {
-            navigation.navigate("Events");
+            navigation!.navigate("Events");
           }}
           style={styles.pressable}
         >
