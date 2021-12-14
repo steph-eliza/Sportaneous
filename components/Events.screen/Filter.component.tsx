@@ -5,19 +5,14 @@ import Collapsible from "react-native-collapsible";
 import {styles} from "./Filter.style";
 import {selectAllEvents} from "../../utils/utils";
 import {updateCheckBox, resetSelection, applyFilter} from "./utils/FilterUtils";
+import EventCategories from "./utils/EventCategories.json";
 
 const Filter = ({setEvents}) => {
   interface categoryIsChecked {
     [category: string]: boolean;
   }
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [categoryIsChecked, setCategoryIsChecked] = useState({
-    running: false,
-    "ice skating": false,
-    tennis: false,
-    "table tennis": false,
-    climbing: false,
-  });
+  const [categoryIsChecked, setCategoryIsChecked] = useState(EventCategories);
 
   return (
     <View>
