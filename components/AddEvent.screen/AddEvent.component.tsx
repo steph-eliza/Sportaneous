@@ -1,7 +1,8 @@
-import React, { useState, useContext, ReactNode } from 'react'
+import React, { useState, useContext } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {
   Button,
+  Platform,
   TextInput,
   SafeAreaView,
   View,
@@ -9,6 +10,7 @@ import {
   ScrollView,
   Keyboard,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native'
 import {
@@ -34,13 +36,16 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
   const [maxCapacity, setMaxCapacity] = useState('')
   const [date, setDate] = useState<Date>()
   const [time, setTime] = useState<Date>()
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
   const changeSelectedDate = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || date
+    setDatePickerVisibility(false)
     setDate(currentDate)
   }
   const changeSelectedTime = (event: any, selectedTime: Date | undefined) => {
     const currentTime = selectedTime || time
+    setDatePickerVisibility(false)
     setTime(currentTime)
   }
 
@@ -90,8 +95,8 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
       <ScrollView>
         <KeyboardAvoidingView>
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View>
-              <Text>Please add your event details</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.title}>please fill the details</Text>
               <TextInput
                 style={styles.inputField}
                 onChangeText={setTitle}
@@ -125,28 +130,54 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-        <Text>select date and time</Text>
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date || new Date()}
-          mode={'date'}
-          display="default"
-          onChange={changeSelectedDate}
-        />
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={time || new Date()}
-          mode={'time'}
-          is24Hour={true}
-          display="default"
-          onChange={changeSelectedTime}
-        />
-        <Button
-          onPress={handlePress}
-          color="black"
-          title="Post"
-          disabled={isDisabled}
-        />
+        <View style={styles.datetime}>
+          <TouchableOpacity
+            onPress={() => {
+              setDatePickerVisibility(true)
+            }}
+          >
+            <Text style={styles.inputField}>
+              SELECT DATE: {date?.toDateString()}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {isDatePickerVisible && (
+          <DateTimePicker
+            value={date || new Date()}
+            mode={'date'}
+            display="default"
+            onChange={changeSelectedDate}
+          />
+        )}
+        <View style={styles.datetime}>
+          <TouchableOpacity
+            onPress={() => {
+              setDatePickerVisibility(true)
+            }}
+          >
+            <Text style={styles.inputField}>
+              SELECT TIME: {time?.toTimeString().slice(0, 5)}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        {isDatePickerVisible && (
+          <DateTimePicker
+            value={time || new Date()}
+            mode={'time'}
+            is24Hour={true}
+            display="default"
+            onChange={changeSelectedTime}
+          />
+        )}
+        <View style={styles.post}>
+          <TouchableOpacity
+            style={styles.postButton}
+            onPress={handlePress}
+            disabled={isDisabled}
+          >
+            <Text style={styles.postText}>POST</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   )

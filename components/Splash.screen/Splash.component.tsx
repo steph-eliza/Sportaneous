@@ -5,7 +5,7 @@ import { Screen } from 'react-native-screens'
 import { getUserById } from '../../utils/utils'
 import { UserContext } from '../../contexts/UserContext'
 import { GetUserName } from '../GetUserName.screen/GetUserName.component'
-import PhoneSignIn from '../Auth.screen/Auth.component'
+import { PhoneSignIn } from '../Auth.screen/Auth.component'
 import { Nav } from '../Nav.view/Nav.component'
 import { styles } from './Splash.style'
 
