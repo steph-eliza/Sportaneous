@@ -1,4 +1,4 @@
-import { View, Text, Pressable, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./SingleEvent.style";
 import { UserContext } from "../../contexts/UserContext";
@@ -19,8 +19,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
   let { eventId } = route!.params;
   const { currentUser } = useContext(UserContext);
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [eventDetails, setEventDetails] = React.useState<eventDetails>({
+  const dummyDetails = {
     attendees: [],
     category: "Dummy",
     date: "Dummmy",
@@ -31,7 +30,10 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     pending_attendees: [],
     title: "Dummmy",
     time: "",
-  });
+  };
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [eventDetails, setEventDetails] =
+    React.useState<eventDetails>(dummyDetails);
 
   const [hostDetails, setHostDetails] = React.useState<hostDetails>({
     first_name: "",
@@ -51,18 +53,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
       if (doc.exists()) {
         setEventDetails(doc.data());
       } else {
-        setEventDetails({
-          attendees: [],
-          category: "Dummy",
-          date: "Dummmy",
-          description: "Dummmy",
-          host_id: "Dummmy",
-          location: "Dummmy",
-          max_capacity: "",
-          pending_attendees: [],
-          title: "Dummmy",
-          time: "",
-        });
+        setEventDetails(dummyDetails);
       }
     });
   }, [eventId]);
