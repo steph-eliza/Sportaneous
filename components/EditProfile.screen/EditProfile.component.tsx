@@ -3,10 +3,14 @@ import { Text, TextInput , Button, Image, Platform, View , Alert } from "react-n
 import { styles } from "./EditProfile.style";
 import { UserContext } from "../../contexts/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { updateUserDetails } from "../../utils/utils";
+import { updateUserDetails , getUserById, deleteUser } from "../../utils/utils";
 import * as ImagePicker from 'expo-image-picker';
 import {storage} from "../../utils/firestoreConfig"
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+const user = auth.currentUser?.uid;
 
 type UpdateUserProps = {
     navigation: {
@@ -21,24 +25,45 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
     const [userImage, setUserImage] = useState(null)
     const [userDetails, setUserDetails] = useState({
         first_name: '',
+        hosted_events: [],
         last_name: '',
         img_bitmap: '',
+        requested_events: []
     })
-    
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
             }
-        }
         })();
-        }, [userImage]);
+        getUserById(auth.currentUser?.uid)
+            .then((userData) => {
+                setImgURL(userData?.img_bitmap)
+                setUserDetails(userData)
+                return imgURL
+            }).catch((err) => {
+                console.log(err)
+            })
+    }, [userImage]);
 
-
+    
     const handleChange = (text: string, stateKey: string) => {
         setUserDetails({ ...userDetails, [stateKey]: text })
+        console.log(userDetails)
+    }
+    const updateUser = async () => {
+        getUserById(auth.currentUser?.uid)
+            .then((userObj) => { 
+                updateUserDetails(userDetails, auth.currentUser?.uid)
+                return userDetails
+            }).then((res) => {
+                console.log(res)
+            }).catch((err) => {
+                console.log(err)
+        })
     }
 
     const selectPhoto = async () => {
@@ -50,7 +75,7 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         });
         if (!result.cancelled) {
             setUserImage(result.uri);
-            uploadImage(result.uri, `avatar/img/${currentUser.id}.png`)
+            uploadImage(result.uri, `avatar/img/${currentUser.id}`)
                 .then((res) => {
                     Alert.alert("Upload Success")
             }).catch((err) => {
@@ -59,29 +84,6 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         }
     }
 
-    const takePhoto = async () => {
-        let result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-        if (!result.cancelled) {
-            setUserImage(result.uri);
-            uploadImage(result.uri, `avatar/img/${currentUser.id}.png`)
-            .then((res) => {
-                Alert.alert("Upload Success")
-            }).catch((err) => {
-                Alert.alert(err)
-            })
-        }
-    
-    }
-
-    const handlePress = async () => {
-        updateUserDetails()
-    }
-    
     const uploadImage = async (uri, imageName) => {
         if (!uri) return;
         const blob = await new Promise((resolve, reject) => {
@@ -105,9 +107,18 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         
         getDownloadURL(storageRef)
             .then((url) => {
-                setImgURL(url)
+                handleChange(url,"img_bitmap")
             }).catch((err) => {
                 console.log(err)
+        })
+    }
+
+    const deleteUserDetails = () => {
+        deleteUser(user)
+            .then(() => {
+                console.log("User Deleted")
+            }).catch(() => {
+            
         })
     }
 
@@ -115,7 +126,6 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         <SafeAreaView style={styles.container}>
             <View>
             <Text style={styles.title}>Update User Detail</Text> 
-                {userImage ? <Image source={{ uri: userImage }} style={styles.avatar} /> : null}
                 {imgURL ? <Image source={{ uri: imgURL }} style={styles.avatar} /> : null}
             <Button
                 onPress={selectPhoto}
@@ -123,12 +133,6 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 title="Choose Photo"
                 // disabled={isDisabled}
                 />
-            <Button
-                onPress={takePhoto}
-                color="black"
-                title="Take Photo"
-                // disabled={isDisabled}
-            />
             <TextInput
                 style={styles.inputField}
                 onChangeText={(text) => handleChange(text, 'first_name')}
@@ -140,13 +144,13 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 placeholder="Last Name:"
             />
             <Button
-                onPress={handlePress}
+                onPress={updateUser}
                 color="black"
                 title="Update"
                 // disabled={isDisabled}
             />
             <Button
-                onPress={handlePress}
+                onPress={deleteUserDetails}
                 color="red"
                 title="Delete Account"
                 // disabled={isDisabled}
