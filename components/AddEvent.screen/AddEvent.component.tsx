@@ -1,13 +1,23 @@
-import React, { useState, useContext } from 'react'
-import { Button, TextInput, SafeAreaView, Text, ScrollView } from 'react-native'
-import { UserContext } from '../../contexts/UserContext'
-import { addNewEvent, addNewChatroom } from '../../utils/utils'
-import { styles } from './AddEvent.style'
+import React, { useState, useContext, ReactNode } from 'react'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import {
-  PickerTime,
-  PickerDate,
-  PickerItem,
-} from 'react-native-ultimate-modal-picker'
+  Button,
+  TextInput,
+  SafeAreaView,
+  View,
+  Text,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+} from 'react-native'
+import {
+  addNewEvent,
+  addNewChatroom,
+  addNewEventToCurrentUserProfile,
+} from '../../utils/utils'
+import { UserContext } from '../../contexts/UserContext'
+import { styles } from './AddEvent.style'
 
 type AddEventProps = {
   navigation: {
@@ -17,78 +27,127 @@ type AddEventProps = {
 
 export const AddEvent = ({ navigation }: AddEventProps) => {
   const { currentUser } = useContext(UserContext)
-  const [ date, setDate ] = useState<any>(new Date().toString());
-  const [ time, setTime ] = useState<Date>(new Date());
-  const [ fromDate, setFromDate ] = useState<Date>(new Date());
-  const [eventDetails, setEventDetails] = useState({
-    title: '',
-    description: '',
-    location: '',
-    date: date,
-    time: time,
-    max_capacity: '',
-    host_id: currentUser.id,
-    attendees: [],
-    pending_attendees: [],
-  })
+  const [title, setTitle] = useState('')
+  const [category, setCategory] = useState('')
+  const [description, setDescription] = useState('')
+  const [location, setLocation] = useState('')
+  const [maxCapacity, setMaxCapacity] = useState('')
+  const [date, setDate] = useState<Date>()
+  const [time, setTime] = useState<Date>()
 
-  const handleChange = (text: string, stateKey: string) => {
-    setEventDetails({ ...eventDetails, [stateKey]: text })
+  const changeSelectedDate = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date
+    setDate(currentDate)
+  }
+  const changeSelectedTime = (event: any, selectedTime: Date | undefined) => {
+    const currentTime = selectedTime || time
+    setTime(currentTime)
+  }
+
+  const resetEventData = () => {
+    setTitle('')
+    setCategory('')
+    setDescription('')
+    setLocation('')
+    setMaxCapacity('')
+    setDate(undefined)
+    setTime(undefined)
   }
 
   const handlePress = async () => {
-    const eventId = await addNewEvent(eventDetails)
+    const eventId = await addNewEvent({
+      title: title,
+      category: category,
+      description: description,
+      location: location,
+      max_capacity: maxCapacity,
+      date: date?.toDateString(),
+      time: time?.toTimeString().slice(0, 5),
+      host_id: currentUser.id,
+      attendees: [],
+      pending_attendees: [],
+    })
     addNewChatroom(
       { host_id: currentUser.id, attendees_id: [], messages: [] },
       eventId
     )
-    navigation.navigate('Event', { eventId: eventId })
+    addNewEventToCurrentUserProfile(currentUser.id, eventId)
+    resetEventData()
+    navigation.navigate('Event', { eventId })
   }
 
-  console.log(date, '>>>>date')
+  const isDisabled = !(
+    title &&
+    description &&
+    location &&
+    maxCapacity &&
+    date &&
+    time
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-      <Text>Please add your event details</Text>
-      <TextInput
-        style={styles.inputField}
-        onChangeText={(text) => handleChange(text, 'title')}
-        placeholder="title"
-      />
-      <TextInput
-        style={styles.inputField}
-        onChangeText={(text) => handleChange(text, 'description')}
-        placeholder="description"
-      />
-      <TextInput
-        style={styles.inputField}
-        onChangeText={(text) => handleChange(text, 'location')}
-        placeholder="city"
-      />
-      <TextInput
-        style={styles.inputField}
-        onChangeText={(text) => handleChange(text, 'max_capacity')}
-        placeholder="how many people can join?"
-      />
-      <PickerDate
-          title="Date"
-          onChange={(date: Date) => setDate(date)}
-          mode="spinner"
+        <KeyboardAvoidingView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View>
+              <Text>Please add your event details</Text>
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setTitle}
+                value={title}
+                placeholder="title"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setCategory}
+                value={category}
+                placeholder="category"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setDescription}
+                value={description}
+                placeholder="description"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setLocation}
+                value={location}
+                placeholder="city"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setMaxCapacity}
+                value={maxCapacity}
+                placeholder="how many people can join?"
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+        <Text>select date and time</Text>
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date || new Date()}
+          mode={'date'}
+          display="default"
+          onChange={changeSelectedDate}
         />
-      <PickerTime
-          title="Date/Time"
-          onChange={(date: Date) => setTime(date)}
-          mode="spinner"
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={time || new Date()}
+          mode={'time'}
+          is24Hour={true}
+          display="default"
+          onChange={changeSelectedTime}
         />
-      <Button
-        onPress={handlePress}
-        color="black"
-        title="Post"
-        // disabled={isDisabled}
-      />
+        <Button
+          onPress={handlePress}
+          color="black"
+          title="Post"
+          disabled={isDisabled}
+        />
       </ScrollView>
     </SafeAreaView>
   )
 }
-
-export default AddEvent
