@@ -39,6 +39,7 @@ const Filter = ({setEvents}) => {
             {Object.keys(categoryIsChecked).map((activity) => {
               return (
                 <CheckBox
+                  key={activity}
                   title={activity}
                   containerStyle={styles.checkBox}
                   textStyle={styles.checkBoxText}

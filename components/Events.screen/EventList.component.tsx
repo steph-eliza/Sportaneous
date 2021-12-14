@@ -26,6 +26,7 @@ const EventList = ({navigation}) => {
 
   useEffect(() => {
     selectAllEvents().then((res) => {
+      console.log(res);
       setEvents(res);
       setIsLoading(false);
     });
@@ -39,9 +40,9 @@ const EventList = ({navigation}) => {
       <Text style={styles.title}>{item.title}</Text>
       <Text style={[styles.user, textColor]}>{userNames[item.host_id]}</Text>
       <Text style={[styles.location, textColor]}>{item.location}</Text>
-      <Text style={[styles.date, textColor]}>{item.date}</Text>
+      {/* <Text style={[styles.date, textColor]}>{item.date}</Text> */}
       <Text style={[styles.category, textColor]}>{item.category}</Text>
-      <Text style={[styles.time, textColor]}>{item.time}</Text>
+      {/* <Text style={[styles.time, textColor]}>{item.time}</Text> */}
       <Text style={[styles.description, textColor]}>
         {truncate(item.description)}
       </Text>
@@ -74,7 +75,7 @@ const EventList = ({navigation}) => {
       <FlatList
         data={events}
         renderItem={renderItem}
-        keyExtractor={(item) => item.chat_id}
+        keyExtractor={(item) => item.id}
         extraData={selectedId}
       />
     </SafeAreaView>
