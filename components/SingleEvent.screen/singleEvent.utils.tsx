@@ -5,22 +5,23 @@ export type navigationWithEventId = {
 };
 
 export type addEventProps = {
-  navigation: {
+  navigation?: {
     navigate: (component: string, event_id?: navigationWithEventId) => {};
   };
-  route: {
+  route?: {
     params: { eventId: string };
   };
+  hostDetails?: hostDetails;
+  eventDetails?: eventDetails;
 };
 
-export type hostDetailsType = {
+export type hostDetails = {
   first_name: string;
   last_name: string;
   description: string;
   image_bitmap: string;
 };
-
-export type eventDetailsType = {
+export type eventDetails = {
   attendees: string[];
   category: string;
   date: string;
@@ -51,13 +52,13 @@ export function checkAcceptedOrRequested(
 
 export function deleteEventAndCascade(
   eventId: string,
-  { navigation }: AddEventProps
+  { navigation }: addEventProps
 ) {
   try {
     //////CHECK DELETE removes requested/attneding events from other users
     deleteEvent(eventId);
     deleteChatroom(eventId);
-    navigation.navigate("Events");
+    navigation?.navigate("Events");
   } catch (error) {
     console.log(error);
     alert("Unable to delete event at this time, please try again later");
