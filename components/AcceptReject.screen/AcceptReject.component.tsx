@@ -9,9 +9,10 @@ import {
   addAttendee,
 } from "../../utils/utils";
 import React from "react";
+import { EventEmitter } from "stream";
 
 export const AcceptReject = ({ route }) => {
-    const { eventId } = route.params;
+    const { eventId, eventTitle } = route.params;
   console.log({eventId})
   //TEMP HARDCODING REMOVE ME
   //  eventId = "MqFdV61nNp5BqUqDNqU";
@@ -133,14 +134,11 @@ export const AcceptReject = ({ route }) => {
       />
     );
   };
-
-  console.log(attendingUsers.length)
-  console.log(pendingUsers.length)
-
+console.log({eventTitle})
   if(pendingUsers.length === 0 && attendingUsers.length === 0){
-    console.log("EMPTY ARRAYS DETECTED")
     return (
       <SafeAreaView style={styles.container}>
+        <Text>{eventTitle}</Text>
         <Pressable
         style={styles.item}
         onPress={() => {}}
