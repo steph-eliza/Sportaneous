@@ -5,7 +5,6 @@ import {Text, Pressable, View, TouchableOpacity} from "react-native";
 import {UserContext} from "../../contexts/UserContext";
 import {getUsers, selectAllEvents} from "../../utils/utils";
 import {
-  getTime,
   makeNameIdReference,
   truncate,
 } from "../Events.screen/utils/EventListUtils";
@@ -74,7 +73,7 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
               <Text style={styles.location}>{myEvent.location}</Text>
               <Text style={styles.date}>{myEvent.date}</Text>
               <Text style={styles.category}>{myEvent.category}</Text>
-              <Text style={styles.time}>{getTime(myEvent.date)}</Text>
+              <Text style={styles.time}>{myEvent.time}</Text>
               <Text style={styles.description}>
                 {truncate(myEvent.description)}
               </Text>

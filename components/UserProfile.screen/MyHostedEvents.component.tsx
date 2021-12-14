@@ -4,7 +4,7 @@ import {Text, Pressable, View, TouchableOpacity, Alert} from "react-native";
 import Collapsible from "react-native-collapsible";
 import {ScrollView} from "react-native-gesture-handler";
 import {selectEventsByUser} from "../../utils/utils";
-import {getTime, truncate} from "../Events.screen/utils/EventListUtils";
+import {truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
 import {confirmDelete, getOwnName} from "./ProfileUtils";
 
@@ -81,7 +81,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                   <Text style={styles.location}>{myEvent.location}</Text>
                   <Text style={styles.date}>{myEvent.date}</Text>
                   <Text style={styles.category}>{myEvent.category}</Text>
-                  <Text style={styles.time}>{getTime(myEvent.date)}</Text>
+                  <Text style={styles.time}>{myEvent.time}</Text>
                   <Text style={styles.description}>
                     {truncate(myEvent.description)}
                   </Text>
