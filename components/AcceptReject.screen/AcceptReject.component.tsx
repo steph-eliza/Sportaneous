@@ -11,26 +11,23 @@ import {
 import React from "react";
 
 export const AcceptReject = ({ route }) => {
-  //   const { event_id } = route.params;
-
+    const { eventId } = route.params;
+  console.log({eventId})
   //TEMP HARDCODING REMOVE ME
-  const event_id = "MqFdV61nNp5BqUqDNqU";
+  //  eventId = "MqFdV61nNp5BqUqDNqU";
   const [selectedId, setSelectedId] = React.useState(null);
   const [pendingUsers, setPendingUsers] = React.useState([]);
   const [attendingUsers, setAttendingUsers] = React.useState([]);
   const [reloadTrigger, setReloadTrigger] = React.useState(0);
 
   React.useEffect(() => {
-    selectEventById(event_id).then((res) => {
-      console.log(res);
+    selectEventById(eventId).then((res) => {
       if (res.pending_attendees.length > 0) {
         let pendingUsersNoEmpties = res.pending_attendees.filter((user) => {
           return user !== "";
         });
         setPendingUsers(pendingUsersNoEmpties);
-        console.log(pendingUsers, "This is Pending Users");
       } else {
-        // setPendingUsers([{ first_name: "", last_name: "", userId: "" }])
         setPendingUsers([]);
       }
 
@@ -38,13 +35,12 @@ export const AcceptReject = ({ route }) => {
         let usersNoEmpties = res.attendees.filter((user) => {
           return user !== "";
         });
-        setAttendingUsers(usersNoEmpties, "This is Pending Users");
+        setAttendingUsers(usersNoEmpties);
       } else {
-        // setAttendingUsers([{ first_name: "", last_name: "", userId: "" }])
         setAttendingUsers([]);
       }
     });
-  }, [event_id, reloadTrigger]);
+  }, [eventId, reloadTrigger]);
 
   const AttendeesItem = ({ item, backgroundColor, textColor }) => (
     <View style={[styles.item, backgroundColor]}>
@@ -62,7 +58,7 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          removeAttendee(event_id, {
+          removeAttendee(eventId, {
             userId: item.userId,
             first_name: item.first_name,
             last_name: item.last_name,
@@ -95,7 +91,7 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          addAttendee(event_id, {
+          addAttendee(eventId, {
             userId: item.userId,
             first_name: item.first_name,
             last_name: item.last_name,
@@ -138,7 +134,22 @@ export const AcceptReject = ({ route }) => {
     );
   };
 
-  if (pendingUsers.length === 0) {
+  console.log(attendingUsers.length)
+  console.log(pendingUsers.length)
+
+  if(pendingUsers.length === 0 && attendingUsers.length === 0){
+    console.log("EMPTY ARRAYS DETECTED")
+    return (
+      <SafeAreaView style={styles.container}>
+        <Pressable
+        style={styles.item}
+        onPress={() => {}}
+      >
+        <Text>You don't currently have any requests to join this event.</Text>
+      </Pressable>
+      </SafeAreaView>
+    )
+  } else if (pendingUsers.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
         <FlatList
