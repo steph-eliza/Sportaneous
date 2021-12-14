@@ -4,10 +4,12 @@ import {
   Button,
   TextInput,
   SafeAreaView,
+  View,
   Text,
   ScrollView,
   Keyboard,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native'
 import {
   addNewEvent,
@@ -74,12 +76,6 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
     navigation.navigate('Event', { eventId })
   }
 
-  const HideKeyboard = ({ children }: { children: ReactNode }) => (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      {children}
-    </TouchableWithoutFeedback>
-  )
-
   const isDisabled = !(
     title &&
     description &&
@@ -91,63 +87,67 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HideKeyboard>
-        <ScrollView>
-          <Text>Please add your event details</Text>
-          <TextInput
-            style={styles.inputField}
-            onChangeText={setTitle}
-            value={title}
-            placeholder="title"
-          />
-          <TextInput
-            style={styles.inputField}
-            onChangeText={setCategory}
-            value={category}
-            placeholder="category"
-          />
-          <TextInput
-            style={styles.inputField}
-            onChangeText={setDescription}
-            value={description}
-            placeholder="description"
-          />
-          <TextInput
-            style={styles.inputField}
-            onChangeText={setLocation}
-            value={location}
-            placeholder="city"
-          />
-          <TextInput
-            style={styles.inputField}
-            onChangeText={setMaxCapacity}
-            value={maxCapacity}
-            placeholder="how many people can join?"
-          />
-          <Text>select date and time</Text>
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date || new Date()}
-            mode={'date'}
-            display="default"
-            onChange={changeSelectedDate}
-          />
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={time || new Date()}
-            mode={'time'}
-            is24Hour={true}
-            display="default"
-            onChange={changeSelectedTime}
-          />
-          <Button
-            onPress={handlePress}
-            color="black"
-            title="Post"
-            disabled={isDisabled}
-          />
-        </ScrollView>
-      </HideKeyboard>
+      <ScrollView>
+        <KeyboardAvoidingView>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View>
+              <Text>Please add your event details</Text>
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setTitle}
+                value={title}
+                placeholder="title"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setCategory}
+                value={category}
+                placeholder="category"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setDescription}
+                value={description}
+                placeholder="description"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setLocation}
+                value={location}
+                placeholder="city"
+              />
+              <TextInput
+                style={styles.inputField}
+                onChangeText={setMaxCapacity}
+                value={maxCapacity}
+                placeholder="how many people can join?"
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+        <Text>select date and time</Text>
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date || new Date()}
+          mode={'date'}
+          display="default"
+          onChange={changeSelectedDate}
+        />
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={time || new Date()}
+          mode={'time'}
+          is24Hour={true}
+          display="default"
+          onChange={changeSelectedTime}
+        />
+        <Button
+          onPress={handlePress}
+          color="black"
+          title="Post"
+          disabled={isDisabled}
+        />
+      </ScrollView>
     </SafeAreaView>
   )
 }
