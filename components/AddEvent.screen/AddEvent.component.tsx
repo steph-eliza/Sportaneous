@@ -1,4 +1,5 @@
 import React, { useState, useContext, ReactNode } from 'react'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import {
   Button,
   TextInput,
@@ -15,7 +16,6 @@ import {
 } from '../../utils/utils'
 import { UserContext } from '../../contexts/UserContext'
 import { styles } from './AddEvent.style'
-import DateTimePicker from '@react-native-community/datetimepicker'
 
 type AddEventProps = {
   navigation: {
@@ -65,10 +65,6 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
       attendees: [],
       pending_attendees: [],
     })
-    addNewChatroom(
-      { host_id: currentUser.id, attendees_id: [], messages: [] },
-      eventId
-    )
     addNewChatroom(
       { host_id: currentUser.id, attendees_id: [], messages: [] },
       eventId
@@ -155,5 +151,3 @@ export const AddEvent = ({ navigation }: AddEventProps) => {
     </SafeAreaView>
   )
 }
-
-export default AddEvent
