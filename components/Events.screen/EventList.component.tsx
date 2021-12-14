@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FlatList, SafeAreaView, Text, TouchableOpacity} from "react-native";
+import {FlatList, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
 import styles from "./EventList.style";
 import Filter from "./Filter.component";
 import {getUsers, selectAllEvents} from "../../utils/utils";
@@ -34,8 +34,8 @@ const EventList = ({navigation}) => {
     });
   }, []);
 
-  const Item = ({item, onPress, backgroundColor, textColor}) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+  const Item = ({item, onPress, textColor}) => (
+    <TouchableOpacity onPress={onPress} style={[styles.item]}>
       <Text style={styles.title}>{item.title}</Text>
       <Text style={[styles.user, textColor]}>{userNames[item.host_id]}</Text>
       <Text style={[styles.location, textColor]}>{item.location}</Text>
@@ -59,7 +59,6 @@ const EventList = ({navigation}) => {
           setSelectedId(item.chat_id);
           navigation.navigate("Event", {eventId: item.id});
         }}
-        backgroundColor={{backgroundColor}}
         textColor={{color}}
       />
     );
