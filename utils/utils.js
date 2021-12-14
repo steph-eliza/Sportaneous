@@ -117,21 +117,27 @@ export const joinEvent = (userDetails, eventId) => {
 };
 
 export const addAttendee = (eventId, userDetails) => {
-  return updateDoc(doc(db, "events", eventId), {
+  return updateDoc(doc(db, 'events', eventId), {
     attendees: arrayUnion(userDetails),
     pending_attendees: arrayRemove(userDetails),
   });
 };
 
 export const removeAttendee = (eventId, userDetails) => {
-  return updateDoc(doc(db, "events", eventId), {
+  return updateDoc(doc(db, 'events', eventId), {
     attendees: arrayRemove(userDetails),
   });
 };
 
 export const removeSelfFromEvent = (userDetails, eventId) => {
-  return updateDoc(doc(db, "events", eventId), {
+  return updateDoc(doc(db, 'events', eventId), {
     pending_attendees: arrayRemove(userDetails),
     attendees: arrayRemove(userDetails),
+  });
+};
+
+export const addNewEventToCurrentUserProfile = (userId, eventId) => {
+  return updateDoc(doc(db, 'users', userId), {
+    hosted_events: arrayUnion(eventId),
   });
 };
