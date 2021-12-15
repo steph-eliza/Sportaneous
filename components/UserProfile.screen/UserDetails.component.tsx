@@ -75,8 +75,6 @@ export const UserDetails = ({navigation}) => {
             onPress={() => {
               navigation.navigate("Edit Profile");
             }}
-            // detail edit functionality
-            // navigate to edit page
           >
             <Text style={styles.buttonTitle}>Edit Details</Text>
           </Pressable>
