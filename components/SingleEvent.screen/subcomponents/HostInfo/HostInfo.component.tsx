@@ -10,7 +10,6 @@ export const HostInfo = ({ hostDetails }: addEventProps) => {
     if (hostDetails?.id !== "") {
       getUserById(hostDetails?.id)
         .then((userData: any) => {
-          console.log(userData);
           setImgURL(userData?.image_bitmap);
         })
         .catch((err) => {
@@ -19,8 +18,6 @@ export const HostInfo = ({ hostDetails }: addEventProps) => {
     }
   }, [hostDetails]);
 
-  console.log(hostDetails);
-  console.log(imgURL);
   return (
     <View style={styles.hostView}>
       <Text style={styles.text}>About the host:</Text>
