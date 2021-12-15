@@ -28,14 +28,14 @@ export const GetUserName = ({ reload }: { reload: () => void }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Hello! What's your name?</Text>
-      <Text>First Name:</Text>
+      <Text style={styles.title}>What's your name?</Text>
+      <Text style={styles.name}>FIRST NAME</Text>
       <TextInput
         style={styles.inputName}
         onChangeText={setFirstName}
         value={firstName}
       />
-      <Text>Last Name:</Text>
+      <Text style={styles.name}>LAST NAME</Text>
       <TextInput
         style={styles.inputName}
         onChangeText={setLastName}
@@ -43,8 +43,8 @@ export const GetUserName = ({ reload }: { reload: () => void }) => {
       />
       <Button
         onPress={handlePress}
-        color="black"
-        title="Submit"
+        color="whitesmoke"
+        title="SUBMIT"
         disabled={isDisabled}
       />
     </View>

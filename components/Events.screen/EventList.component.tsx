@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FlatList, SafeAreaView, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, SafeAreaView, Text, TouchableOpacity} from "react-native";
 import styles from "./EventList.style";
 import Filter from "./Filter.component";
 import {getUsers, selectAllEvents} from "../../utils/utils";
@@ -49,8 +49,6 @@ const EventList = ({navigation}) => {
   );
 
   const renderItem = ({item}) => {
-    const backgroundColor =
-      item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
     const color = item.id === selectedId ? "white" : "black";
     return (
       <Item
