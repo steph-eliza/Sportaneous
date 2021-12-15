@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#323B76",
     textTransform: "uppercase",
-    width: windowWidth / 1,
+    width: windowWidth * 0.95,
   },
   hidden: {},
   topRowContainer: { justifyContent: "space-between", flexDirection: "row" },
@@ -71,10 +71,17 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-  inputMessage: { color: "black" },
-
+  inputMessage: {
+    width: windowWidth * 0.75,
+    height: 30,
+  },
   sendText: {
     marginRight: 5,
     fontSize: 20,
+  },
+  noMessages: { alignSelf: "center", color: "#FFF" },
+  spacing: {
+    justifyContent: "flex-end",
+    flex: 1,
   },
 });

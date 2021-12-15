@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, Button } from "react-native";
 import React, { useContext } from "react";
 import { styles } from "./chat.style";
 import { FlatList, TextInput } from "react-native-gesture-handler";
@@ -7,22 +7,27 @@ import { addChatMessage, deleteChatMessage } from "../../utils/utils";
 import { db } from "../../utils/firestoreConfig";
 import { doc, onSnapshot } from "firebase/firestore";
 import { UserContext } from "../../contexts/UserContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export const Chat = ({ route }) => {
+export const Chat = ({ route, navigation }) => {
   const { chat_id, eventName } = route.params;
   const { currentUser } = useContext(UserContext);
   const [selectedId, setSelectedId] = React.useState(null);
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState("");
   const [isMessagesEmpty, setIsMessagesEmpty] = React.useState(true);
+
   React.useEffect(() => {
+    setMessages([]);
     const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
       if (doc.data().messages.length > 0) {
         setIsMessagesEmpty(false);
         setMessages(doc.data().messages);
+      } else {
+        setIsMessagesEmpty(true);
       }
     });
-  }, [db, chat_id]);
+  }, [chat_id]);
   const formatTimestamp = (timestamp) => {
     let date = new Date(timestamp * 1000);
     let datevalues = {
@@ -57,7 +62,7 @@ export const Chat = ({ route }) => {
             deleteChatMessage(
               {
                 userId: currentUser.id,
-                first_name: currentUser.first_name,
+                first_name: item.first_name,
                 message_body: item.message_body,
                 timestamp: item.timestamp,
               },
@@ -80,44 +85,27 @@ export const Chat = ({ route }) => {
       item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
     return <Item item={item} backgroundColor={{ backgroundColor }} />;
   };
-  if (isMessagesEmpty) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <TextInput
-            style={styles.name}
-            placeholder="Message..."
-            onChangeText={setText}
-            value={text}
-          ></TextInput>
-          <Pressable
-            onPress={() => {
-              if (text !== "") {
-                addChatMessage(
-                  {
-                    userId: currentUser.id,
-                    first_name: currentUser.first_name,
-                    message_body: text,
-                    timestamp: new Date(),
-                  },
-                  chat_id
-                ).then(() => {
-                  setText("");
-                });
-              }
-            }}
-          >
-            <Text style={styles.press}>SEND</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <Text style={styles.header}>{eventName}</Text>
-        </View>
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => {
+            navigation.navigate("Chatrooms");
+          }}
+          title="Go back"
+        />
+      ),
+    });
+  }, [navigation]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>{eventName}</Text>
+      <KeyboardAwareScrollView contentContainerStyle={styles.spacing}>
+        {isMessagesEmpty ? (
+          <Text style={styles.noMessages}>No messages</Text>
+        ) : null}
         <FlatList
           data={messages}
           renderItem={renderItem}
@@ -128,6 +116,7 @@ export const Chat = ({ route }) => {
           <TextInput
             style={styles.inputMessage}
             placeholder="Message..."
+            placeholderTextColor={"black"}
             onChangeText={setText}
             value={text}
           ></TextInput>
@@ -151,7 +140,7 @@ export const Chat = ({ route }) => {
             <Text style={styles.sendText}>SEND</Text>
           </Pressable>
         </View>
-      </SafeAreaView>
-    );
-  }
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
+  );
 };
