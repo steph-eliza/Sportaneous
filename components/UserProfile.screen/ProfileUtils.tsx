@@ -1,7 +1,8 @@
 import {Alert} from "react-native";
 import {deleteEvent, getUserById, removeSelfFromEvent} from "../../utils/utils";
+import {deleteEventAndCascade} from "../SingleEvent.screen/singleEvent.utils";
 
-export const confirmDelete = (eventID) =>
+export const confirmDelete = (eventId, {navigation}, user_id, eventDetails) =>
   Alert.alert("Warning!", "Are you sure you want to delete this event?", [
     {
       text: "Cancel",
@@ -11,7 +12,7 @@ export const confirmDelete = (eventID) =>
     {
       text: "OK",
       onPress: () => {
-        deleteEvent(eventID);
+        deleteEventAndCascade(eventId, {navigation}, user_id, eventDetails);
       },
     },
   ]);

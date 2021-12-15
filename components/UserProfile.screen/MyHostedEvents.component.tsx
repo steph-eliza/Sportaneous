@@ -96,7 +96,10 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.requestsButton,
                   ]}
                   onPress={() => {
-                    navigation.navigate("AcceptReject", {eventId: myEvent.id,eventTitle : myEvent.title});
+                    navigation.navigate("AcceptReject", {
+                      eventId: myEvent.id,
+                      eventTitle: myEvent.title,
+                    });
                   }}
                 >
                   <Text style={styles.buttonTitle}>Pending Requests</Text>
@@ -111,7 +114,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.deleteButton,
                   ]}
                   onPress={() => {
-                    confirmDelete(myEvent.id);
+                    confirmDelete(myEvent.id, {navigation}, user_id, myEvent);
                   }}
                 >
                   <Text style={styles.buttonTitle}>Delete Event</Text>
