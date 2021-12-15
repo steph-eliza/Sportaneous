@@ -88,19 +88,20 @@ export const Chat = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView contentContainerStyle={styles.spacing}>
         <View>
           <Text style={styles.header}>{eventName}</Text>
+
+          {isMessagesEmpty ? (
+            <Text style={styles.noMessages}>No messages</Text>
+          ) : null}
+          <FlatList
+            data={messages}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedId}
+          />
         </View>
-        {isMessagesEmpty ? (
-          <Text style={styles.noMessages}>No messages</Text>
-        ) : null}
-        <FlatList
-          data={messages}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-        />
         <View style={styles.sendMessagecontainer}>
           <TextInput
             style={styles.inputMessage}
