@@ -18,12 +18,16 @@ export const UserDetails = ({ navigation }) => {
 
   useEffect(() => {
     //firebase storage request for IMG file 
-    getDownloadURL(storageRef)
-      .then((res) => { 
-        setImgURL(res)
-      }).catch((err) => {
-        console.log(err)
-      })
+    try {
+      getDownloadURL(storageRef)
+        .then((res) => {
+          setImgURL(res)
+        }).catch((err) => {
+          console.log(err)
+        })
+    } catch (err) {
+      console.log(err)
+    }
   },[])
 
   return (
