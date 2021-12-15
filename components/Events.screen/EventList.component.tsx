@@ -4,8 +4,15 @@ import styles from "./EventList.style";
 import Filter from "./Filter.component";
 import {getUsers, selectAllEvents} from "../../utils/utils";
 import {makeNameIdReference, truncate} from "./utils/EventListUtils";
+import {RefreshEvents} from "./RefreshEvents.component";
+import EventCategories from "./utils/EventCategories.json";
 
 const EventList = ({navigation}) => {
+  interface categoryIsChecked {
+    [category: string]: boolean;
+  }
+  const [categoryIsChecked, setCategoryIsChecked] =
+    useState<categoryIsChecked>(EventCategories);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [userNames, setUserNames] = useState({});
@@ -67,7 +74,15 @@ const EventList = ({navigation}) => {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <Filter setEvents={setEvents} />
+      <Filter
+        setEvents={setEvents}
+        categoryIsChecked={categoryIsChecked}
+        setCategoryIsChecked={setCategoryIsChecked}
+      />
+      <RefreshEvents
+        setEvents={setEvents}
+        setCategoryIsChecked={setCategoryIsChecked}
+      />
       <FlatList
         data={events}
         renderItem={renderItem}
