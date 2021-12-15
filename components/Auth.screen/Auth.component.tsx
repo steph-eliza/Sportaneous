@@ -17,7 +17,6 @@ import {
   getAuth,
   PhoneAuthProvider,
   signInWithCredential,
-  ApplicationVerifier,
 } from 'firebase/auth'
 import { getApp } from 'firebase/app'
 import { styles } from './Auth.style'
@@ -31,7 +30,7 @@ if (!app?.options || Platform.OS === 'web') {
   )
 }
 
-const PhoneSignIn = () => {
+export const PhoneSignIn = () => {
 
   const recaptchaVerifier = useRef<FirebaseRecaptchaVerifierModal>(null)
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -75,9 +74,10 @@ const PhoneSignIn = () => {
         firebaseConfig={app.options}
         attemptInvisibleVerification
       />
-      <Text style={{ marginTop: 20 }}>Enter phone number</Text>
+      <Text style={styles.hello}>Hello!</Text>
+      <Text style={styles.text}>To register, please enter your phone number</Text>
       <TextInput
-        style={{ marginVertical: 10, fontSize: 17 }}
+        style={styles.inputField1}
         placeholder="+1 999 999 9999"
         autoFocus
         autoCompleteType="tel"
@@ -86,18 +86,19 @@ const PhoneSignIn = () => {
         onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
       />
       <Button
-        title="Send Verification Code"
+      color='whitesmoke'
+        title="SEND VERIFICATION CODE"
         onPress={async () => sendUserPhoneDetails()}
       />
-      <Text style={{ marginTop: 20 }}>Enter Verification code</Text>
       <TextInput
-        style={{ marginVertical: 10, fontSize: 17 }}
+        style={styles.inputField2}
         editable={!!verificationId}
-        placeholder="123456"
+        placeholder="Enter verification code"
         onChangeText={setVerificationCode}
       />
       <Button
-        title="Confirm Verification Code"
+        color='whitesmoke'
+        title="CONFIRM"
         disabled={!verificationId}
         onPress={async () => sendVerificationCode()}
       />
@@ -113,5 +114,3 @@ const PhoneSignIn = () => {
     </View>
   )
 }
-
-export default PhoneSignIn
