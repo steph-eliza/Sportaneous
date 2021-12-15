@@ -61,7 +61,6 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     });
   }, [eventId]);
 
-  console.log(eventDetails.host_id);
   React.useEffect(() => {
     getUserById(eventDetails.host_id).then((user) => {
       if (user !== undefined) {
