@@ -15,14 +15,18 @@ export const Chat = ({ route }) => {
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState("");
   const [isMessagesEmpty, setIsMessagesEmpty] = React.useState(true);
+
   React.useEffect(() => {
+    setMessages([]);
     const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
       if (doc.data().messages.length > 0) {
         setIsMessagesEmpty(false);
         setMessages(doc.data().messages);
+      } else {
+        setIsMessagesEmpty(true);
       }
     });
-  }, [db, chat_id]);
+  }, [chat_id]);
   const formatTimestamp = (timestamp) => {
     let date = new Date(timestamp * 1000);
     let datevalues = {
@@ -80,78 +84,48 @@ export const Chat = ({ route }) => {
       item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
     return <Item item={item} backgroundColor={{ backgroundColor }} />;
   };
-  if (isMessagesEmpty) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <TextInput
-            style={styles.name}
-            placeholder="Message..."
-            onChangeText={setText}
-            value={text}
-          ></TextInput>
-          <Pressable
-            onPress={() => {
-              if (text !== "") {
-                addChatMessage(
-                  {
-                    userId: currentUser.id,
-                    first_name: currentUser.first_name,
-                    message_body: text,
-                    timestamp: new Date(),
-                  },
-                  chat_id
-                ).then(() => {
-                  setText("");
-                });
-              }
-            }}
-          >
-            <Text style={styles.press}>SEND</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View>
-          <Text style={styles.header}>{eventName}</Text>
-        </View>
-        <FlatList
-          data={messages}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          extraData={selectedId}
-        />
-        <View style={styles.sendMessagecontainer}>
-          <TextInput
-            style={styles.inputMessage}
-            placeholder="Message..."
-            onChangeText={setText}
-            value={text}
-          ></TextInput>
-          <Pressable
-            onPress={() => {
-              if (text !== "") {
-                addChatMessage(
-                  {
-                    userId: currentUser.id,
-                    first_name: currentUser.first_name,
-                    message_body: text,
-                    timestamp: new Date(),
-                  },
-                  chat_id
-                ).then(() => {
-                  setText("");
-                });
-              }
-            }}
-          >
-            <Text style={styles.sendText}>SEND</Text>
-          </Pressable>
-        </View>
-      </SafeAreaView>
-    );
-  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.header}>{eventName}</Text>
+      </View>
+      {isMessagesEmpty ? (
+        <Text style={styles.noMessages}>No messages</Text>
+      ) : null}
+      <FlatList
+        data={messages}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        extraData={selectedId}
+      />
+      <View style={styles.sendMessagecontainer}>
+        <TextInput
+          style={styles.inputMessage}
+          placeholder="Message..."
+          onChangeText={setText}
+          value={text}
+        ></TextInput>
+        <Pressable
+          onPress={() => {
+            if (text !== "") {
+              addChatMessage(
+                {
+                  userId: currentUser.id,
+                  first_name: currentUser.first_name,
+                  message_body: text,
+                  timestamp: new Date(),
+                },
+                chat_id
+              ).then(() => {
+                setText("");
+              });
+            }
+          }}
+        >
+          <Text style={styles.sendText}>SEND</Text>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  );
 };

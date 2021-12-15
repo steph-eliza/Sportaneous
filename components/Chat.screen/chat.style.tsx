@@ -77,4 +77,5 @@ export const styles = StyleSheet.create({
     marginRight: 5,
     fontSize: 20,
   },
+  noMessages: { alignSelf: "center", color: "#FFF" },
 });
