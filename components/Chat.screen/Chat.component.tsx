@@ -9,13 +9,12 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { UserContext } from "../../contexts/UserContext";
 
 export const Chat = ({ route }) => {
-  const { chat_id } = route.params;
+  const { chat_id, eventName } = route.params;
   const { currentUser } = useContext(UserContext);
   const [selectedId, setSelectedId] = React.useState(null);
   const [messages, setMessages] = React.useState([]);
   const [text, setText] = React.useState("");
   const [isMessagesEmpty, setIsMessagesEmpty] = React.useState(true);
-
   React.useEffect(() => {
     const unsub = onSnapshot(doc(db, "chats", chat_id), (doc) => {
       if (doc.data().messages.length > 0) {
@@ -24,7 +23,6 @@ export const Chat = ({ route }) => {
       }
     });
   }, [db, chat_id]);
-
   const formatTimestamp = (timestamp) => {
     let date = new Date(timestamp * 1000);
     let datevalues = {
@@ -34,27 +32,28 @@ export const Chat = ({ route }) => {
       hour: String(date.getHours()),
       minutes: String(date.getMinutes()),
       seconds: String(date.getSeconds()),
+    };
+    if (Number(datevalues.hour) < 10) {
+      let hourString = "0" + datevalues.hour;
+      datevalues.hour = hourString;
     }
-    if(Number(datevalues.hour) < 10){
-      let hourString = '0' + datevalues.hour
-      datevalues.hour = hourString
-    };
-    if(Number(datevalues.minutes) < 10){
-      let minutesString = '0' + datevalues.minutes
-      datevalues.minutes = minutesString
-    };
+    if (Number(datevalues.minutes) < 10) {
+      let minutesString = "0" + datevalues.minutes;
+      datevalues.minutes = minutesString;
+    }
     return `${datevalues.hour}:${datevalues.minutes} ${datevalues.day}/${datevalues.month}/${datevalues.fullYear}`;
   };
+  const Item = ({ item }) => (
+    <View style={styles.item}>
+      <View style={styles.topRowContainer}>
+        <Text style={styles.name}>{item.first_name}:</Text>
 
-  const Item = ({ item, backgroundColor, textColor }) => (
-    <View style={[styles.item, backgroundColor]}>
-      <Text style={styles.item}>{item.first_name}</Text>
-      <Text style={styles.item}>{item.message_body}</Text>
-      <Text style={styles.item}>{formatTimestamp(item.timestamp.seconds)}</Text>
-      <Pressable
-        style={styles.item}
-        onPress={() => {
-          if (currentUser.id === item.userId) {
+        <Pressable
+          disabled={currentUser.id !== item.userId}
+          style={
+            currentUser.id === item.userId ? styles.deleteButton : styles.hidden
+          }
+          onPress={() => {
             deleteChatMessage(
               {
                 userId: currentUser.id,
@@ -64,32 +63,29 @@ export const Chat = ({ route }) => {
               },
               chat_id
             );
-          }
-        }}
-      >
-        <Text> {currentUser.id === item.userId ? "X" : ""} </Text>
-      </Pressable>
+          }}
+        >
+          <Text style={styles.delete}>
+            {currentUser.id === item.userId ? "X" : null}
+          </Text>
+        </Pressable>
+      </View>
+      <Text style={styles.message}>{item.message_body}</Text>
+      <Text style={styles.time}>{formatTimestamp(item.timestamp.seconds)}</Text>
+      {/* ADD functionality for formatting time from api */}
     </View>
   );
-
   const renderItem = ({ item }) => {
     const backgroundColor =
       item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
-    const color = item.id === selectedId ? "white" : "black";
-    return (
-      <Item
-        item={item}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
-      />
-    );
+    return <Item item={item} backgroundColor={{ backgroundColor }} />;
   };
-
   if (isMessagesEmpty) {
     return (
       <SafeAreaView style={styles.container}>
         <View>
           <TextInput
+            style={styles.name}
             placeholder="Message..."
             onChangeText={setText}
             value={text}
@@ -105,10 +101,9 @@ export const Chat = ({ route }) => {
                     timestamp: new Date(),
                   },
                   chat_id
-                )
-                  .then(() => {
-                    setText("")
-                  });
+                ).then(() => {
+                  setText("");
+                });
               }
             }}
           >
@@ -120,14 +115,18 @@ export const Chat = ({ route }) => {
   } else {
     return (
       <SafeAreaView style={styles.container}>
+        <View>
+          <Text style={styles.header}>{eventName}</Text>
+        </View>
         <FlatList
           data={messages}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           extraData={selectedId}
         />
-        <View>
+        <View style={styles.sendMessagecontainer}>
           <TextInput
+            style={styles.inputMessage}
             placeholder="Message..."
             onChangeText={setText}
             value={text}
@@ -143,14 +142,13 @@ export const Chat = ({ route }) => {
                     timestamp: new Date(),
                   },
                   chat_id
-                )
-                .then(() => {
-                  setText("")
+                ).then(() => {
+                  setText("");
                 });
               }
             }}
           >
-            <Text style={styles.press}>SEND</Text>
+            <Text style={styles.sendText}>SEND</Text>
           </Pressable>
         </View>
       </SafeAreaView>
