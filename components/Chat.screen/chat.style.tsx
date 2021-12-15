@@ -71,15 +71,17 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-  inputMessage: { color: "black" },
-
+  inputMessage: {
+    width: windowWidth * 0.75,
+    height: 30,
+  },
   sendText: {
     marginRight: 5,
     fontSize: 20,
   },
   noMessages: { alignSelf: "center", color: "#FFF" },
   spacing: {
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     flex: 1,
   },
 });
