@@ -18,7 +18,6 @@ export const AcceptReject = ({ route, navigation }) => {
 
   React.useEffect(() => {
     selectEventById(eventId).then((res) => {
-      console.log(res)
       if (res.pending_attendees.length > 0) {
         let pendingUsersNoEmpties = res.pending_attendees.filter((user) => {
           return user !== "";
@@ -47,7 +46,6 @@ export const AcceptReject = ({ route, navigation }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          console.log(item.userId,"userId")
           navigation.navigate("ViewProfile", {userId: item.userId});
         }}
       >
@@ -61,7 +59,6 @@ export const AcceptReject = ({ route, navigation }) => {
             first_name: item.first_name,
             last_name: item.last_name,
           }).then((res) => {
-            console.log(res, "REMOVE ATTENDEE");
             setReloadTrigger((prevState) => {
               return prevState + 1;
             });
@@ -80,9 +77,7 @@ export const AcceptReject = ({ route, navigation }) => {
 
       <Pressable
         style={styles.item}
-        onPress={() => {
-          console.log(item.userId,"userId")
-          
+        onPress={() => {          
           navigation.navigate("ViewProfile", {userId: item.userId});
         }}
       >
@@ -96,7 +91,6 @@ export const AcceptReject = ({ route, navigation }) => {
             first_name: item.first_name,
             last_name: item.last_name,
           }).then((res) => {
-            console.log({ res });
             setReloadTrigger((prevState) => {
               return prevState + 1;
             });
@@ -133,7 +127,6 @@ export const AcceptReject = ({ route, navigation }) => {
       />
     );
   };
-console.log({eventTitle})
   if(pendingUsers.length === 0 && attendingUsers.length === 0){
     return (
       <SafeAreaView style={styles.container}>
