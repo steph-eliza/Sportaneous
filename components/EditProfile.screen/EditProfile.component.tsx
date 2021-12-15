@@ -10,27 +10,19 @@ import { getDownloadURL, ref, uploadBytes  } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { ScrollView } from "react-native-gesture-handler";
 
-const auth = getAuth();
-const user = auth.currentUser?.uid;
-
 type UpdateUserProps = {
     navigation: {
         navigate: (component: string, {}) => {}
     }
 }
+const auth = getAuth()
+const userId = auth.currentUser?.uid
 
 export const EditProfile = ({navigation}: UpdateUserProps) => {
-
     const { currentUser } = useContext(UserContext)
     const [imgURL, setImgURL] = useState("")
-    const [userImage, setUserImage] = useState(null)
-    const [userDetails, setUserDetails] = useState({
-        first_name: '',
-        hosted_events: [],
-        last_name: '',
-        img_bitmap: '',
-        requested_events: []
-    })
+    const [userDetails, setUserDetails] = useState(currentUser)
+
     useEffect(() => {
         (async () => {
             if (Platform.OS !== 'web') {
@@ -40,29 +32,18 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 }
             }
         })();
-        getUserById(auth.currentUser?.uid)
-            .then((userData) => {
-                setImgURL(userData?.img_bitmap)
-                setUserDetails(userData)
-                return imgURL
-            }).catch((err) => {
-                console.log(err)
-            })
-    }, [userImage]);
+    }, [imgURL]);
 
-    
     const handleChange = (text: string, stateKey: string) => {
         setUserDetails({ ...userDetails, [stateKey]: text })
-        console.log(userDetails)
     }
+
     const updateUser = async () => {
-        getUserById(auth.currentUser?.uid)
+        getUserById(userId)
             .then((userObj) => { 
-                updateUserDetails(userDetails, auth.currentUser?.uid)
-                return userDetails
-            }).then((res) => {
+                updateUserDetails(userDetails, userId)
                 navigation.navigate("Profile")
-                console.log(res)
+                return userDetails
             }).catch((err) => {
                 console.log(err)
         })
@@ -76,12 +57,11 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
             quality: 1,
         });
         if (!result.cancelled) {
-            setUserImage(result.uri);
-            uploadImage(result.uri, `avatar/img/${currentUser.id}`)
+            uploadImage(result.uri, `avatar/img/${userId}`)
                 .then((res) => {
                     Alert.alert("Upload Success")
             }).catch((err) => {
-                Alert.alert(err)
+                    Alert.alert(err)
             })
         }
     }
@@ -109,16 +89,18 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         
         getDownloadURL(storageRef)
             .then((url) => {
-                handleChange(url,"img_bitmap")
+                handleChange(url, "image_bitmap")
+                setImgURL(url)
+                return imgURL
             }).catch((err) => {
                 console.log(err)
             })
     }
     
     const deleteUserDetails = () => {
-        deleteUser(user)
+        deleteUser(userId)
             .then(() => {
-                console.log("User Deleted")
+                
             }).catch(() => {
             
         })
