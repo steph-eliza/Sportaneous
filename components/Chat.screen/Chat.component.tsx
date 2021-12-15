@@ -7,6 +7,7 @@ import { addChatMessage, deleteChatMessage } from "../../utils/utils";
 import { db } from "../../utils/firestoreConfig";
 import { doc, onSnapshot } from "firebase/firestore";
 import { UserContext } from "../../contexts/UserContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export const Chat = ({ route }) => {
   const { chat_id, eventName } = route.params;
@@ -87,45 +88,47 @@ export const Chat = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.header}>{eventName}</Text>
-      </View>
-      {isMessagesEmpty ? (
-        <Text style={styles.noMessages}>No messages</Text>
-      ) : null}
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedId}
-      />
-      <View style={styles.sendMessagecontainer}>
-        <TextInput
-          style={styles.inputMessage}
-          placeholder="Message..."
-          onChangeText={setText}
-          value={text}
-        ></TextInput>
-        <Pressable
-          onPress={() => {
-            if (text !== "") {
-              addChatMessage(
-                {
-                  userId: currentUser.id,
-                  first_name: currentUser.first_name,
-                  message_body: text,
-                  timestamp: new Date(),
-                },
-                chat_id
-              ).then(() => {
-                setText("");
-              });
-            }
-          }}
-        >
-          <Text style={styles.sendText}>SEND</Text>
-        </Pressable>
-      </View>
+      <KeyboardAwareScrollView>
+        <View>
+          <Text style={styles.header}>{eventName}</Text>
+        </View>
+        {isMessagesEmpty ? (
+          <Text style={styles.noMessages}>No messages</Text>
+        ) : null}
+        <FlatList
+          data={messages}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          extraData={selectedId}
+        />
+        <View style={styles.sendMessagecontainer}>
+          <TextInput
+            style={styles.inputMessage}
+            placeholder="Message..."
+            onChangeText={setText}
+            value={text}
+          ></TextInput>
+          <Pressable
+            onPress={() => {
+              if (text !== "") {
+                addChatMessage(
+                  {
+                    userId: currentUser.id,
+                    first_name: currentUser.first_name,
+                    message_body: text,
+                    timestamp: new Date(),
+                  },
+                  chat_id
+                ).then(() => {
+                  setText("");
+                });
+              }
+            }}
+          >
+            <Text style={styles.sendText}>SEND</Text>
+          </Pressable>
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
