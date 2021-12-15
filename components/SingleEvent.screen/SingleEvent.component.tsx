@@ -42,6 +42,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     last_name: "",
     description: "",
     image_bitmap: "",
+    id: "",
   });
 
   let acceptedOrRequested: boolean = checkAcceptedOrRequested(
@@ -68,6 +69,7 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
           last_name: user.last_name,
           description: user.description,
           image_bitmap: user.image_bitmap,
+          id: eventDetails.host_id,
         });
       }
 
