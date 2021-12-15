@@ -6,7 +6,12 @@ export const styles = StyleSheet.create({
   page: {
     flex: 1,
   },
-
+  avatar: {
+      borderRadius: 100,
+      height: 200,
+      width: 200,
+      alignSelf: "center"
+  },
   title: {
     fontWeight: "bold",
     fontSize: 20,
