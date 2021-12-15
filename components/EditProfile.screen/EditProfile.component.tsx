@@ -10,15 +10,15 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native'
 import { styles } from './EditProfile.style'
 import { UserContext } from '../../contexts/UserContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { updateUserDetails, getUserById, deleteUser } from '../../utils/utils'
+import { updateUserDetails, deleteUser } from '../../utils/utils'
 import * as ImagePicker from 'expo-image-picker'
 import { storage } from '../../utils/firestoreConfig'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { getAuth } from 'firebase/auth'
 import { ScrollView } from 'react-native-gesture-handler'
 
 type UpdateUserProps = {
@@ -33,7 +33,7 @@ export const EditProfile = ({ navigation }: UpdateUserProps) => {
   const [userDetails, setUserDetails] = useState(currentUser)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       if (Platform.OS !== 'web') {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -111,41 +111,44 @@ export const EditProfile = ({ navigation }: UpdateUserProps) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text style={styles.title}>Update User Details</Text>
+        <Text style={styles.title}>Update Details</Text>
         {imgURL ? (
           <Image source={{ uri: imgURL }} style={styles.avatar} />
         ) : null}
         <Button onPress={selectPhoto} color="black" title="Choose Photo" />
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}
         >
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.inner}>
-              <Text>First Name:</Text>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>First Name:</Text>
               <TextInput
                 style={styles.inputField}
                 onChangeText={(text) => handleChange(text, 'first_name')}
-                placeholder="First Name:"
+                placeholder="First Name"
               />
-              <Text>Last Name:</Text>
+              <Text style={styles.inputTitle}>Last Name:</Text>
               <TextInput
                 style={styles.inputField}
                 onChangeText={(text) => handleChange(text, 'last_name')}
-                placeholder="Last Name:"
+                placeholder="Last Name"
               />
-              <Text>Description:</Text>
+              <Text style={styles.inputTitle}>Description:</Text>
               <TextInput
                 multiline
                 numberOfLines={4}
                 style={styles.inputField}
                 onChangeText={(text) => handleChange(text, 'description')}
-                placeholder="Description:"
+                placeholder="Description"
               />
             </View>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
-        <Button onPress={updateUser} color="black" title="Submit" />
+        <View style={styles.submit}>
+          <TouchableOpacity style={styles.submitButton} onPress={updateUser}>
+            <Text style={styles.submitText}>SUBMIT</Text>
+          </TouchableOpacity>
+        </View>
         <Button
           onPress={deleteUserDetails}
           color="red"
