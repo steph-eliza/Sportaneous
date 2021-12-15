@@ -12,11 +12,11 @@ import { ScrollView } from "react-native-gesture-handler";
 
 type UpdateUserProps = {
     navigation: {
-        navigate: (component: string, {}) => {}
+        navigate: (component: string) => {}
     }
 }
-const auth = getAuth()
-const userId = auth.currentUser?.uid
+// const auth = getAuth()
+// const userId = auth.currentUser?.uid
 
 export const EditProfile = ({navigation}: UpdateUserProps) => {
     const { currentUser } = useContext(UserContext)
@@ -38,15 +38,9 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
         setUserDetails({ ...userDetails, [stateKey]: text })
     }
 
-    const updateUser = async () => {
-        getUserById(userId)
-            .then((userObj) => { 
-                updateUserDetails(userDetails, userId)
-                navigation.navigate("Profile")
-                return userDetails
-            }).catch((err) => {
-                console.log(err)
-        })
+    const updateUser = () => {
+        updateUserDetails(userDetails, currentUser.id)
+        navigation.navigate("Profile")
     }
 
     const selectPhoto = async () => {
@@ -57,16 +51,16 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
             quality: 1,
         });
         if (!result.cancelled) {
-            uploadImage(result.uri, `avatar/img/${userId}`)
+            uploadImage(result.uri, `avatar/img/${currentUser.id}`)
                 .then((res) => {
-                    Alert.alert("Upload Success")
+                    Alert.alert("Upload Successful")
             }).catch((err) => {
                     Alert.alert(err)
             })
         }
     }
 
-    const uploadImage = async (uri, imageName) => {
+    const uploadImage = async (uri: string, imageName: string) => {
         if (!uri) return;
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -92,13 +86,12 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 handleChange(url, "image_bitmap")
                 setImgURL(url)
                 return imgURL
-            }).catch((err) => {
-                console.log(err)
+            }).catch((err) => {(err)
             })
     }
     
     const deleteUserDetails = () => {
-        deleteUser(userId)
+        deleteUser(currentUser.id)
             .then(() => {
                 
             }).catch(() => {
@@ -109,7 +102,7 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                    <Text style={styles.title}>Update User Detail</Text> 
+                    <Text style={styles.title}>Update User Details</Text> 
                     {imgURL ? <Image source={{ uri: imgURL }} style={styles.avatar} /> : null}
                     <Button
                         onPress={selectPhoto}
@@ -150,13 +143,11 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                         onPress={updateUser}
                         color="black"
                         title="Submit"
-                        // disabled={isDisabled}
                     />
                     <Button
                         onPress={deleteUserDetails}
                         color="red"
                         title="Delete Account"
-                        // disabled={isDisabled}
                         />
             </ScrollView>
         </SafeAreaView>
