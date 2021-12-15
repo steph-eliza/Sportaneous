@@ -7,10 +7,10 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   avatar: {
-      borderRadius: 100,
-      height: 200,
-      width: 200,
-      alignSelf: "center"
+    borderRadius: 100,
+    height: 200,
+    width: 200,
+    alignSelf: "center",
   },
   title: {
     fontWeight: "bold",
@@ -29,31 +29,32 @@ export const styles = StyleSheet.create({
   },
   detailsField: {
     borderBottomWidth: 1,
+    borderColor: "#DADBDF",
     marginTop: 10,
     paddingBottom: 5,
     paddingLeft: 10,
     textAlign: "left",
     width: windowWidth / 3,
-    fontSize: 16,
+    fontSize: 17,
   },
   detailsValue: {
     borderBottomWidth: 1,
+    borderColor: "#DADBDF",
     marginTop: 10,
     paddingBottom: 5,
     paddingRight: 10,
     textAlign: "right",
     width: windowWidth / 3,
-    fontSize: 16,
+    fontSize: 15,
   },
 
   editButton: {
     borderLeftWidth: 1,
     borderBottomWidth: 1,
     borderRightWidth: 1,
-    borderColor: "#333",
+    borderColor: "#DADBDF",
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
-    // backgroundColor: "rgba(120,50,240, 0.25)",
     padding: 5,
     width: windowWidth / 1.8,
     alignSelf: "center",
@@ -61,5 +62,6 @@ export const styles = StyleSheet.create({
   buttonTitle: {
     textAlign: "center",
     fontWeight: "bold",
+    color: "whitesmoke",
   },
 });

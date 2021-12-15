@@ -94,8 +94,8 @@ export const MyPendingRequests = ({user_id, navigation}) => {
               style={({pressed}) => [
                 {
                   backgroundColor: pressed
-                    ? "rgba(255,150,20, 0.15)"
-                    : "rgba(255,150,20, 0.25)",
+                    ? "rgba(108, 93, 171, 0.5)"
+                    : "rgba(108, 93, 171, 1)",
                 },
                 styles.requestsButton,
               ]}

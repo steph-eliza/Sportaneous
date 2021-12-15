@@ -67,8 +67,8 @@ export const UserDetails = ({navigation}) => {
             style={({pressed}) => [
               {
                 backgroundColor: pressed
-                  ? "rgba(30,280,280, 0.15)"
-                  : "rgba(30,200,240, 0.25)",
+                  ? "rgba(50, 59, 118, 0.5)"
+                  : "rgba(50, 59, 118, 1)",
               },
               styles.editButton,
             ]}
