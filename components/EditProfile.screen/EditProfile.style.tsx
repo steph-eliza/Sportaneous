@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    }, inner: {
+        padding: 24,
+        flex: 1,
+        justifyContent: "space-around"
     },
     inputField: {
         height: 40,

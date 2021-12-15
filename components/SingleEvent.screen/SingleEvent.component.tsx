@@ -80,7 +80,6 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
     last_name: currentUser.last_name,
     userId: currentUser.id,
   };
-
   if (isLoading) {
     return <View style={styles.view}></View>;
   } else if (eventDetails.host_id === currentUser.id) {
