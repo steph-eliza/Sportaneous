@@ -1,34 +1,40 @@
 import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
 
-const windowWdith = Dimensions.get("window").width;
 export const styles = StyleSheet.create({
-  view: {
-    backgroundColor: "grey",
+  container: {
     flex: 1,
-    borderWidth: 2,
-    borderColor: "green",
+    margin: 10,
+  },
+  view: {
+    backgroundColor: "#FFF",
+    flex: 1,
+    padding: 10,
+    borderRadius: 10,
+    marginHorizontal: 25,
+    marginTop: 10,
+    marginBottom: 0,
+    borderWidth: 1,
+    borderColor: "#DADBDF",
   },
   text: {
-    padding: 4,
-    fontSize: 20,
-    width: windowWdith,
-    borderColor: "red",
-    borderWidth: 2,
+    fontSize: 18,
+    margin: 5,
   },
-  title: { fontSize: 40, alignSelf: "center", padding: 10 },
-  PressableText: {
+  touchOpacity: {
+    marginBottom: 10,
+    marginHorizontal: 2,
+    borderWidth: 1,
+    borderColor: "#323B76",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    backgroundColor: "#323B76",
+    padding: 8,
+    alignSelf: "center",
+  },
+  touchOpacityText: {
     padding: 4,
-    fontSize: 25,
-    width: windowWdith / 2,
-    borderColor: "red",
-    borderWidth: 2,
+    fontSize: 18,
     textAlign: "center",
-  },
-  pressable: {
-    width: windowWdith / 2,
-    marginHorizontal: windowWdith / 4,
-    marginTop: 20,
-    marginBottom: 20,
+    color: "whitesmoke",
   },
 });
