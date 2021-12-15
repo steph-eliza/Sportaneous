@@ -1,13 +1,14 @@
 import React, { useState , useEffect , useContext } from "react";
-import { Text, TextInput , Button, Image, Platform, View , Alert } from "react-native";
+import { Text, TextInput , Button, Image, Platform, View , Alert , KeyboardAvoidingView , TouchableWithoutFeedback , Keyboard} from "react-native";
 import { styles } from "./EditProfile.style";
 import { UserContext } from "../../contexts/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { updateUserDetails , getUserById, deleteUser } from "../../utils/utils";
 import * as ImagePicker from 'expo-image-picker';
 import {storage} from "../../utils/firestoreConfig"
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes  } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { ScrollView } from "react-native-gesture-handler";
 
 const auth = getAuth();
 const user = auth.currentUser?.uid;
@@ -60,6 +61,7 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 updateUserDetails(userDetails, auth.currentUser?.uid)
                 return userDetails
             }).then((res) => {
+                navigation.navigate("Profile")
                 console.log(res)
             }).catch((err) => {
                 console.log(err)
@@ -110,9 +112,9 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
                 handleChange(url,"img_bitmap")
             }).catch((err) => {
                 console.log(err)
-        })
+            })
     }
-
+    
     const deleteUserDetails = () => {
         deleteUser(user)
             .then(() => {
@@ -124,38 +126,57 @@ export const EditProfile = ({navigation}: UpdateUserProps) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View>
-            <Text style={styles.title}>Update User Detail</Text> 
-                {imgURL ? <Image source={{ uri: imgURL }} style={styles.avatar} /> : null}
-            <Button
-                onPress={selectPhoto}
-                color="black"
-                title="Choose Photo"
-                // disabled={isDisabled}
-                />
-            <TextInput
-                style={styles.inputField}
-                onChangeText={(text) => handleChange(text, 'first_name')}
-                placeholder="First Name:"
-            />
-            <TextInput
-                style={styles.inputField}
-                onChangeText={(text) => handleChange(text, 'last_name')}
-                placeholder="Last Name:"
-            />
-            <Button
-                onPress={updateUser}
-                color="black"
-                title="Update"
-                // disabled={isDisabled}
-            />
-            <Button
-                onPress={deleteUserDetails}
-                color="red"
-                title="Delete Account"
-                // disabled={isDisabled}
-                />
-                </View>
+            <ScrollView>
+                    <Text style={styles.title}>Update User Detail</Text> 
+                    {imgURL ? <Image source={{ uri: imgURL }} style={styles.avatar} /> : null}
+                    <Button
+                        onPress={selectPhoto}
+                        color="black"
+                        title="Choose Photo"
+                        // disabled={isDisabled}
+                            />
+                    <KeyboardAvoidingView
+                        behavior={Platform.OS === "ios" ? "padding" : "height"}
+                        style={styles.container}
+                    >
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.inner}>
+                            <Text>First Name:</Text> 
+                            <TextInput
+                                style={styles.inputField}
+                                onChangeText={(text) => handleChange(text, 'first_name')}
+                                placeholder="First Name:"
+                                    />
+                            <Text>Last Name:</Text> 
+                            <TextInput
+                                style={styles.inputField}
+                                onChangeText={(text) => handleChange(text, 'last_name')}
+                                placeholder="Last Name:"
+                                    />
+                            <Text>Description:</Text> 
+                            <TextInput
+                                multiline
+                                numberOfLines={4}
+                                style={styles.inputField}
+                                onChangeText={(text) => handleChange(text, 'description')}
+                                placeholder="Description:"
+                                    />
+                        </View>
+                        </TouchableWithoutFeedback>
+                    </KeyboardAvoidingView>
+                    <Button
+                        onPress={updateUser}
+                        color="black"
+                        title="Submit"
+                        // disabled={isDisabled}
+                    />
+                    <Button
+                        onPress={deleteUserDetails}
+                        color="red"
+                        title="Delete Account"
+                        // disabled={isDisabled}
+                        />
+            </ScrollView>
         </SafeAreaView>
     )
 }

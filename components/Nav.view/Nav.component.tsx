@@ -45,7 +45,6 @@ export function Nav() {
         options={{ drawerItemStyle: { display: "none" } }}
       />
       <Drawer.Screen name="Profile" component={UserDetails} />
-      <Drawer.Screen name="Edit Profile" component={EditProfile} options={{drawerItemStyle: {display: "none"}}}/>
       <Drawer.Screen name="AcceptReject" component={AcceptReject} />
     </Drawer.Navigator>
   );
