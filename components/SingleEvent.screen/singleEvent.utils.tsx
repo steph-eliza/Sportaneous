@@ -25,6 +25,7 @@ export type hostDetails = {
   last_name: string;
   description: string;
   image_bitmap: string;
+  id: string;
 };
 export type eventDetails = {
   attendees: string[];
