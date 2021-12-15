@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {  getUserById } from "../../utils/utils";
 
 export const ViewProfile = ({ route, navigation }) => {
-    const { userId } = route.params;
+    const { userId, eventId, eventTitle } = route.params;
     const [imgURL, setImgURL] = useState("")
     const [userImage, setUserImage] = useState(null)
     const [userDetails, setUserDetails] = useState({
@@ -37,7 +37,7 @@ export const ViewProfile = ({ route, navigation }) => {
             <Pressable
         style={styles.item}
         onPress={() => {
-          navigation.navigate("AcceptReject");
+          navigation.navigate("AcceptReject", {eventId: eventId, eventTitle: eventTitle});
         }}
       >
         <Text>Back Button</Text>

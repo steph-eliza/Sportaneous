@@ -38,21 +38,19 @@ export const AcceptReject = ({ route, navigation }) => {
     });
   }, [eventId, reloadTrigger]);
 
-  const AttendeesItem = ({ item, backgroundColor, textColor }) => (
-    <View style={[styles.item, backgroundColor]}>
-      <Text style={styles.item}>{item.first_name}</Text>
-      <Text style={styles.item}>{item.last_name}</Text>
-
+  const AttendeesItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.name}>{item.first_name} {item.last_name}</Text>
       <Pressable
-        style={styles.item}
+        style={styles.navigate}
         onPress={() => {
           navigation.navigate("ViewProfile", {userId: item.userId});
         }}
       >
-        <Text>Press here to go to user profile!</Text>
+        <Text style={styles.buttonsText}>Check user profile</Text>
       </Pressable>
       <Pressable
-        style={styles.item}
+        style={styles.acceptReject}
         onPress={() => {
           removeAttendee(eventId, {
             userId: item.userId,
@@ -65,26 +63,24 @@ export const AcceptReject = ({ route, navigation }) => {
           });
         }}
       >
-        <Text>Remove Attendee</Text>
+        <Text style={styles.buttonsText}>Remove Attendee</Text>
       </Pressable>
     </View>
   );
 
-  const PendingAttendeesItem = ({ item, backgroundColor, textColor }) => (
-    <View style={[styles.item, backgroundColor]}>
-      <Text style={styles.item}>{item.first_name}</Text>
-      <Text style={styles.item}>{item.last_name}</Text>
-
+  const PendingAttendeesItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.name}>{item.first_name} {item.last_name}</Text>
       <Pressable
-        style={styles.item}
+        style={styles.navigate}
         onPress={() => {          
-          navigation.navigate("ViewProfile", {userId: item.userId});
+          navigation.navigate("ViewProfile", { userId: item.userId, eventId: eventId, eventTitle: eventTitle });
         }}
       >
-        <Text>Press here to see user profile</Text>
+        <Text style={styles.buttonsText}>Check user profile</Text>
       </Pressable>
       <Pressable
-        style={styles.item}
+        style={styles.acceptReject}
         onPress={() => {
           addAttendee(eventId, {
             userId: item.userId,
@@ -97,51 +93,37 @@ export const AcceptReject = ({ route, navigation }) => {
           });
         }}
       >
-        <Text>Add attendee to Event!</Text>
+        <Text style={styles.buttonsText}>Add attendee to Event!</Text>
       </Pressable>
     </View>
   );
 
   const renderPendingItem = ({ item }) => {
-    const backgroundColor =
-      item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
-    const color = item.id === selectedId ? "white" : "black";
     return (
       <PendingAttendeesItem
         item={item}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
       />
     );
   };
 
   const renderAttendingItem = ({ item }) => {
-    const backgroundColor =
-      item.id === selectedId ? "#6E3B6E" : "rgba(10,80,160, 0.1)";
-    const color = item.id === selectedId ? "white" : "black";
     return (
       <AttendeesItem
         item={item}
-        backgroundColor={{ backgroundColor }}
-        textColor={{ color }}
       />
     );
   };
   if(pendingUsers.length === 0 && attendingUsers.length === 0){
     return (
       <SafeAreaView style={styles.container}>
-        <Text>{eventTitle}</Text>
-        <Pressable
-        style={styles.item}
-      >
-        <Text>You don't currently have any requests to join this event.</Text>
-      </Pressable>
+        <Text style={styles.title}>{eventTitle}</Text>
+        <Text>You don't have any join requests.</Text>
       </SafeAreaView>
     )
   } else if (pendingUsers.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <Text>{eventTitle}</Text>
+      <SafeAreaView style={styles.title}>
+        <Text style={styles.title}>{eventTitle}</Text>
         <FlatList
           data={attendingUsers}
           renderItem={renderAttendingItem}
@@ -152,7 +134,7 @@ export const AcceptReject = ({ route, navigation }) => {
   } else {
     return (
       <SafeAreaView style={styles.container}>
-        <Text>{eventTitle}</Text>
+        <Text style={styles.title}>{eventTitle}</Text>
         <FlatList
           data={pendingUsers}
           renderItem={renderPendingItem}

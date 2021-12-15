@@ -10,6 +10,7 @@ import { GetUserName } from '../GetUserName.screen/GetUserName.component'
 import { Chat } from '../Chat.screen/Chat.component'
 import { AcceptReject } from '../AcceptReject.screen/AcceptReject.component'
 import { EditProfile } from '../EditProfile.screen/EditProfile.component'
+import { ViewProfile } from '../ViewProfile.screen/ViewProfile.component'
 
 const Drawer = createDrawerNavigator()
 
@@ -45,7 +46,16 @@ export function Nav() {
         options={{ drawerItemStyle: { display: 'none' } }}
       />
       <Drawer.Screen name="Profile" component={UserDetails} />
-      <Drawer.Screen name="AcceptReject" component={AcceptReject} />
+      <Drawer.Screen
+        name="AcceptReject"
+        component={AcceptReject}
+        options={{ drawerItemStyle: { display: 'none' } }}
+      />
+      <Drawer.Screen
+        name="ViewProfile"
+        component={ViewProfile}
+        options={{ drawerItemStyle: { display: 'none' } }}
+      />
     </Drawer.Navigator>
   )
 }
