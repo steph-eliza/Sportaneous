@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     borderColor: "red",
     borderWidth: 2,
   },
-  title: { fontSize: 50, alignSelf: "center", padding: 10 },
+  title: { fontSize: 40, alignSelf: "center", padding: 10 },
   PressableText: {
     padding: 4,
     fontSize: 25,
@@ -29,5 +29,6 @@ export const styles = StyleSheet.create({
     width: windowWdith / 2,
     marginHorizontal: windowWdith / 4,
     marginTop: 20,
+    marginBottom: 20,
   },
 });

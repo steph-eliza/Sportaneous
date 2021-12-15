@@ -1,38 +1,47 @@
 import { View, Text, Pressable } from "react-native";
-import React, { useState, useEffect } from "react";
 import { styles } from "./AcceptReject.style";
 import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { selectEventById, selectAllEvents, removeAttendee, addAttendee } from "../../utils/utils";
+import {
+  selectEventById,
+  selectAllEvents,
+  removeAttendee,
+  addAttendee,
+} from "../../utils/utils";
+import React from "react";
+import { EventEmitter } from "stream";
 
-
-export const AcceptReject = ({ route }) => {
-//   const { event_id } = route.params;
-    const event_id = "MqFdV61nNp5BqUqDNqU"
-    const [selectedId, setSelectedId] = React.useState(null);
+export const AcceptReject = ({ route, navigation }) => {
+    const { eventId, eventTitle } = route.params;
+  console.log({eventId})
+  //TEMP HARDCODING REMOVE ME
+  //  eventId = "MqFdV61nNp5BqUqDNqU";
+  const [selectedId, setSelectedId] = React.useState(null);
   const [pendingUsers, setPendingUsers] = React.useState([]);
   const [attendingUsers, setAttendingUsers] = React.useState([]);
+  const [reloadTrigger, setReloadTrigger] = React.useState(0);
 
   React.useEffect(() => {
-    selectEventById(event_id).then((res) => {
-      console.log(res)
-      if(res.pending_attendees.length > 0){
-              let pendingUsersNoEmpties = res.pending_attendees.filter((user) => {
-          return user !== ""
-      })
-      setPendingUsers(pendingUsersNoEmpties)
-      console.log(pendingUsers, "This is Pending Users")
+    selectEventById(eventId).then((res) => {
+      if (res.pending_attendees.length > 0) {
+        let pendingUsersNoEmpties = res.pending_attendees.filter((user) => {
+          return user !== "";
+        });
+        setPendingUsers(pendingUsersNoEmpties);
+      } else {
+        setPendingUsers([]);
       }
-  
-      
-      if(res.attendees.length > 0){
-      let usersNoEmpties = res.attendees.filter((user) => {
-        return user !== ""
-    })
-      setAttendingUsers(usersNoEmpties, "This is Pending Users")
-}
+
+      if (res.attendees.length > 0) {
+        let usersNoEmpties = res.attendees.filter((user) => {
+          return user !== "";
+        });
+        setAttendingUsers(usersNoEmpties);
+      } else {
+        setAttendingUsers([]);
+      }
     });
-  }, [event_id]);
+  }, [eventId, reloadTrigger]);
 
   const AttendeesItem = ({ item, backgroundColor, textColor }) => (
     <View style={[styles.item, backgroundColor]}>
@@ -42,11 +51,27 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          removeAttendee(event_id ,{ userId: "1234", first_name: "Will", last_name: "test" })
-          .then((res) => {
-              console.log(res, "REMOVE ATTENDEE")
-          })
-          
+
+          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
+
+          // navigation.navigate("UserProfileView", {userId: item.userId});
+        }}
+      >
+        <Text>Press here to go to user profile!</Text>
+      </Pressable>
+      <Pressable
+        style={styles.item}
+        onPress={() => {
+          removeAttendee(eventId, {
+            userId: item.userId,
+            first_name: item.first_name,
+            last_name: item.last_name,
+          }).then((res) => {
+            console.log(res, "REMOVE ATTENDEE");
+            setReloadTrigger((prevState) => {
+              return prevState + 1;
+            });
+          });
         }}
       >
         <Text>Remove Attendee</Text>
@@ -62,14 +87,30 @@ export const AcceptReject = ({ route }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-          addAttendee(event_id ,{ userId: "1234", first_name: "Will", last_name: "test" })
-          .then((res) => {
-              console.log(res)
-          })
-          
+
+          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
+
+          // navigation.navigate("UserProfileView", {userId: item.userId});
         }}
       >
-        <Text>Add Attendee</Text>
+        <Text>Press here to see user profile</Text>
+      </Pressable>
+      <Pressable
+        style={styles.item}
+        onPress={() => {
+          addAttendee(eventId, {
+            userId: item.userId,
+            first_name: item.first_name,
+            last_name: item.last_name,
+          }).then((res) => {
+            console.log({ res });
+            setReloadTrigger((prevState) => {
+              return prevState + 1;
+            });
+          });
+        }}
+      >
+        <Text>Add attendee to Event!</Text>
       </Pressable>
     </View>
   );
@@ -99,23 +140,43 @@ export const AcceptReject = ({ route }) => {
       />
     );
   };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={pendingUsers}
-        renderItem={renderPendingItem}
-        keyExtractor={(item) => item.id}
-      />
-       <FlatList
-        data={attendingUsers}
-        renderItem={renderAttendingItem}
-        keyExtractor={(item) => item.id}
-      />
-
-      <View>
-        
-      </View>
-    </SafeAreaView>
-  );
+console.log({eventTitle})
+  if(pendingUsers.length === 0 && attendingUsers.length === 0){
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>{eventTitle}</Text>
+        <Pressable
+        style={styles.item}
+        onPress={() => {}}
+      >
+        <Text>You don't currently have any requests to join this event.</Text>
+      </Pressable>
+      </SafeAreaView>
+    )
+  } else if (pendingUsers.length === 0) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={attendingUsers}
+          renderItem={renderAttendingItem}
+          keyExtractor={(item) => item.id}
+        />
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={pendingUsers}
+          renderItem={renderPendingItem}
+          keyExtractor={(item) => item.id}
+        />
+        <FlatList
+          data={attendingUsers}
+          renderItem={renderAttendingItem}
+          keyExtractor={(item) => item.id}
+        />
+      </SafeAreaView>
+    );
+  }
 };

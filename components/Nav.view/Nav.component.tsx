@@ -33,6 +33,11 @@ export function Nav() {
         component={GetUserName}
         options={{ drawerItemStyle: { display: "none" } }}
       />
+      <Drawer.Screen
+        name="Edit Profile"
+        component={EditProfile}
+        options={{ drawerItemStyle: { display: "none" }}}
+      />
       <Drawer.Screen name="Chatrooms" component={Chatroom} />
       <Drawer.Screen
         name="Chat"
