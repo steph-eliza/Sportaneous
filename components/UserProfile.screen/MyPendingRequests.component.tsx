@@ -48,14 +48,9 @@ export const MyPendingRequests = ({user_id, navigation}) => {
   }, [pendingRequestIds]);
 
   React.useEffect(() => {
-    console.log("                               in listener");
     setIsLoading(true);
     const unsub = onSnapshot(doc(db, "users", user_id), (doc: any) => {
       if (doc.data().requested_events.length > 0) {
-        console.log(
-          doc.data().requested_events,
-          "                <-- requested events doc"
-        );
         setPendingRequestIds(doc.data().requested_events);
       } else {
         setPendingRequestIds([]);
