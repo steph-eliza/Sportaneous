@@ -1,21 +1,16 @@
 import { View, Text, Pressable } from "react-native";
 import { styles } from "./AcceptReject.style";
-import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   selectEventById,
-  selectAllEvents,
   removeAttendee,
   addAttendee,
 } from "../../utils/utils";
 import React from "react";
-import { EventEmitter } from "stream";
 
 export const AcceptReject = ({ route, navigation }) => {
     const { eventId, eventTitle } = route.params;
-  console.log({eventId})
-  //TEMP HARDCODING REMOVE ME
-  //  eventId = "MqFdV61nNp5BqUqDNqU";
   const [selectedId, setSelectedId] = React.useState(null);
   const [pendingUsers, setPendingUsers] = React.useState([]);
   const [attendingUsers, setAttendingUsers] = React.useState([]);
@@ -51,10 +46,7 @@ export const AcceptReject = ({ route, navigation }) => {
       <Pressable
         style={styles.item}
         onPress={() => {
-
-          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
-
-          // navigation.navigate("UserProfileView", {userId: item.userId});
+          navigation.navigate("ViewProfile", {userId: item.userId});
         }}
       >
         <Text>Press here to go to user profile!</Text>
@@ -67,7 +59,6 @@ export const AcceptReject = ({ route, navigation }) => {
             first_name: item.first_name,
             last_name: item.last_name,
           }).then((res) => {
-            console.log(res, "REMOVE ATTENDEE");
             setReloadTrigger((prevState) => {
               return prevState + 1;
             });
@@ -86,11 +77,8 @@ export const AcceptReject = ({ route, navigation }) => {
 
       <Pressable
         style={styles.item}
-        onPress={() => {
-
-          // NEED TO CREATE A READ ONLY USER PROFILE COMPONENT BASED OFF JEFFERY'S
-
-          // navigation.navigate("UserProfileView", {userId: item.userId});
+        onPress={() => {          
+          navigation.navigate("ViewProfile", {userId: item.userId});
         }}
       >
         <Text>Press here to see user profile</Text>
@@ -103,7 +91,6 @@ export const AcceptReject = ({ route, navigation }) => {
             first_name: item.first_name,
             last_name: item.last_name,
           }).then((res) => {
-            console.log({ res });
             setReloadTrigger((prevState) => {
               return prevState + 1;
             });
@@ -140,14 +127,12 @@ export const AcceptReject = ({ route, navigation }) => {
       />
     );
   };
-console.log({eventTitle})
   if(pendingUsers.length === 0 && attendingUsers.length === 0){
     return (
       <SafeAreaView style={styles.container}>
         <Text>{eventTitle}</Text>
         <Pressable
         style={styles.item}
-        onPress={() => {}}
       >
         <Text>You don't currently have any requests to join this event.</Text>
       </Pressable>
@@ -156,6 +141,7 @@ console.log({eventTitle})
   } else if (pendingUsers.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
+        <Text>{eventTitle}</Text>
         <FlatList
           data={attendingUsers}
           renderItem={renderAttendingItem}
@@ -166,6 +152,7 @@ console.log({eventTitle})
   } else {
     return (
       <SafeAreaView style={styles.container}>
+        <Text>{eventTitle}</Text>
         <FlatList
           data={pendingUsers}
           renderItem={renderPendingItem}

@@ -50,7 +50,6 @@ export const Chat = ({ route }) => {
     <View style={[styles.item, backgroundColor]}>
       <Text style={styles.item}>{item.first_name}</Text>
       <Text style={styles.item}>{item.message_body}</Text>
-      {/* ADD functionality for formatting time from api */}
       <Text style={styles.item}>{formatTimestamp(item.timestamp.seconds)}</Text>
       <Pressable
         style={styles.item}
@@ -106,7 +105,10 @@ export const Chat = ({ route }) => {
                     timestamp: new Date(),
                   },
                   chat_id
-                );
+                )
+                  .then(() => {
+                    setText("")
+                  });
               }
             }}
           >
@@ -124,7 +126,6 @@ export const Chat = ({ route }) => {
           keyExtractor={(item) => item.id}
           extraData={selectedId}
         />
-
         <View>
           <TextInput
             placeholder="Message..."
@@ -142,7 +143,10 @@ export const Chat = ({ route }) => {
                     timestamp: new Date(),
                   },
                   chat_id
-                );
+                )
+                .then(() => {
+                  setText("")
+                });
               }
             }}
           >
