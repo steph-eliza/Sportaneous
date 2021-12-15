@@ -1,17 +1,22 @@
+import {doc, onSnapshot} from "firebase/firestore";
 import React from "react";
+import {useContext} from "react";
 import {useEffect, useState} from "react";
 import {Text, Pressable, View, TouchableOpacity, Alert} from "react-native";
 import Collapsible from "react-native-collapsible";
 import {ScrollView} from "react-native-gesture-handler";
-import {selectEventsByUser} from "../../utils/utils";
+import {UserContext} from "../../contexts/UserContext";
+import {db} from "../../utils/firestoreConfig";
+import {selectEventById} from "../../utils/utils";
 import {truncate} from "../Events.screen/utils/EventListUtils";
 import {styles} from "./ProfileEvents.style";
-import {confirmDelete, getOwnName} from "./ProfileUtils";
+import {confirmDelete} from "./ProfileUtils";
 
 export const MyHostedEvents = ({user_id, navigation}) => {
+  const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [hostedIsCollapsed, setHostedIsCollapsed] = useState(false);
-  const [myName, setMyName] = useState("");
+  const [myHostedEventIds, setMyHostedEventIds] = useState([]);
   const [myHostedEvents, setMyHostedEvents] = useState([
     {
       title: "dummy",
@@ -25,13 +30,28 @@ export const MyHostedEvents = ({user_id, navigation}) => {
   ]);
 
   useEffect(() => {
-    (async () => {
-      const myEventRes = await selectEventsByUser(user_id);
-      setMyHostedEvents(myEventRes);
-      setIsLoading(false);
-      setMyName(await getOwnName(user_id));
-    })();
-  }, []);
+    const eventPromises: any = myHostedEventIds.map((eventId) => {
+      return selectEventById(eventId);
+    });
+    Promise.all(eventPromises).then((res: any) => {
+      res.forEach((event, index) => {
+        event.id = myHostedEventIds[index];
+      });
+      setMyHostedEvents(res);
+    });
+    setIsLoading(false);
+  }, [myHostedEventIds]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const unsub = onSnapshot(doc(db, "users", user_id), (doc: any) => {
+      if (doc.data().hosted_events.length > 0) {
+        setMyHostedEventIds(doc.data().hosted_events);
+      } else {
+        setMyHostedEventIds([]);
+      }
+    });
+  }, [user_id]);
 
   if (isLoading) {
     return <Text>Loading hosted events ...</Text>;
@@ -69,7 +89,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
         <Collapsible collapsed={hostedIsCollapsed}>
           {myHostedEvents.map((myEvent) => {
             return (
-              <View style={styles.container}>
+              <View style={styles.container} key={myEvent.id}>
                 <TouchableOpacity
                   style={styles.item}
                   onPress={() => {
@@ -77,7 +97,9 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                   }}
                 >
                   <Text style={styles.title}>{myEvent.title}</Text>
-                  <Text style={styles.user}>{myName}</Text>
+                  <Text
+                    style={styles.user}
+                  >{`${currentUser.first_name} ${currentUser.last_name}`}</Text>
                   <Text style={styles.location}>{myEvent.location}</Text>
                   <Text style={styles.date}>{myEvent.date}</Text>
                   <Text style={styles.category}>{myEvent.category}</Text>
@@ -96,7 +118,10 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.requestsButton,
                   ]}
                   onPress={() => {
-                    navigation.navigate("AcceptReject", {eventId: myEvent.id,eventTitle : myEvent.title});
+                    navigation.navigate("AcceptReject", {
+                      eventId: myEvent.id,
+                      eventTitle: myEvent.title,
+                    });
                   }}
                 >
                   <Text style={styles.buttonTitle}>Pending Requests</Text>
@@ -111,7 +136,7 @@ export const MyHostedEvents = ({user_id, navigation}) => {
                     styles.deleteButton,
                   ]}
                   onPress={() => {
-                    confirmDelete(myEvent.id);
+                    confirmDelete(myEvent.id, {navigation}, user_id, myEvent);
                   }}
                 >
                   <Text style={styles.buttonTitle}>Delete Event</Text>

@@ -1,9 +1,10 @@
+import {doc, onSnapshot} from "firebase/firestore";
 import React from "react";
-import {useEffect} from "react";
-import {useState, useContext} from "react";
+import {useState, useContext, useEffect} from "react";
 import {Text, Pressable, View, TouchableOpacity} from "react-native";
 import {UserContext} from "../../contexts/UserContext";
-import {getUsers, selectAllEvents} from "../../utils/utils";
+import {db} from "../../utils/firestoreConfig";
+import {getUsers, selectAllEvents, selectEventById} from "../../utils/utils";
 import {
   makeNameIdReference,
   truncate,
@@ -15,6 +16,7 @@ export const MyPendingRequests = ({user_id, navigation}) => {
   const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [userNames, setUserNames] = useState({});
+  const [pendingRequestIds, setPendingRequestIds] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([
     {
       title: "dummy",
@@ -28,23 +30,33 @@ export const MyPendingRequests = ({user_id, navigation}) => {
   ]);
 
   useEffect(() => {
-    (async () => {
-      const allEventRes = await selectAllEvents();
-      const myPending = allEventRes.filter((event) => {
-        let attendingMatch = false;
-        event.pending_attendees.forEach((person) => {
-          if (person.userId === user_id) attendingMatch = true;
-        });
-        if (attendingMatch) return event;
+    const eventPromises: any = pendingRequestIds.map((eventId) => {
+      return selectEventById(eventId);
+    });
+    Promise.all(eventPromises).then((res: any) => {
+      res.forEach((event, index) => {
+        event.id = pendingRequestIds[index];
       });
-      if (myPending) {
-        setPendingRequests(myPending);
-      }
-      setIsLoading(false);
+
+      setPendingRequests(res);
+    });
+    setIsLoading(false);
+    (async () => {
       const nameUidReferenceObject = await getUsers();
       setUserNames(makeNameIdReference(nameUidReferenceObject));
     })();
-  }, []);
+  }, [pendingRequestIds]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const unsub = onSnapshot(doc(db, "users", user_id), (doc: any) => {
+      if (doc.data().requested_events.length > 0) {
+        setPendingRequestIds(doc.data().requested_events);
+      } else {
+        setPendingRequestIds([]);
+      }
+    });
+  }, [user_id]);
 
   if (isLoading) {
     return <Text>Loading event requests ...</Text>;
@@ -61,7 +73,7 @@ export const MyPendingRequests = ({user_id, navigation}) => {
       <Text style={styles.joinSubHeader}>Pending Join Requests</Text>
       {pendingRequests.map((myEvent) => {
         return (
-          <View style={styles.container}>
+          <View style={styles.container} key={myEvent.id}>
             <TouchableOpacity
               style={styles.item}
               onPress={() => {

@@ -1,9 +1,11 @@
+import {doc, onSnapshot} from "firebase/firestore";
 import React from "react";
 import {useEffect} from "react";
 import {useState, useContext} from "react";
 import {Text, Pressable, View, TouchableOpacity} from "react-native";
 import {UserContext} from "../../contexts/UserContext";
-import {getUsers, selectAllEvents} from "../../utils/utils";
+import {db} from "../../utils/firestoreConfig";
+import {getUsers, selectAllEvents, selectEventById} from "../../utils/utils";
 import {
   makeNameIdReference,
   truncate,
@@ -15,6 +17,7 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
   const {currentUser} = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [userNames, setUserNames] = useState({});
+  const [acceptedRequestIds, setAcceptedRequestIds] = useState([]);
   const [acceptedRequests, setAcceptedRequests] = useState([
     {
       title: "dummy",
@@ -28,23 +31,33 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
   ]);
 
   useEffect(() => {
-    (async () => {
-      const allEventRes = await selectAllEvents();
-      const myAccepted = allEventRes.filter((event) => {
-        let attendingMatch = false;
-        event.attendees.forEach((person) => {
-          if (person.userId === user_id) attendingMatch = true;
-        });
-        if (attendingMatch) return event;
+    const eventPromises: any = acceptedRequestIds.map((eventId) => {
+      return selectEventById(eventId);
+    });
+    Promise.all(eventPromises).then((res: any) => {
+      res.forEach((event, index) => {
+        event.id = acceptedRequestIds[index];
       });
-      if (myAccepted) {
-        setAcceptedRequests(myAccepted);
-      }
-      setIsLoading(false);
+
+      setAcceptedRequests(res);
+    });
+    setIsLoading(false);
+    (async () => {
       const nameUidReferenceObject = await getUsers();
       setUserNames(makeNameIdReference(nameUidReferenceObject));
     })();
-  }, []);
+  }, [acceptedRequestIds]);
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    const unsub = onSnapshot(doc(db, "users", user_id), (doc: any) => {
+      if (doc.data().accepted_events.length > 0) {
+        setAcceptedRequestIds(doc.data().accepted_events);
+      } else {
+        setAcceptedRequestIds([]);
+      }
+    });
+  }, [user_id]);
 
   if (isLoading) {
     return <Text>Loading joined events ...</Text>;
