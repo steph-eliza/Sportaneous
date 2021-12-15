@@ -1,20 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { UserContext } from "../../contexts/UserContext";
 import { FlatList, SafeAreaView, Text, TouchableOpacity, Image } from "react-native";
 import { selectAllEvents, getUsers } from "../../utils/utils";
 import { makeNameIdReference } from "../Events.screen/utils/EventListUtils"
 import styles from "./Chatroom.style";
 
 const Chatroom = ({ navigation }) => {
+  const { currentUser } = useContext(UserContext)
   const [selectedId, setSelectedId] = useState(null);
-  // Get all events
-  // If attendees has users
   const [events, setEvents] = React.useState();
   const [userNames, setUserNames] = React.useState({})
 
   useEffect(() => {
     selectAllEvents().then((res) => {
       const filteredEvents = res.filter((event: any) => {
-        return event.attendees.length > 0;
+        let attendeeList = event.attendees
+        let returnValue = false
+        console.log(attendeeList)
+        if(attendeeList.length > 0) {
+          if(event.host_id === currentUser.id) {
+            returnValue = true
+          }
+          attendeeList.forEach((personDetails) => {
+            if(personDetails.userId === currentUser.id) {
+              returnValue = true
+            }
+          })
+          return returnValue
+        }
       });
       setEvents(filteredEvents);
       getUsers().then((res) => {
