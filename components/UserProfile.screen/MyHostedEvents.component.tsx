@@ -30,23 +30,15 @@ export const MyHostedEvents = ({user_id, navigation}) => {
   ]);
 
   useEffect(() => {
-    console.log(myHostedEventIds, "               <-- event ids");
     const eventPromises: any = myHostedEventIds.map((eventId) => {
       return selectEventById(eventId);
     });
-    console.log(
-      eventPromises,
-      "                <-- event promises collection after map"
-    );
     Promise.all(eventPromises).then((res: any) => {
-      console.log(res, "                <-- promises in promise all");
       res.forEach((event, index) => {
         event.id = myHostedEventIds[index];
       });
-      console.log(res, "               <-- events with ids");
       setMyHostedEvents(res);
     });
-
     setIsLoading(false);
   }, [myHostedEventIds]);
 

@@ -12,13 +12,13 @@ import {
   arrayRemove,
   setDoc,
 } from "firebase/firestore";
-import { db } from "./firestoreConfig.js";
+import {db} from "./firestoreConfig.js";
 
 export const selectAllEvents = () => {
   return getDocs(collection(db, "events")).then((snapshot) => {
     let eventsArray = [];
     snapshot.docs.forEach((doc) => {
-      eventsArray.push({ ...doc.data(), id: doc.id });
+      eventsArray.push({...doc.data(), id: doc.id});
     });
     return eventsArray;
   });
@@ -29,7 +29,7 @@ export const selectEventsByUser = (userId) => {
   return getDocs(q).then((snapshot) => {
     let eventsArray = [];
     snapshot.docs.forEach((doc) => {
-      eventsArray.push({ ...doc.data(), id: doc.id });
+      eventsArray.push({...doc.data(), id: doc.id});
     });
     return eventsArray;
   });
@@ -60,7 +60,7 @@ export const selectFilteredEvents = (location) => {
   return getDocs(q1).then((snapshot) => {
     let eventsArray = [];
     snapshot.docs.forEach((doc) => {
-      eventsArray.push({ ...doc.data(), id: doc.id });
+      eventsArray.push({...doc.data(), id: doc.id});
     });
     return eventsArray;
   });
@@ -82,7 +82,7 @@ export const getUsers = () => {
   return getDocs(collection(db, "users")).then((snapshot) => {
     let users = [];
     snapshot.docs.forEach((user) => {
-      users.push({ ...user.data(), id: user.id });
+      users.push({...user.data(), id: user.id});
     });
     return users;
   });
