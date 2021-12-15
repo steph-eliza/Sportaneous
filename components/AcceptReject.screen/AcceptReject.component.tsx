@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import { styles } from "./AcceptReject.style";
 import { FlatList } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -114,9 +114,29 @@ export const AcceptReject = ({ route, navigation }) => {
       />
     );
   };
+
+  const renderBoth = ({ item }) => {
+    return (
+      <AttendeesItem
+        item={item}
+      /> && <PendingAttendeesItem
+      item={item}
+    />
+    );
+  }
+
+
   if(pendingUsers.length === 0 && attendingUsers.length === 0){
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
+        <TouchableOpacity
+          onPress={() => {
+            navigation!.navigate("Profile");
+          }}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>Go back to events</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>{eventTitle}</Text>
         <Text>You don't have any join requests.</Text>
       </SafeAreaView>
@@ -124,6 +144,14 @@ export const AcceptReject = ({ route, navigation }) => {
   } else if (pendingUsers.length === 0) {
     return (
       <SafeAreaView style={styles.title}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation!.navigate("Profile");
+          }}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>Go back to events</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>{eventTitle}</Text>
         <FlatList
           data={attendingUsers}
@@ -134,11 +162,19 @@ export const AcceptReject = ({ route, navigation }) => {
     );
   } else {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView>
+        <TouchableOpacity
+          onPress={() => {
+            navigation!.navigate("Profile");
+          }}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>back to profile</Text>
+        </TouchableOpacity>
         <Text style={styles.title}>{eventTitle}</Text>
         <FlatList
           data={pendingUsers}
-          renderItem={renderPendingItem}
+          renderItem={renderBoth}
           keyExtractor={(item) => item.id}
         />
         <FlatList

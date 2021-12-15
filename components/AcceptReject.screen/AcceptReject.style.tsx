@@ -3,12 +3,6 @@ import { StyleSheet, Dimensions } from 'react-native'
 const windowWidth = Dimensions.get('window').width
 
 export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
   item: {
     backgroundColor: '#FFF',
     padding: 10,
@@ -69,10 +63,19 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     textTransform: 'uppercase',
   },
-  popUpText: {
-    color: 'whitesmoke',
-    fontSize: 17,
-    textAlign: 'center',
-    margin: 20,
+  backButton: {
+    padding: 8,
+    backgroundColor: 'black',
+    borderRadius: 2,
+    width: 75,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+backButtonText: {
+    textAlign: 'center',
+    color: '#ffff',
+    fontWeight: 'bold',
+    fontSize: 12,
+    textTransform: "uppercase"
+  } 
 })
