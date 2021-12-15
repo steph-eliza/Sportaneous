@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { SingleEvent } from "../SingleEvent.screen/SingleEvent.component";
-import { AddEvent } from "../AddEvent.screen/AddEvent.component";
-import EventList from "../Events.screen/EventList.component";
-import { UserDetails } from "../UserProfile.screen/UserDetails.component";
-import PhoneSignIn from "../Auth.screen/Auth.component";
-import Chatroom from "../Chatroom.screen/Chatroom.component";
-import {GetUserName} from "../GetUserName.screen/GetUserName.component";
-import {Chat} from "../Chat.screen/Chat.component";
-import {AcceptReject} from "../AcceptReject.screen/AcceptReject.component";
-import { EditProfile } from "../EditProfile.screen/EditProfile.component";
-=======
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { SingleEvent } from '../SingleEvent.screen/SingleEvent.component'
@@ -24,7 +10,6 @@ import { GetUserName } from '../GetUserName.screen/GetUserName.component'
 import { Chat } from '../Chat.screen/Chat.component'
 import { AcceptReject } from '../AcceptReject.screen/AcceptReject.component'
 import { EditProfile } from '../EditProfile.screen/EditProfile.component'
->>>>>>> 82623a2b387c18ef868a10a6eb3236938cad4587
 
 const Drawer = createDrawerNavigator()
 
