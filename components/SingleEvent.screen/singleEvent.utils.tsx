@@ -1,4 +1,9 @@
-import { deleteChatroom, deleteEvent } from "../../utils/utils";
+import {
+  deleteChatroom,
+  deleteEvent,
+  deleteEventFromUsersHostedEvents,
+  deleteEventFromUsersRequestedEvents,
+} from "../../utils/utils";
 
 export type navigationWithEventId = {
   eventId: string;
@@ -52,12 +57,18 @@ export function checkAcceptedOrRequested(
 
 export function deleteEventAndCascade(
   eventId: string,
-  { navigation }: addEventProps
+  { navigation }: addEventProps,
+  userId: string,
+  eventDetails: eventDetails
 ) {
   try {
-    //////CHECK DELETE removes requested/attneding events from other users
+    const attendeesToUpdate = eventDetails.attendees.concat(
+      eventDetails.pending_attendees
+    );
     deleteEvent(eventId);
     deleteChatroom(eventId);
+    deleteEventFromUsersHostedEvents(userId, eventId);
+    deleteEventFromUsersRequestedEvents(attendeesToUpdate, eventId);
     navigation?.navigate("Events");
   } catch (error) {
     console.log(error);

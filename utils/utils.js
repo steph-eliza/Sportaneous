@@ -153,4 +153,17 @@ export const addNewEventToCurrentUserProfile = (userId, eventId) => {
 
 export const updateUserDetails = (userDetails, uid) => {
   return updateDoc(doc(db, "users", uid), userDetails);
-}
+};
+export const deleteEventFromUsersHostedEvents = (userId, eventId) => {
+  return updateDoc(doc(db, "users", userId), {
+    hosted_events: arrayRemove(eventId),
+  });
+};
+
+export const deleteEventFromUsersRequestedEvents = (users, eventId) => {
+  users.forEach((user) => {
+    updateDoc(doc(db, "users", user), {
+      requested_events: arrayRemove(eventId),
+    });
+  });
+};

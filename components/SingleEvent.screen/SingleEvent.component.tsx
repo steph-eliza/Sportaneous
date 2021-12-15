@@ -90,7 +90,12 @@ export const SingleEvent = ({ navigation, route }: addEventProps) => {
         <TouchableOpacity
           style={styles.touchOpacity}
           onPress={() => {
-            deleteEventAndCascade(eventId, { navigation });
+            deleteEventAndCascade(
+              eventId,
+              { navigation },
+              currentUser.id,
+              eventDetails
+            );
           }}
         >
           <Text style={styles.touchOpacityText}>Delete event?</Text>
