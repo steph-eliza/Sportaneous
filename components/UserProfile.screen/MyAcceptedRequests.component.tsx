@@ -49,14 +49,9 @@ export const MyAcceptedRequests = ({user_id, navigation}) => {
   }, [acceptedRequestIds]);
 
   React.useEffect(() => {
-    console.log("                               in listener acc");
     setIsLoading(true);
     const unsub = onSnapshot(doc(db, "users", user_id), (doc: any) => {
       if (doc.data().accepted_events.length > 0) {
-        console.log(
-          doc.data().accepted_events,
-          "                <-- requested events doc acc"
-        );
         setAcceptedRequestIds(doc.data().accepted_events);
       } else {
         setAcceptedRequestIds([]);

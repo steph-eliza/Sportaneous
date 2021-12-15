@@ -19,7 +19,6 @@ export const confirmDelete = (eventId, {navigation}, user_id, eventDetails) =>
 
 export const getOwnName = async (user_id) => {
   const myName = await getUserById(user_id);
-  console.log(myName);
   return `${myName.first_name} ${myName.last_name}`;
 };
 
