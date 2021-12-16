@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    backgroundColor: 'lightgrey',
+    backgroundColor: 'rgba(20,60,40, 0.05)',
     paddingBottom: 20,
   },
   avatar: {
