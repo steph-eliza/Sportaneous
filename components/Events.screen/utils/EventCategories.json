@@ -1,8 +1,8 @@
 {
-  "climbing": false,
-  "ice skating": false,
+  "outdoor": false,
+  "water sports": false,
   "running": false,
-  "skiing": false,
-  "table tennis": false,
-  "tennis": false
+  "team sports": false,
+  "winter sports": false,
+  "indoor": false
 }

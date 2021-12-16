@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#323B76",
+    paddingBottom: 80,
   },
   item: {
     backgroundColor: "#FFF",
@@ -74,10 +75,16 @@ export const styles = StyleSheet.create({
   inputMessage: {
     width: windowWidth * 0.75,
     height: 30,
+    // marginBottom: 10,
   },
   sendText: {
     marginRight: 5,
-    fontSize: 20,
+    color: '#fff',
+    backgroundColor: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    padding: 2,
+    borderRadius:5
   },
   noMessages: { alignSelf: "center", color: "#FFF" },
   spacing: {

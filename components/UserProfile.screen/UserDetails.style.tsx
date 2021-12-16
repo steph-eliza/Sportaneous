@@ -5,6 +5,7 @@ const windowWidth = Dimensions.get("window").width;
 export const styles = StyleSheet.create({
   page: {
     flex: 1,
+    marginBottom: 60
   },
   avatar: {
     borderRadius: 100,
@@ -18,7 +19,6 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 15,
   },
-
   detailsContainer: {
     width: windowWidth / 1.05,
     alignSelf: "center",

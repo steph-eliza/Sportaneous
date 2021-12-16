@@ -11,8 +11,8 @@ export const RefreshEvents = ({setEvents, setCategoryIsChecked}) => {
         style={({pressed}) => [
           {
             backgroundColor: pressed
-              ? "rgba(108, 93, 171, 0.5)"
-              : "rgba(108, 93, 171, 1)",
+              ? "silver"
+              : "grey",
           },
           styles.refreshButton,
         ]}
