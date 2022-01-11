@@ -10,19 +10,13 @@ The technologies used in this project include: React Native, Expo, and Typescrip
 
 ## Installation
 
-As the app is not currently hosted there is not a live version to link to here at this time, but this may be possible in the future!
+**_This project requires node version 17.2.0, as well as a mobile device running Android 10+ or IOS 11+, Expo Go, and with QR code reading capabilities._**
 
-For now, if you would like to check out this project, then follow the steps below:
+As the app requires specific API keys and is not currently hosted there is not a live version to link to here at this time, but this may be possible in the future!
 
-**_This project requires node version 17.2.0, as well as a mobile device running Android 10+ or IOS 11+, Expo Go, and QR code reading capabilities_**
+For now, if you would like to check out this project, the following presentation includes a run-through of app functionality and the development process:
 
-- Using the terminal of your choice, navigate to a desired file location and run:
-  > `git clone https://github.com/steph-eliza/Sportaneous.git`
-- Navigate into the cloned folder and run:
-  > `code .`
-- Inside your local coding environment, run `npm i` to install the project's dependencies
-- Run `expo start` to launch the project
-- On your mobile device, scan the generated QR code and follow the link to start the app!
+> https://www.youtube.com/watch?v=E7k8uKvwgKc
 
 # App Functionalities
 
